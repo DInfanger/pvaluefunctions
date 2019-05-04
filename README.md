@@ -49,7 +49,7 @@ in the file `confidence_distributions.R` (see above).
 
 Alternatively, you can source the files directly from the GitHub
 repository using the
-[`devtools`](https://cran.r-project.org/web/packages/devtools/index.html)
+[`devtools`](https://CRAN.R-project.org/package=devtools)
 package:
 
 ``` r
@@ -77,14 +77,14 @@ to install those packages.
 ### Important information\!
 
 The newest version of [ggplot2
-(3.1.1)](https://cran.r-project.org/web/packages/ggplot2/index.html) has
+(3.1.1)](https://CRAN.R-project.org/package=ggplot2) has
 a [bug](https://github.com/tidyverse/ggplot2/issues/2978) in `sec_axis`
 that will lead to the secondary y-axis being labelled wrongly.
 
 It is therefore recommended that you install the developmental version
 of ggplot2 until the bug has been fixed. You can install the
 developmental version using the following command (after installing the
-[`devtools`](https://cran.r-project.org/web/packages/devtools/index.html)
+[`devtools`](https://CRAN.R-project.org/package=devtools)
 package): `devtools::install_github("tidyverse/ggplot2")`
 
 ## Usage
