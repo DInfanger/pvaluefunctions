@@ -4,6 +4,11 @@
 # Date (dd.mm.yyyy): 22.09.2018
 #========================================================================
 
+if (getRversion() >= "2.15.1") {
+  utils::globalVariables(c("values", "variable", "hypothesis", "null_value", "theor_values", "p_value", "label"))
+}
+
+
 #' Create p-value functions, s-value functions, confidence distributions and confidence densities
 #'
 #' \code{conf_dist} generates confidence distributions (cdf), confidence densities (pdf), shannon suprisal (s-value) functions and p-value functions for several commonly used estimates.
@@ -56,7 +61,6 @@
 #' @import stats ggplot2 scales
 #' @importFrom grDevices grey
 #' @export
-
 
 conf_dist <- function(
   estimate = NULL
