@@ -9,7 +9,7 @@ if (getRversion() >= "2.15.1") {
 }
 
 
-#' Create p-value functions, s-value functions, confidence distributions and confidence densities
+#' Create and Plot \emph{P}-Value Functions, S-Value Functions, Confidence Distributions and Confidence Densities
 #'
 #' \code{conf_dist} generates confidence distributions (cdf), confidence densities (pdf), shannon suprisal (s-value) functions and p-value functions for several commonly used estimates.
 #'
@@ -34,8 +34,20 @@ if (getRversion() >= "2.15.1") {
 #' @param plot_p_limit Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale (i.e. log_yaxis = TRUE).
 #'
 #' @return \code{conf_dist} returns four data frames and a ggplot2-plot object: \code{res_frame} (contains parameter values, \emph{p}-values, s-values, confidence distribution and density, variable names and type of hypothesis), \code{conf_frame} (contains the used confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull for the corresponding null values), \code{point_est} (contains the mean, median and mode point estimate) and \code{plot} (a ggplot2-plot).
+#' @references Bender R, Berg G, Zeeb H. Tutorial: using confidence curves in medical research. Biom J. 2005;47(2):237-247.
 #'
-#' @examples#'
+#' Poole C. Confidence intervals exclude nothing. Am J Public Health. 1987;77(4):492-493.
+#'
+#' Poole C. Beyond the confidence interval. Am J Public Health. 1987;77(2):195-199.
+#'
+#' Rothman KJ, Greenland S, Lash TL. Modern epidemiology. 3rd ed. Philadelphia, PA: Wolters Kluwer; 2008.
+#'
+#' Schweder T, Hjort NL. Confidence, likelihood, probability: statistical inference with confidence distributions. New York, NY: Cambridge University Press; 2016.
+#'
+#' Sullivan KM, Foster DA. Use of the confidence interval function. Epidemiology. 1990;1(1):39-42.
+#'
+#' Xie Mg, Singh K. Confidence distribution, the frequentist distribution estimator of a parameter: A review. Internat Statist Rev. 2013;81(1):3-39.
+#' @examples
 #'
 #' # Create a p-value function for using the normal distribution
 #'

@@ -39,6 +39,8 @@ available.
 
 ## Installation
 
+Upon release, you can install the package by typing `install.packages("pvaluefunctions")` from CRAN.
+
 Download the file `confidence_distributions.R` to your computer. You can
 either `source()` the function in R or open it, select and run
 everything. After loading the function, it’s ready for use.

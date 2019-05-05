@@ -2,7 +2,7 @@
 % Please edit documentation in R/confidence_distributions.R
 \name{conf_dist}
 \alias{conf_dist}
-\title{Create p-value functions, s-value functions, confidence distributions and confidence densities}
+\title{Create and Plot \emph{P}-Value Functions, S-Value Functions, Confidence Distributions and Confidence Densities}
 \usage{
 conf_dist(estimate = NULL, n = NULL, df = NULL, stderr = NULL,
   tstat = NULL, type = NULL, plot_type = "p_val",
@@ -57,7 +57,6 @@ conf_dist(estimate = NULL, n = NULL, df = NULL, stderr = NULL,
 \code{conf_dist} generates confidence distributions (cdf), confidence densities (pdf), shannon suprisal (s-value) functions and p-value functions for several commonly used estimates.
 }
 \examples{
-#'
 
 # Create a p-value function for using the normal distribution
 
@@ -80,4 +79,19 @@ estimate = c(-0.13)
 , plot_p_limit = 1 - 0.9999
 )
 
+}
+\references{
+Bender R, Berg G, Zeeb H. Tutorial: using confidence curves in medical research. Biom J. 2005;47(2):237-247.
+
+Poole C. Confidence intervals exclude nothing. Am J Public Health. 1987;77(4):492-493.
+
+Poole C. Beyond the confidence interval. Am J Public Health. 1987;77(2):195-199.
+
+Rothman KJ, Greenland S, Lash TL. Modern epidemiology. 3rd ed. Philadelphia, PA: Wolters Kluwer; 2008.
+
+Schweder T, Hjort NL. Confidence, likelihood, probability: statistical inference with confidence distributions. New York, NY: Cambridge University Press; 2016.
+
+Sullivan KM, Foster DA. Use of the confidence interval function. Epidemiology. 1990;1(1):39-42.
+
+Xie Mg, Singh K. Confidence distribution, the frequentist distribution estimator of a parameter: A review. Internat Statist Rev. 2013;81(1):3-39.
 }

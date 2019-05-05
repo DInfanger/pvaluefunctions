@@ -1,6 +1,6 @@
 Package: pvaluefunctions
 Type: Package
-Title: pvaluefunctions: Creates and plots p-value functions, s-value functions, confidence distributions and confidence densities
+Title: pvaluefunctions: Creates and Plots P-Value Functions, S-Value Functions, Confidence Distributions and Confidence Densities
 Version: 1.0.0
 Authors@R: person("Denis", "Infanger", email = "denis.infanger@unibas.ch", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-9028-7110"))
 Maintainer: Denis Infanger <denis.infanger@unibas.ch>

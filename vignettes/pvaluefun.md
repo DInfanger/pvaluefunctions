@@ -1,7 +1,7 @@
 ---
 title: "*P*-value functions"
 author: "Denis Infanger"
-date: "2019-05-04"
+date: "2019-05-05"
 output: html_vignette
 vignette: >
   %\VignetteIndexEntry{*P*-value functions}
@@ -23,7 +23,7 @@ Download the file `confidence_distributions.R` to your computer. You can either 
 
 To reproduce the plots from the publication, download the file `paper_plots.R` and run it *after* loading the main function contained in the file `confidence_distributions.R` (see above).
 
-Alternatively, you can source the files directly from the GitHub repository using the [`devtools`](https://cran.r-project.org/web/packages/devtools/index.html) package:
+Alternatively, you can source the files directly from the GitHub repository using the [`devtools`](https://CRAN.R-project.org/package = devtools) package:
 
 
 ```r
@@ -46,9 +46,9 @@ Use the command `install.packages(c("ggplot2", "scales", "zipfR"))` in R to inst
 
 ### Important information!
 
-The newest version of [ggplot2 (3.1.1)](https://cran.r-project.org/web/packages/ggplot2/index.html) has a [bug](https://github.com/tidyverse/ggplot2/issues/2978) in `sec_axis` that will lead to the secondary y-axis being labelled wrongly.
+The newest version of [ggplot2 (3.1.1)](https://CRAN.R-project.org/package=ggplot2) has a [bug](https://github.com/tidyverse/ggplot2/issues/2978) in `sec_axis` that will lead to the secondary y-axis being labelled wrongly.
 
-It is therefore recommended that you install the developmental version of ggplot2 until the bug has been fixed. You can install the developmental version using the following command (after installing the [`devtools`](https://cran.r-project.org/web/packages/devtools/index.html) package): `devtools::install_github("tidyverse/ggplot2")`
+It is therefore recommended that you install the developmental version of ggplot2 until the bug has been fixed. You can install the developmental version using the following command (after installing the [`devtools`](https://CRAN.R-project.org/package = devtools) package): `devtools::install_github("tidyverse/ggplot2")`
 
 ## Usage
 
@@ -473,8 +473,8 @@ Xie Mg, Singh K. (2013): Confidence distribution, the frequentist distribution e
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] zipfR_0.6-10            scales_1.0.0            ggplot2_3.1.1          
-#> [4] usethis_1.5.0           devtools_2.0.2          pvaluefunctions_1.0.0.0
+#> [1] zipfR_0.6-10          scales_1.0.0          ggplot2_3.1.1        
+#> [4] usethis_1.5.0         devtools_2.0.2        pvaluefunctions_1.0.0
 #> 
 #> loaded via a namespace (and not attached):
 #>  [1] Rcpp_1.0.1         RColorBrewer_1.1-2 highr_0.8         
