@@ -1,23 +1,28 @@
 ---
 title: "*P*-value functions"
-author: "Denis Infanger"
-date: "2019-05-05"
-output: html_vignette
-vignette: >
-  %\VignetteIndexEntry{*P*-value functions}
-  %\VignetteEngine{knitr::knitr}
-  \usepackage[utf8]{inputenc}
+output:
+  github_document:
+    toc: true
+    toc_depth: 3
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE
+  , comment = "#>"
+  # , tidy.opts = list(width.cutoff = 160, tidy = FALSE)
+)
+```
 
 ## Overview
 
-This package contains R functions to create graphics of *p*-value functions, confidence distributions, confidence densities, or the [Surprisal value (S-value)](http://www.umsl.edu/~fraundorfp/egsurpri.html) (Greenland 2019). An R-script to reproduce the plots in the publication is also available.
+This repository contains R functions to create graphics of *p*-value functions, confidence distributions, confidence densities, or the [Surprisal value (S-value)](http://www.umsl.edu/~fraundorfp/egsurpri.html) (Greenland 2019). An R-script to reproduce the plots in the publication is also available.
 
 ## Installation
+
+Upon release, you can download the package directly from CRAN by typing `install.packages("pvaluefunctions")`.
 
 Download the file `confidence_distributions.R` to your computer. You can either `source()` the function in R or open it, select and run everything. After loading the function, it's ready for use.
 
@@ -25,12 +30,15 @@ To reproduce the plots from the publication, download the file `paper_plots.R` a
 
 Alternatively, you can source the files directly from the GitHub repository using the [`devtools`](https://CRAN.R-project.org/package=devtools) package:
 
-
-```r
+```{r source_github, message = FALSE, warning = FALSE, echo = TRUE, eval = FALSE}
 library(devtools)
 
-# Load function
+# Load main function
 source_url("https://raw.githubusercontent.com/DInfanger/pvalue_functions/master/confidence_distributions.R")
+
+# Load file to reproduce figures in the publication
+source_url("https://raw.githubusercontent.com/DInfanger/pvalue_functions/master/paper_plots.R")
+
 ```
 
 
@@ -95,33 +103,20 @@ The main function `conf_dist()` returns five objects in a list:
 
 ### Two-sample *t*-test with unequal variances (Welch-Test)
 
-
-```r
+```{r ttest, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
 
 #-----------------------------------------------------------------------------
 # Sourcing function
 #-----------------------------------------------------------------------------
 
-#source("confidence_distributions.R")
+source("confidence_distributions.R")
 
 #-----------------------------------------------------------------------------
 # T-Test
 #-----------------------------------------------------------------------------
 
 with(sleep, mean(extra[group == 1])) - with(sleep, mean(extra[group == 2]))
-#> [1] -1.58
 t.test(extra ~ group, data = sleep, var.equal = FALSE)
-#> 
-#> 	Welch Two Sample t-test
-#> 
-#> data:  extra by group
-#> t = -1.8608, df = 17.776, p-value = 0.07939
-#> alternative hypothesis: true difference in means is not equal to 0
-#> 95 percent confidence interval:
-#>  -3.3654832  0.2054832
-#> sample estimates:
-#> mean in group 1 mean in group 2 
-#>            0.75            2.33
 
 #-----------------------------------------------------------------------------
 # Create p-value function
@@ -147,13 +142,10 @@ res <- conf_dist(
 )
 ```
 
-<img src="figure/ttest-1.png" title="plot of chunk ttest" alt="plot of chunk ttest" width="80%" style="display: block; margin: auto;" />
-
 ### Single coefficient from a linear regression model
 #### *P*-value function
 
-
-```r
+```{r linreg_single_pval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
 #-----------------------------------------------------------------------------
 # Model
 #-----------------------------------------------------------------------------
@@ -161,27 +153,6 @@ res <- conf_dist(
 mod <- lm(Infant.Mortality~Agriculture + Fertility + Examination, data = swiss)
 
 summary(mod)
-#> 
-#> Call:
-#> lm(formula = Infant.Mortality ~ Agriculture + Fertility + Examination, 
-#>     data = swiss)
-#> 
-#> Residuals:
-#>     Min      1Q  Median      3Q     Max 
-#> -8.5375 -1.4021 -0.0066  1.7381  5.9150 
-#> 
-#> Coefficients:
-#>             Estimate Std. Error t value Pr(>|t|)   
-#> (Intercept) 11.01896    4.47291   2.463  0.01784 * 
-#> Agriculture -0.02143    0.02394  -0.895  0.37569   
-#> Fertility    0.13115    0.04145   3.164  0.00285 **
-#> Examination  0.04913    0.08351   0.588  0.55942   
-#> ---
-#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-#> 
-#> Residual standard error: 2.645 on 43 degrees of freedom
-#> Multiple R-squared:  0.2291,	Adjusted R-squared:  0.1753 
-#> F-statistic:  4.26 on 3 and 43 DF,  p-value: 0.01014
 
 #-----------------------------------------------------------------------------
 # Create p-value function
@@ -207,11 +178,8 @@ res <- conf_dist(
 )
 ```
 
-<img src="figure/linreg_single_pval-1.png" title="plot of chunk linreg_single_pval" alt="plot of chunk linreg_single_pval" width="80%" style="display: block; margin: auto;" />
-
 #### Confidence distribution
-
-```r
+```{r linreg_single_cdf, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
 res <- conf_dist(
   estimate = c(-0.02143)
   , df = c(43)
@@ -231,16 +199,14 @@ res <- conf_dist(
   , together = FALSE
   # , plot_p_limit = 1 - 0.999
 )
-```
 
-<img src="figure/linreg_single_cdf-1.png" title="plot of chunk linreg_single_cdf" alt="plot of chunk linreg_single_cdf" width="80%" style="display: block; margin: auto;" />
+```
 
 
 ### Multiple coefficients from a linear regression model
 #### *P*-value functions
 
-
-```r
+```{r linreg_multiple_pval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
 res <- conf_dist(
   estimate = c(0.13115, 0.04913)
   , df = c(43, 43)
@@ -261,11 +227,8 @@ res <- conf_dist(
 )
 ```
 
-<img src="figure/linreg_multiple_pval-1.png" title="plot of chunk linreg_multiple_pval" alt="plot of chunk linreg_multiple_pval" width="80%" style="display: block; margin: auto;" />
-
 #### Surprisal values
-
-```r
+```{r linreg_multiple_sval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
 res <- conf_dist(
   estimate = c(0.13115, 0.04913)
   , df = c(43, 43)
@@ -286,28 +249,14 @@ res <- conf_dist(
 )
 ```
 
-<img src="figure/linreg_multiple_sval-1.png" title="plot of chunk linreg_multiple_sval" alt="plot of chunk linreg_multiple_sval" width="80%" style="display: block; margin: auto;" />
-
 ### Pearson correlation coefficient (one-sided)
 
-
-```r
+```{r corr_pearson, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
 #-----------------------------------------------------------------------------
 # Calculate Pearson's correlation coefficient
 #-----------------------------------------------------------------------------
 
 cor.test(swiss$Fertility, swiss$Agriculture, alternative = "two.sided", method = "pearson")
-#> 
-#> 	Pearson's product-moment correlation
-#> 
-#> data:  swiss$Fertility and swiss$Agriculture
-#> t = 2.5316, df = 45, p-value = 0.01492
-#> alternative hypothesis: true correlation is not equal to 0
-#> 95 percent confidence interval:
-#>  0.07334947 0.58130587
-#> sample estimates:
-#>       cor 
-#> 0.3530792
 
 #-----------------------------------------------------------------------------
 # Create p-value function
@@ -332,12 +281,9 @@ res <- conf_dist(
 )
 ```
 
-<img src="figure/corr_pearson-1.png" title="plot of chunk corr_pearson" alt="plot of chunk corr_pearson" width="80%" style="display: block; margin: auto;" />
-
 ### Odds ratio from logistic regression
 
-
-```r
+```{r logreg, message = FALSE, warning = FALSE, fig.width = 9.2, fig.height = 7.2, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
 #-----------------------------------------------------------------------------
 # Calculate logistic regression model using a dataset from UCLA
 #-----------------------------------------------------------------------------
@@ -348,33 +294,6 @@ dat_tmp$rank <- factor(dat_tmp$rank)
 logistic_mod <- glm(admit ~ gre + gpa + rank, data = dat_tmp, family = "binomial")
 
 summary(logistic_mod)
-#> 
-#> Call:
-#> glm(formula = admit ~ gre + gpa + rank, family = "binomial", 
-#>     data = dat_tmp)
-#> 
-#> Deviance Residuals: 
-#>     Min       1Q   Median       3Q      Max  
-#> -1.6268  -0.8662  -0.6388   1.1490   2.0790  
-#> 
-#> Coefficients:
-#>              Estimate Std. Error z value Pr(>|z|)    
-#> (Intercept) -3.989979   1.139951  -3.500 0.000465 ***
-#> gre          0.002264   0.001094   2.070 0.038465 *  
-#> gpa          0.804038   0.331819   2.423 0.015388 *  
-#> rank2       -0.675443   0.316490  -2.134 0.032829 *  
-#> rank3       -1.340204   0.345306  -3.881 0.000104 ***
-#> rank4       -1.551464   0.417832  -3.713 0.000205 ***
-#> ---
-#> Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-#> 
-#> (Dispersion parameter for binomial family taken to be 1)
-#> 
-#>     Null deviance: 499.98  on 399  degrees of freedom
-#> Residual deviance: 458.52  on 394  degrees of freedom
-#> AIC: 470.52
-#> 
-#> Number of Fisher Scoring iterations: 4
 
 rm(dat_tmp)
 
@@ -402,12 +321,9 @@ res <- conf_dist(
 )
 ```
 
-<img src="figure/logreg-1.png" title="plot of chunk logreg" alt="plot of chunk logreg" width="80%" style="display: block; margin: auto;" />
-
 ### Proportion
 
-
-```r
+```{r prop, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
 res <- conf_dist(
   estimate = c(0.44)
   , n = c(50)
@@ -427,8 +343,6 @@ res <- conf_dist(
   , plot_p_limit = 1 - 0.999
 )
 ```
-
-<img src="figure/prop-1.png" title="plot of chunk prop" alt="plot of chunk prop" width="80%" style="display: block; margin: auto;" />
 
 ## References
 
@@ -456,45 +370,8 @@ Xie Mg, Singh K. (2013): Confidence distribution, the frequentist distribution e
 
 ## Session info
 
-
-```
-#> R version 3.6.0 (2019-04-26)
-#> Platform: x86_64-w64-mingw32/x64 (64-bit)
-#> Running under: Windows 10 x64 (build 17134)
-#> 
-#> Matrix products: default
-#> 
-#> locale:
-#> [1] LC_COLLATE=C                        LC_CTYPE=German_Switzerland.1252   
-#> [3] LC_MONETARY=German_Switzerland.1252 LC_NUMERIC=C                       
-#> [5] LC_TIME=German_Switzerland.1252    
-#> 
-#> attached base packages:
-#> [1] stats     graphics  grDevices utils     datasets  methods   base     
-#> 
-#> other attached packages:
-#> [1] zipfR_0.6-10          scales_1.0.0          ggplot2_3.1.1        
-#> [4] usethis_1.5.0         devtools_2.0.2        pvaluefunctions_1.0.0
-#> 
-#> loaded via a namespace (and not attached):
-#>  [1] Rcpp_1.0.1         RColorBrewer_1.1-2 highr_0.8         
-#>  [4] pillar_1.3.1       plyr_1.8.4         compiler_3.6.0    
-#>  [7] prettyunits_1.0.2  remotes_2.0.4      tools_3.6.0       
-#> [10] testthat_2.1.1     digest_0.6.18      pkgbuild_1.0.3    
-#> [13] pkgload_1.0.2      evaluate_0.13      tibble_2.1.1      
-#> [16] memoise_1.1.0      gtable_0.3.0       pkgconfig_2.0.2   
-#> [19] rlang_0.3.4        cli_1.1.0          rstudioapi_0.10   
-#> [22] commonmark_1.7     curl_3.3           xfun_0.6          
-#> [25] httr_1.4.0         knitr_1.22         dplyr_0.8.0.1     
-#> [28] withr_2.1.2        stringr_1.4.0      roxygen2_6.1.1    
-#> [31] xml2_1.2.0         desc_1.2.0         fs_1.3.0          
-#> [34] tidyselect_0.2.5   rprojroot_1.3-2    grid_3.6.0        
-#> [37] glue_1.3.1         R6_2.4.0           processx_3.3.0    
-#> [40] sessioninfo_1.1.1  callr_3.2.0        purrr_0.3.2       
-#> [43] magrittr_1.5       backports_1.1.4    ps_1.3.0          
-#> [46] assertthat_0.2.1   colorspace_1.4-1   labeling_0.3      
-#> [49] stringi_1.4.3      lazyeval_0.2.2     munsell_0.5.0     
-#> [52] crayon_1.3.4
+```{r session_info, include=TRUE, echo=FALSE}
+sessionInfo()
 ```
 
 ## License
