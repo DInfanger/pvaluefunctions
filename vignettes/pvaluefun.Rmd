@@ -65,7 +65,7 @@ There is only one function needed to create the plots: `conf_dist()`. The functi
 * **`df`**: Numerical vector containing the degrees of freedom. Required for statistics based on the *t*-distribution (e.g. linear regression) and *t*-tests. Must be equal the number of estimates.
 * **`stderr`**: Numerical vector containing the standard error(s) of the estimate(s). Required for statistics based on the *t*-distribution (e.g. linear regression) and the normal distribution (e.g. logistic regression). Must be equal the number of estimate(s).
 * **`tstat`**: Numerical vector containing the *t*-statistic(s). Required for *t*-tests (means and mean differences). Must be equal the number of estimates. 
-* **`type`**: String indicating the type estimate. Must be one of the following: `ttest`, `linreg`, `gammareg`, `general_t`, `logreg`, `poisreg`, `coxreg`, `general_z`, `pearson`, `spearman`, `kendall`, `var`, `prop`.
+* **`type`**: String indicating the type of the estimate. Must be one of the following: `ttest`, `linreg`, `gammareg`, `general_t`, `logreg`, `poisreg`, `coxreg`, `general_z`, `pearson`, `spearman`, `kendall`, `var`, `prop`.
 * **`plot_type`**: String indicating the type of plot. Must be one of the following: `cdf` (confidence distribution), `pdf` (confidence density), `p_val` (*p*-value function), `s_val` (Surprisal).
 * **`n_values`** (optional): Integer indicating the number of points that are used to generate the graphics. The higher this number, the higher the computation time and resolution.
 * **`est_names`** (optional): String vector indicating the names of the estimate(s). Must be equal the number of estimates.
@@ -82,7 +82,7 @@ There is only one function needed to create the plots: `conf_dist()`. The functi
 
 ### Required arguments for different estimate types
 
-* $t$-tests: `estimate`, `df`, `tstat`.
+* *t*-tests: `estimate`, `df`, `tstat`.
 * Linear regression, Gamma regression, general estimates based on the *t*-distribution: `estimate`, `df`, `stderr`.
 * Logistic regression, Poisson regression, Cox regression, general estimates based on the normal distribution: `estimate`, `stderr`.
 * Correlation coefficients (Pearson, Spearman, Kendall), proportions, variances: `estimate`, `n`.
@@ -101,7 +101,7 @@ The main function `conf_dist()` returns five objects in a list:
 
 ### Two-sample *t*-test with unequal variances (Welch-Test)
 
-```{r ttest, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
+```{r ttest, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "tiff", dev.args = list(compression = "lzw"), dpi = 300}
 
 #-----------------------------------------------------------------------------
 # Sourcing function
@@ -143,7 +143,7 @@ res <- conf_dist(
 ### Single coefficient from a linear regression model
 #### *P*-value function
 
-```{r linreg_single_pval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
+```{r linreg_single_pval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "tiff", dev.args = list(compression = "lzw"), dpi = 300}
 #-----------------------------------------------------------------------------
 # Model
 #-----------------------------------------------------------------------------
@@ -177,7 +177,7 @@ res <- conf_dist(
 ```
 
 #### Confidence distribution
-```{r linreg_single_cdf, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
+```{r linreg_single_cdf, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "tiff", dev.args = list(compression = "lzw"), dpi = 300}
 res <- conf_dist(
   estimate = c(-0.02143)
   , df = c(43)
@@ -204,7 +204,7 @@ res <- conf_dist(
 ### Multiple coefficients from a linear regression model
 #### *P*-value functions
 
-```{r linreg_multiple_pval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
+```{r linreg_multiple_pval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "tiff", dev.args = list(compression = "lzw"), dpi = 300}
 res <- conf_dist(
   estimate = c(0.13115, 0.04913)
   , df = c(43, 43)
@@ -226,7 +226,7 @@ res <- conf_dist(
 ```
 
 #### Surprisal values
-```{r linreg_multiple_sval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
+```{r linreg_multiple_sval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "tiff", dev.args = list(compression = "lzw"), dpi = 300}
 res <- conf_dist(
   estimate = c(0.13115, 0.04913)
   , df = c(43, 43)
@@ -249,7 +249,7 @@ res <- conf_dist(
 
 ### Pearson correlation coefficient (one-sided)
 
-```{r corr_pearson, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
+```{r corr_pearson, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "tiff", dev.args = list(compression = "lzw"), dpi = 300}
 #-----------------------------------------------------------------------------
 # Calculate Pearson's correlation coefficient
 #-----------------------------------------------------------------------------
@@ -281,7 +281,7 @@ res <- conf_dist(
 
 ### Odds ratio from logistic regression
 
-```{r logreg, message = FALSE, warning = FALSE, fig.width = 9.2, fig.height = 7.2, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
+```{r logreg, message = FALSE, warning = FALSE, fig.width = 9.2, fig.height = 7.2, out.width = "80%", fig.align='center', dev = "tiff", dev.args = list(compression = "lzw"), dpi = 300}
 #-----------------------------------------------------------------------------
 # Calculate logistic regression model using a dataset from UCLA
 #-----------------------------------------------------------------------------
@@ -321,7 +321,7 @@ res <- conf_dist(
 
 ### Proportion
 
-```{r prop, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
+```{r prop, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "tiff", dev.args = list(compression = "lzw"), dpi = 300}
 res <- conf_dist(
   estimate = c(0.44)
   , n = c(50)

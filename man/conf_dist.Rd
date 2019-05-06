@@ -22,9 +22,9 @@ conf_dist(estimate = NULL, n = NULL, df = NULL, stderr = NULL,
 
 \item{tstat}{Numerical vector containing the \emph{t}-statistic(s). Required for \emph{t}-tests (means and mean differences). Must be equal the number of estimates.}
 
-\item{type}{String indicating the type estimate. Must be one of the following: ttest, linreg, gammareg, general_t, logreg, poisreg, coxreg, general_z, pearson, spearman, kendall, var, prop.}
+\item{type}{String indicating the type of the estimate. Must be one of the following: \code{ttest}, \code{linreg}, \code{gammareg}, \code{general_t}, \code{logreg}, \code{poisreg}, \code{coxreg}, \code{general_z}, \code{pearson}, \code{spearman}, \code{kendall}, \code{var}, \code{prop}.}
 
-\item{plot_type}{String indicating the type of plot. Must be one of the following: cdf (confidence distribution), pdf (confidence density), p_val (\emph{p}-value function), s_val (Surprisal).}
+\item{plot_type}{String indicating the type of plot. Must be one of the following: \code{cdf} (confidence distribution), \code{pdf} (confidence density), \code{p_val} (\emph{p}-value function), \code{s_val} (Surprisal).}
 
 \item{n_values}{(optional) Integer indicating the number of points that are used to generate the graphics. The higher this number, the higher the computation time and resolution.}
 
@@ -36,7 +36,7 @@ conf_dist(estimate = NULL, n = NULL, df = NULL, stderr = NULL,
 
 \item{trans}{(optional) String indicating the transformation function that will be applied to the estimates and confidence curves. For example: \code{exp} for an exponential transformation of the log-odds in logistic regression.}
 
-\item{alternative}{String indicating if the confidence level(s) are two-sided or one-sided. Must be one of the following: two_sided, one_sided.}
+\item{alternative}{String indicating if the confidence level(s) are two-sided or one-sided. Must be one of the following: \code{two_sided}, \code{one_sided}.}
 
 \item{log_yaxis}{Logical. Indicating if a portion of the y-axis should be displayed on the logarithmic scale.}
 
@@ -48,17 +48,20 @@ conf_dist(estimate = NULL, n = NULL, df = NULL, stderr = NULL,
 
 \item{together}{Logical. Indicating if graphics for multiple estimates should be displayed together or on separate plots.}
 
-\item{plot_p_limit}{Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale (i.e. log_yaxis = TRUE).}
+\item{plot_p_limit}{Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale (i.e. \code{log_yaxis = TRUE}).}
 }
 \value{
-\code{conf_dist} returns four data frames and a ggplot2-plot object: \code{res_frame} (contains parameter values, \emph{p}-values, s-values, confidence distribution and density, variable names and type of hypothesis), \code{conf_frame} (contains the used confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull for the corresponding null values), \code{point_est} (contains the mean, median and mode point estimate) and \code{plot} (a ggplot2-plot).
+\code{conf_dist} returns four data frames and a ggplot2-plot object: \code{res_frame} (contains parameter values, \emph{p}-values, s-values, confidence distribution and density, variable names and type of hypothesis), \code{conf_frame} (contains the used confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull for the corresponding null values), \code{point_est} (contains the mean, median and mode point estimates) and \code{plot} (a ggplot2-plot).
 }
 \description{
-\code{conf_dist} generates confidence distributions (cdf), confidence densities (pdf), shannon suprisal (s-value) functions and p-value functions for several commonly used estimates.
+The function \code{conf_dist} generates confidence distributions (cdf), confidence densities (pdf), shannon suprisal (s-value) functions and \emph{p}-value functions for several commonly used estimates. In addition, counternulls (see Rosenthal et al. 1994) and point estimates are calculated.
+}
+\details{
+\emph{P}-value functions and confidence intervals are calculated based on the \emph{t}-distribution for \emph{t}-tests, linear regression coefficients, and gamma regression models (GLM). The normal distribution is used for logistic regression, poisson regression and cox regression models. For correlation coefficients, Fisher's transform is used using the corresponding variances (see Bonett et al. 2000). \emph{P}-value functions and confidence intervals for variances are constructed using the Chi2 distribution. Finally, Wilson's score intervals are used for one proportion.
 }
 \examples{
 
-# Create a p-value function for using the normal distribution
+# Create a p-value function for an estimate using the normal distribution
 
 conf_dist(
 estimate = c(-0.13)
@@ -66,7 +69,7 @@ estimate = c(-0.13)
 , type = "general_z"
 , plot_type = "p_val"
 , n_values = 1e4L
-, est_names = c("")
+, est_names = c("Parameter value")
 , log_yaxis = FALSE
 , cut_logyaxis = 0.05
 , conf_level = c(0.95)
@@ -79,13 +82,40 @@ estimate = c(-0.13)
 , plot_p_limit = 1 - 0.9999
 )
 
+# P-value function for a single regression coefficient (Agriculture in the model below)
+
+mod <- lm(Infant.Mortality~Agriculture + Fertility + Examination, data = swiss)
+summary(mod)
+
+res <- conf_dist(
+ estimate = c(-0.02143)
+ , df = c(43)
+ , stderr = (0.02394)
+ , type = "linreg"
+ , plot_type = "p_val"
+ , n_values = 1e4L
+ , conf_level = c(0.95, 0.90, 0.80)
+ , null_values = c(0)
+ , trans = "identity"
+ , alternative = "two_sided"
+ , log_yaxis = TRUE
+ , cut_logyaxis = 0.05
+ , xlab = "Coefficient Agriculture"
+ , together = FALSE
+ , plot_p_limit = 1 - 0.999
+)
+
 }
 \references{
 Bender R, Berg G, Zeeb H. Tutorial: using confidence curves in medical research. Biom J. 2005;47(2):237-247.
 
+Bonett DG, Wright TA. Sample size requirements for estimating Pearson, Kendall and Spearman correlations. 2000;65(1):23-28.
+
 Poole C. Confidence intervals exclude nothing. Am J Public Health. 1987;77(4):492-493.
 
 Poole C. Beyond the confidence interval. Am J Public Health. 1987;77(2):195-199.
+
+Rosenthal R, Rubin D. The counternull value of an effect size: a new statistic. 1994;5(6):329-334.
 
 Rothman KJ, Greenland S, Lash TL. Modern epidemiology. 3rd ed. Philadelphia, PA: Wolters Kluwer; 2008.
 
@@ -94,4 +124,7 @@ Schweder T, Hjort NL. Confidence, likelihood, probability: statistical inference
 Sullivan KM, Foster DA. Use of the confidence interval function. Epidemiology. 1990;1(1):39-42.
 
 Xie Mg, Singh K. Confidence distribution, the frequentist distribution estimator of a parameter: A review. Internat Statist Rev. 2013;81(1):3-39.
+}
+\seealso{
+\code{\link[concurve]{plotpint}}
 }

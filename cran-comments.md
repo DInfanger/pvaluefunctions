@@ -1,11 +1,10 @@
 ## Resubmission
-This is a resubmission. In this version I have:
+This is a resubmission.
 
-* Corrected the title of the package to the suggested form.
+> Uwe Ligges
+> Do not repeat the name in the title.
 
-* Corrected the links to CRAN to the canonical form.
-
-* Re-checked possible mis-spelled words.
+* I have removed the package name from the title.
 
 ## Test environments
 * Local Windows 10 install, R 3.6.0

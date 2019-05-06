@@ -6,3 +6,4 @@
 ^CRAN-RELEASE$
 ^README_files$
 ^vignettes/figure$
+^Readme\.Rmd$

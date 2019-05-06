@@ -1,7 +1,7 @@
 ---
 title: "*P*-value functions"
 author: "Denis Infanger"
-date: "2019-05-05"
+date: "2019-05-06"
 output: html_vignette
 vignette: >
   %\VignetteIndexEntry{*P*-value functions}
@@ -59,7 +59,7 @@ There is only one function needed to create the plots: `conf_dist()`. The functi
 * **`df`**: Numerical vector containing the degrees of freedom. Required for statistics based on the *t*-distribution (e.g. linear regression) and *t*-tests. Must be equal the number of estimates.
 * **`stderr`**: Numerical vector containing the standard error(s) of the estimate(s). Required for statistics based on the *t*-distribution (e.g. linear regression) and the normal distribution (e.g. logistic regression). Must be equal the number of estimate(s).
 * **`tstat`**: Numerical vector containing the *t*-statistic(s). Required for *t*-tests (means and mean differences). Must be equal the number of estimates. 
-* **`type`**: String indicating the type estimate. Must be one of the following: `ttest`, `linreg`, `gammareg`, `general_t`, `logreg`, `poisreg`, `coxreg`, `general_z`, `pearson`, `spearman`, `kendall`, `var`, `prop`.
+* **`type`**: String indicating the type of the estimate. Must be one of the following: `ttest`, `linreg`, `gammareg`, `general_t`, `logreg`, `poisreg`, `coxreg`, `general_z`, `pearson`, `spearman`, `kendall`, `var`, `prop`.
 * **`plot_type`**: String indicating the type of plot. Must be one of the following: `cdf` (confidence distribution), `pdf` (confidence density), `p_val` (*p*-value function), `s_val` (Surprisal).
 * **`n_values`** (optional): Integer indicating the number of points that are used to generate the graphics. The higher this number, the higher the computation time and resolution.
 * **`est_names`** (optional): String vector indicating the names of the estimate(s). Must be equal the number of estimates.
@@ -76,7 +76,7 @@ There is only one function needed to create the plots: `conf_dist()`. The functi
 
 ### Required arguments for different estimate types
 
-* $t$-tests: `estimate`, `df`, `tstat`.
+* *t*-tests: `estimate`, `df`, `tstat`.
 * Linear regression, Gamma regression, general estimates based on the *t*-distribution: `estimate`, `df`, `stderr`.
 * Logistic regression, Poisson regression, Cox regression, general estimates based on the normal distribution: `estimate`, `stderr`.
 * Correlation coefficients (Pearson, Spearman, Kendall), proportions, variances: `estimate`, `n`.
@@ -147,7 +147,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="figure/ttest-1.png" title="plot of chunk ttest" alt="plot of chunk ttest" width="80%" style="display: block; margin: auto;" />
+<img src="figure/ttest-1.tiff" title="plot of chunk ttest" alt="plot of chunk ttest" width="80%" style="display: block; margin: auto;" />
 
 ### Single coefficient from a linear regression model
 #### *P*-value function
@@ -207,7 +207,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="figure/linreg_single_pval-1.png" title="plot of chunk linreg_single_pval" alt="plot of chunk linreg_single_pval" width="80%" style="display: block; margin: auto;" />
+<img src="figure/linreg_single_pval-1.tiff" title="plot of chunk linreg_single_pval" alt="plot of chunk linreg_single_pval" width="80%" style="display: block; margin: auto;" />
 
 #### Confidence distribution
 
@@ -233,7 +233,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="figure/linreg_single_cdf-1.png" title="plot of chunk linreg_single_cdf" alt="plot of chunk linreg_single_cdf" width="80%" style="display: block; margin: auto;" />
+<img src="figure/linreg_single_cdf-1.tiff" title="plot of chunk linreg_single_cdf" alt="plot of chunk linreg_single_cdf" width="80%" style="display: block; margin: auto;" />
 
 
 ### Multiple coefficients from a linear regression model
@@ -261,7 +261,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="figure/linreg_multiple_pval-1.png" title="plot of chunk linreg_multiple_pval" alt="plot of chunk linreg_multiple_pval" width="80%" style="display: block; margin: auto;" />
+<img src="figure/linreg_multiple_pval-1.tiff" title="plot of chunk linreg_multiple_pval" alt="plot of chunk linreg_multiple_pval" width="80%" style="display: block; margin: auto;" />
 
 #### Surprisal values
 
@@ -286,7 +286,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="figure/linreg_multiple_sval-1.png" title="plot of chunk linreg_multiple_sval" alt="plot of chunk linreg_multiple_sval" width="80%" style="display: block; margin: auto;" />
+<img src="figure/linreg_multiple_sval-1.tiff" title="plot of chunk linreg_multiple_sval" alt="plot of chunk linreg_multiple_sval" width="80%" style="display: block; margin: auto;" />
 
 ### Pearson correlation coefficient (one-sided)
 
@@ -332,7 +332,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="figure/corr_pearson-1.png" title="plot of chunk corr_pearson" alt="plot of chunk corr_pearson" width="80%" style="display: block; margin: auto;" />
+<img src="figure/corr_pearson-1.tiff" title="plot of chunk corr_pearson" alt="plot of chunk corr_pearson" width="80%" style="display: block; margin: auto;" />
 
 ### Odds ratio from logistic regression
 
@@ -402,7 +402,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="figure/logreg-1.png" title="plot of chunk logreg" alt="plot of chunk logreg" width="80%" style="display: block; margin: auto;" />
+<img src="figure/logreg-1.tiff" title="plot of chunk logreg" alt="plot of chunk logreg" width="80%" style="display: block; margin: auto;" />
 
 ### Proportion
 
@@ -428,7 +428,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="figure/prop-1.png" title="plot of chunk prop" alt="plot of chunk prop" width="80%" style="display: block; margin: auto;" />
+<img src="figure/prop-1.tiff" title="plot of chunk prop" alt="plot of chunk prop" width="80%" style="display: block; margin: auto;" />
 
 ## References
 

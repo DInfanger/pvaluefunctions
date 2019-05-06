@@ -39,7 +39,8 @@ available.
 
 ## Installation
 
-Upon release, you can install the package by typing `install.packages("pvaluefunctions")` from CRAN.
+Upon release, you can download the package directly from CRAN by typing
+`install.packages("pvaluefunctions")`.
 
 Download the file `confidence_distributions.R` to your computer. You can
 either `source()` the function in R or open it, select and run
@@ -51,17 +52,16 @@ in the file `confidence_distributions.R` (see above).
 
 Alternatively, you can source the files directly from the GitHub
 repository using the
-[`devtools`](https://CRAN.R-project.org/package=devtools)
-package:
+[`devtools`](https://CRAN.R-project.org/package=devtools) package:
 
 ``` r
 library(devtools)
 
 # Load main function
-source_url("https://raw.githubusercontent.com/DInfanger/pvalue_functions/master/confidence_distributions.R")
+source_url("https://raw.githubusercontent.com/DInfanger/pvaluefunctions/master/R/confidence_distributions.R")
 
 # Load file to reproduce figures in the publication
-source_url("https://raw.githubusercontent.com/DInfanger/pvalue_functions/master/paper_plots.R")
+source_url("https://raw.githubusercontent.com/DInfanger/pvalue_functions/master/R/paper_plots.R")
 ```
 
 ## Dependencies
@@ -79,15 +79,15 @@ to install those packages.
 ### Important information\!
 
 The newest version of [ggplot2
-(3.1.1)](https://CRAN.R-project.org/package=ggplot2) has
-a [bug](https://github.com/tidyverse/ggplot2/issues/2978) in `sec_axis`
+(3.1.1)](https://CRAN.R-project.org/package=ggplot2) has a
+[bug](https://github.com/tidyverse/ggplot2/issues/2978) in `sec_axis`
 that will lead to the secondary y-axis being labelled wrongly.
 
 It is therefore recommended that you install the developmental version
 of ggplot2 until the bug has been fixed. You can install the
 developmental version using the following command (after installing the
-[`devtools`](https://CRAN.R-project.org/package=devtools)
-package): `devtools::install_github("tidyverse/ggplot2")`
+[`devtools`](https://CRAN.R-project.org/package=devtools) package):
+`devtools::install_github("tidyverse/ggplot2")`
 
 ## Usage
 
@@ -182,10 +182,12 @@ The main function `conf_dist()` returns five objects in a list:
 ``` r
 
 #-----------------------------------------------------------------------------
-# Sourcing function
+# Installing package from GitHub and loading package
 #-----------------------------------------------------------------------------
 
-source("confidence_distributions.R")
+devtools::install_github("DInfanger/pvaluefunctions")
+
+library(pvaluefunctions)
 
 #-----------------------------------------------------------------------------
 # T-Test
@@ -548,7 +550,7 @@ distribution estimator of a parameter: A review. *Internat Statist Rev.*
 
 ## Session info
 
-    #> R version 3.5.3 (2019-03-11)
+    #> R version 3.6.0 (2019-04-26)
     #> Platform: x86_64-w64-mingw32/x64 (64-bit)
     #> Running under: Windows 10 x64 (build 17134)
     #> 
@@ -563,20 +565,27 @@ distribution estimator of a parameter: A review. *Internat Statist Rev.*
     #> [1] stats     graphics  grDevices utils     datasets  methods   base     
     #> 
     #> other attached packages:
-    #> [1] zipfR_0.6-10       scales_1.0.0       ggplot2_3.1.1.9000
+    #> [1] pvaluefunctions_1.0.0
     #> 
     #> loaded via a namespace (and not attached):
-    #>  [1] Rcpp_1.0.1         knitr_1.22         magrittr_1.5      
-    #>  [4] tidyselect_0.2.5   munsell_0.5.0      colorspace_1.4-1  
-    #>  [7] R6_2.4.0           rlang_0.3.4        stringr_1.4.0     
-    #> [10] dplyr_0.8.0.1      tools_3.5.3        grid_3.5.3        
-    #> [13] gtable_0.3.0       xfun_0.6           withr_2.1.2       
-    #> [16] htmltools_0.3.6    assertthat_0.2.1   yaml_2.2.0        
-    #> [19] lazyeval_0.2.2     digest_0.6.18      tibble_2.1.1      
-    #> [22] crayon_1.3.4       RColorBrewer_1.1-2 purrr_0.3.2       
-    #> [25] glue_1.3.1         evaluate_0.13      rmarkdown_1.12    
-    #> [28] labeling_0.3       stringi_1.4.3      compiler_3.5.3    
-    #> [31] pillar_1.3.1       pkgconfig_2.0.2
+    #>  [1] Rcpp_1.0.1         RColorBrewer_1.1-2 pillar_1.3.1      
+    #>  [4] plyr_1.8.4         compiler_3.6.0     prettyunits_1.0.2 
+    #>  [7] remotes_2.0.4      tools_3.6.0        testthat_2.1.1    
+    #> [10] digest_0.6.18      pkgbuild_1.0.3     pkgload_1.0.2     
+    #> [13] tibble_2.1.1       gtable_0.3.0       evaluate_0.13     
+    #> [16] memoise_1.1.0      pkgconfig_2.0.2    rlang_0.3.4       
+    #> [19] cli_1.1.0          curl_3.3           yaml_2.2.0        
+    #> [22] xfun_0.6           dplyr_0.8.0.1      withr_2.1.2       
+    #> [25] stringr_1.4.0      knitr_1.22         desc_1.2.0        
+    #> [28] fs_1.3.0           devtools_2.0.2     tidyselect_0.2.5  
+    #> [31] rprojroot_1.3-2    grid_3.6.0         glue_1.3.1        
+    #> [34] R6_2.4.0           processx_3.3.0     rmarkdown_1.12    
+    #> [37] sessioninfo_1.1.1  purrr_0.3.2        callr_3.2.0       
+    #> [40] ggplot2_3.1.1      magrittr_1.5       scales_1.0.0      
+    #> [43] backports_1.1.4    ps_1.3.0           htmltools_0.3.6   
+    #> [46] usethis_1.5.0      assertthat_0.2.1   colorspace_1.4-1  
+    #> [49] labeling_0.3       stringi_1.4.3      lazyeval_0.2.2    
+    #> [52] munsell_0.5.0      crayon_1.3.4
 
 ## License
 

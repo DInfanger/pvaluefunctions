@@ -8,37 +8,42 @@ if (getRversion() >= "2.15.1") {
   utils::globalVariables(c("values", "variable", "hypothesis", "null_value", "theor_values", "p_value", "label"))
 }
 
-
 #' Create and Plot \emph{P}-Value Functions, S-Value Functions, Confidence Distributions and Confidence Densities
 #'
-#' \code{conf_dist} generates confidence distributions (cdf), confidence densities (pdf), shannon suprisal (s-value) functions and p-value functions for several commonly used estimates.
+#' The function \code{conf_dist} generates confidence distributions (cdf), confidence densities (pdf), shannon suprisal (s-value) functions and \emph{p}-value functions for several commonly used estimates. In addition, counternulls (see Rosenthal et al. 1994) and point estimates are calculated.
+#'
+#' \emph{P}-value functions and confidence intervals are calculated based on the \emph{t}-distribution for \emph{t}-tests, linear regression coefficients, and gamma regression models (GLM). The normal distribution is used for logistic regression, poisson regression and cox regression models. For correlation coefficients, Fisher's transform is used using the corresponding variances (see Bonett et al. 2000). \emph{P}-value functions and confidence intervals for variances are constructed using the Chi2 distribution. Finally, Wilson's score intervals are used for one proportion.
 #'
 #' @param estimate Numerical vector containing the estimate(s).
 #' @param n Numerical vector containing the sample size(s). Required for correlations, variances and proportions. Must be equal the number of estimates.
 #' @param df Numerical vector containing the degrees of freedom. Required for statistics based on the \emph{t}-distribution (e.g. linear regression) and \emph{t}-tests. Must be equal the number of estimates.
 #' @param stderr Numerical vector containing the standard error(s) of the estimate(s). Required for statistics based on the \emph{t}-distribution (e.g. linear regression) and the normal distribution (e.g. logistic regression). Must be equal the number of estimate(s).
 #' @param tstat Numerical vector containing the \emph{t}-statistic(s). Required for \emph{t}-tests (means and mean differences). Must be equal the number of estimates.
-#' @param type String indicating the type estimate. Must be one of the following: ttest, linreg, gammareg, general_t, logreg, poisreg, coxreg, general_z, pearson, spearman, kendall, var, prop.
-#' @param plot_type String indicating the type of plot. Must be one of the following: cdf (confidence distribution), pdf (confidence density), p_val (\emph{p}-value function), s_val (Surprisal).
+#' @param type String indicating the type of the estimate. Must be one of the following: \code{ttest}, \code{linreg}, \code{gammareg}, \code{general_t}, \code{logreg}, \code{poisreg}, \code{coxreg}, \code{general_z}, \code{pearson}, \code{spearman}, \code{kendall}, \code{var}, \code{prop}.
+#' @param plot_type String indicating the type of plot. Must be one of the following: \code{cdf} (confidence distribution), \code{pdf} (confidence density), \code{p_val} (\emph{p}-value function), \code{s_val} (Surprisal).
 #' @param n_values (optional) Integer indicating the number of points that are used to generate the graphics. The higher this number, the higher the computation time and resolution.
 #' @param est_names (optional) String vector indicating the names of the estimate(s). Must be equal the number of estimates.
 #' @param conf_level (optional) Numerical vector indicating the confidence level(s). Bust be between 0 and 1.
 #' @param null_values (optional) Numerical vector indicating the null value(s) in the plot
 #' @param trans (optional) String indicating the transformation function that will be applied to the estimates and confidence curves. For example: \code{exp} for an exponential transformation of the log-odds in logistic regression.
-#' @param alternative String indicating if the confidence level(s) are two-sided or one-sided. Must be one of the following: two_sided, one_sided.
+#' @param alternative String indicating if the confidence level(s) are two-sided or one-sided. Must be one of the following: \code{two_sided}, \code{one_sided}.
 #' @param log_yaxis Logical. Indicating if a portion of the y-axis should be displayed on the logarithmic scale.
 #' @param cut_logyaxis Numerical value indicating the threshold below which the y-axis will be displayed logarithmically. Must lie between 0 and 1.
 #' @param xlab (optional) String indicating the label of the x-axis.
 #' @param xlim (optional) Optional numerical vector of length 2 indicating the limits of the x-axis on the untransformed scale.
 #' @param together Logical. Indicating if graphics for multiple estimates should be displayed together or on separate plots.
-#' @param plot_p_limit Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale (i.e. log_yaxis = TRUE).
+#' @param plot_p_limit Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale (i.e. \code{log_yaxis = TRUE}).
 #'
-#' @return \code{conf_dist} returns four data frames and a ggplot2-plot object: \code{res_frame} (contains parameter values, \emph{p}-values, s-values, confidence distribution and density, variable names and type of hypothesis), \code{conf_frame} (contains the used confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull for the corresponding null values), \code{point_est} (contains the mean, median and mode point estimate) and \code{plot} (a ggplot2-plot).
+#' @return \code{conf_dist} returns four data frames and a ggplot2-plot object: \code{res_frame} (contains parameter values, \emph{p}-values, s-values, confidence distribution and density, variable names and type of hypothesis), \code{conf_frame} (contains the used confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull for the corresponding null values), \code{point_est} (contains the mean, median and mode point estimates) and \code{plot} (a ggplot2-plot).
 #' @references Bender R, Berg G, Zeeb H. Tutorial: using confidence curves in medical research. Biom J. 2005;47(2):237-247.
+#'
+#' Bonett DG, Wright TA. Sample size requirements for estimating Pearson, Kendall and Spearman correlations. 2000;65(1):23-28.
 #'
 #' Poole C. Confidence intervals exclude nothing. Am J Public Health. 1987;77(4):492-493.
 #'
 #' Poole C. Beyond the confidence interval. Am J Public Health. 1987;77(2):195-199.
+#'
+#' Rosenthal R, Rubin D. The counternull value of an effect size: a new statistic. 1994;5(6):329-334.
 #'
 #' Rothman KJ, Greenland S, Lash TL. Modern epidemiology. 3rd ed. Philadelphia, PA: Wolters Kluwer; 2008.
 #'
@@ -49,7 +54,7 @@ if (getRversion() >= "2.15.1") {
 #' Xie Mg, Singh K. Confidence distribution, the frequentist distribution estimator of a parameter: A review. Internat Statist Rev. 2013;81(1):3-39.
 #' @examples
 #'
-#' # Create a p-value function for using the normal distribution
+#' # Create a p-value function for an estimate using the normal distribution
 #'
 #' conf_dist(
 #' estimate = c(-0.13)
@@ -57,7 +62,7 @@ if (getRversion() >= "2.15.1") {
 #' , type = "general_z"
 #' , plot_type = "p_val"
 #' , n_values = 1e4L
-#' , est_names = c("")
+#' , est_names = c("Parameter value")
 #' , log_yaxis = FALSE
 #' , cut_logyaxis = 0.05
 #' , conf_level = c(0.95)
@@ -69,6 +74,31 @@ if (getRversion() >= "2.15.1") {
 #' , together = TRUE
 #' , plot_p_limit = 1 - 0.9999
 #' )
+#'
+#' # P-value function for a single regression coefficient (Agriculture in the model below)
+#'
+#' mod <- lm(Infant.Mortality~Agriculture + Fertility + Examination, data = swiss)
+#' summary(mod)
+#'
+#'res <- conf_dist(
+#'  estimate = c(-0.02143)
+#'  , df = c(43)
+#'  , stderr = (0.02394)
+#'  , type = "linreg"
+#'  , plot_type = "p_val"
+#'  , n_values = 1e4L
+#'  , conf_level = c(0.95, 0.90, 0.80)
+#'  , null_values = c(0)
+#'  , trans = "identity"
+#'  , alternative = "two_sided"
+#'  , log_yaxis = TRUE
+#'  , cut_logyaxis = 0.05
+#'  , xlab = "Coefficient Agriculture"
+#'  , together = FALSE
+#'  , plot_p_limit = 1 - 0.999
+#')
+#'
+#' @seealso \code{\link[concurve]{plotpint}}
 #'
 #' @import stats ggplot2 scales
 #' @importFrom grDevices grey

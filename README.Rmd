@@ -34,10 +34,10 @@ Alternatively, you can source the files directly from the GitHub repository usin
 library(devtools)
 
 # Load main function
-source_url("https://raw.githubusercontent.com/DInfanger/pvalue_functions/master/confidence_distributions.R")
+source_url("https://raw.githubusercontent.com/DInfanger/pvaluefunctions/master/R/confidence_distributions.R")
 
 # Load file to reproduce figures in the publication
-source_url("https://raw.githubusercontent.com/DInfanger/pvalue_functions/master/paper_plots.R")
+source_url("https://raw.githubusercontent.com/DInfanger/pvalue_functions/master/R/paper_plots.R")
 
 ```
 
@@ -106,10 +106,12 @@ The main function `conf_dist()` returns five objects in a list:
 ```{r ttest, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
 
 #-----------------------------------------------------------------------------
-# Sourcing function
+# Installing package from GitHub and loading package
 #-----------------------------------------------------------------------------
 
-source("confidence_distributions.R")
+devtools::install_github("DInfanger/pvaluefunctions")
+
+library(pvaluefunctions)
 
 #-----------------------------------------------------------------------------
 # T-Test
