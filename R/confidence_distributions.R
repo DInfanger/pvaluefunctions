@@ -159,9 +159,6 @@ conf_dist <- function(
   # require(RColorBrewer)
   # require(MASS)
   # require("zipfR")
-  # devtools::use_package("ggplot2")
-  # devtools::use_package("scales")
-  # devtools::use_package("zipfR")
 
   #-----------------------------------------------------------------------------
   # Safety checks and clean ups
@@ -584,12 +581,12 @@ conf_dist <- function(
   # Labeller functions for custom log-scale
 
   lab_onesided <- Vectorize(function(x){
-    if(!is.na(x) && (x < cut_logyaxis_one) & (round((x %% 1)*10) == 0)) {sprintf("%.5g", x)}
+    if (!is.na(x) && (x < cut_logyaxis_one) & (round((x %% 1)*10) == 0)) {sprintf("%.5g", x)}
     else {sprintf("%.2f", x)}
   })
 
   lab_twosided <- Vectorize(function(x){
-    if(!is.na(x) && (x <= cut_logyaxis) & (round((x %% 1)*10) == 0)) {sprintf("%.5g", x)}
+    if (!is.na(x) && (x <= cut_logyaxis) & (round((x %% 1)*10) == 0)) {sprintf("%.5g", x)}
     else {sprintf("%.1f", x)}
   })
 
@@ -1523,9 +1520,9 @@ cdist_prop1 <- function(
 magnify_trans_log <- function(interval_low = 0.05, interval_high = 1,  reducer = 0.05, reducer2 = 8) {
 
   trans <- Vectorize(function(x, i_low = interval_low, i_high = interval_high, r = reducer, r2 = reducer2) {
-    if(is.na(x) || (x >= i_low & x <= i_high)) {
+    if (is.na(x) || (x >= i_low & x <= i_high)) {
       x
-    } else if(x < i_low & !is.na(x)) {
+    } else if (x < i_low & !is.na(x)) {
       (log10(x / r)/r2 + i_low)
     } else {
       log10((x - i_high) / r + i_high)/r2
@@ -1533,9 +1530,9 @@ magnify_trans_log <- function(interval_low = 0.05, interval_high = 1,  reducer =
   })
 
   inv <- Vectorize(function(x, i_low = interval_low, i_high = interval_high, r = reducer, r2 = reducer2) {
-    if(is.na(x) || (x >= i_low & x <= i_high)) {
+    if (is.na(x) || (x >= i_low & x <= i_high)) {
       x
-    } else if(x < i_low & !is.na(x)) {
+    } else if (x < i_low & !is.na(x)) {
       10^(-(i_low - x)*r2)*r
     } else {
       i_high + 10^(x*r2)*r - i_high*r
@@ -1550,13 +1547,13 @@ magnify_trans_log <- function(interval_low = 0.05, interval_high = 1,  reducer =
 # trans_surprisal <- function() {
 #
 #   trans <- Vectorize(function(x) {
-#     if(!is.na(x)) {
+#     if (!is.na(x)) {
 #       -log2(x)
 #     }
 #   })
 #
 #   inv <- Vectorize(function(x) {
-#     if(!is.na(x)) {
+#     if (!is.na(x)) {
 #       2^(-x)
 #     }
 #   })

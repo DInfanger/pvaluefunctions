@@ -1,12 +1,12 @@
 ---
-title: "*P*-value functions"
+title: "P-value functions"
 author: "Denis Infanger"
-date: "2019-05-06"
-output: html_vignette
+date: "2019-05-08"
+output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{*P*-value functions}
+  %\VignetteIndexEntry{P-value functions}
   %\VignetteEngine{knitr::knitr}
-  \usepackage[utf8]{inputenc}
+  %\usepackage[utf8]{inputenc}
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -19,19 +19,20 @@ This package contains R functions to create graphics of *p*-value functions, con
 
 ## Installation
 
-Download the file `confidence_distributions.R` to your computer. You can either `source()` the function in R or open it, select and run everything. After loading the function, it's ready for use.
-
-To reproduce the plots from the publication, download the file `paper_plots.R` and run it *after* loading the main function contained in the file `confidence_distributions.R` (see above).
-
-Alternatively, you can source the files directly from the GitHub repository using the [`devtools`](https://CRAN.R-project.org/package=devtools) package:
+Install and load the package from CRAN.
 
 
 ```r
-library(devtools)
-
-# Load function
-source_url("https://raw.githubusercontent.com/DInfanger/pvalue_functions/master/confidence_distributions.R")
+require(pvaluefunctions)
 ```
+
+<!-- Download the file `confidence_distributions.R` to your computer. You can either `source()` the function in R or open it, select and run everything. After loading the function, it's ready for use. -->
+
+<!-- To reproduce the plots from the publication, download the file `paper_plots.R` and run it *after* loading the main function contained in the file `confidence_distributions.R` (see above). -->
+
+<!-- Alternatively, you can source the files directly from the GitHub repository using the [`devtools`](https://CRAN.R-project.org/package=devtools) package: -->
+
+
 
 
 ## Dependencies
@@ -42,7 +43,7 @@ The function depends on the following R packages, which need to be installed bef
 * scales
 * zipfR
 
-Use the command `install.packages(c("ggplot2", "scales", "zipfR"))` in R to install those packages.
+<!-- Use the command `install.packages(c("ggplot2", "scales", "zipfR"))` in R to install those packages. -->
 
 ### Important information!
 
@@ -54,25 +55,25 @@ It is therefore recommended that you install the developmental version of ggplot
 
 There is only one function needed to create the plots: `conf_dist()`. The function has the following arguments:
 
-* **`estimate`**: Numerical vector containing the estimate(s).
-* **`n`**: Numerical vector containing the sample size(s). Required for correlations, variances and proportions. Must be equal the number of estimates.
-* **`df`**: Numerical vector containing the degrees of freedom. Required for statistics based on the *t*-distribution (e.g. linear regression) and *t*-tests. Must be equal the number of estimates.
-* **`stderr`**: Numerical vector containing the standard error(s) of the estimate(s). Required for statistics based on the *t*-distribution (e.g. linear regression) and the normal distribution (e.g. logistic regression). Must be equal the number of estimate(s).
-* **`tstat`**: Numerical vector containing the *t*-statistic(s). Required for *t*-tests (means and mean differences). Must be equal the number of estimates. 
-* **`type`**: String indicating the type of the estimate. Must be one of the following: `ttest`, `linreg`, `gammareg`, `general_t`, `logreg`, `poisreg`, `coxreg`, `general_z`, `pearson`, `spearman`, `kendall`, `var`, `prop`.
-* **`plot_type`**: String indicating the type of plot. Must be one of the following: `cdf` (confidence distribution), `pdf` (confidence density), `p_val` (*p*-value function), `s_val` (Surprisal).
-* **`n_values`** (optional): Integer indicating the number of points that are used to generate the graphics. The higher this number, the higher the computation time and resolution.
-* **`est_names`** (optional): String vector indicating the names of the estimate(s). Must be equal the number of estimates.
-* **`conf_level`** (optional): Numerical vector indicating the confidence level(s). Bust be between 0 and 1.
-* **`null_values`** (optional): Numerical vector indicating the null value(s) in the plot
-* **`trans`** (optional): String indicating the transformation function that will be applied to the estimates and confidence curves. For example: "exp" for an exponential transformation of the log-odds in logistic regression. 
-* **`alternative`**: String indicating if the confidence level(s) are two-sided or one-sided. Must be one of the following: `two_sided`, `one_sided`.
-* **`log_yaxis`**: Logical. Indicating if a portion of the y-axis should be displayed on the logarithmic scale.
-* **`cut_logyaxis`**: Numerical value indicating the threshold below which the y-axis will be displayed logarithmically. Must lie between 0 and 1.
-* **`xlab`** (optional): String indicating the label of the x-axis.
-* **`xlim`** (optional): Optional numerical vector of length 2 indicating the limits of the x-axis on the *untransformed* scale.
-* **`together`**: Logical. Indicating if graphics for multiple estimates should be displayed together or on separate plots.
-* **`plot_p_limit`**: Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale (i.e. `log_yaxis = TRUE`).
+* `estimate`: Numerical vector containing the estimate(s).
+* `n`: Numerical vector containing the sample size(s). Required for correlations, variances and proportions. Must be equal the number of estimates.
+* `df`: Numerical vector containing the degrees of freedom. Required for statistics based on the *t*-distribution (e.g. linear regression) and *t*-tests. Must be equal the number of estimates.
+* `stderr`: Numerical vector containing the standard error(s) of the estimate(s). Required for statistics based on the *t*-distribution (e.g. linear regression) and the normal distribution (e.g. logistic regression). Must be equal the number of estimate(s).
+* `tstat`: Numerical vector containing the *t*-statistic(s). Required for *t*-tests (means and mean differences). Must be equal the number of estimates. 
+* `type`: String indicating the type of the estimate. Must be one of the following: `ttest`, `linreg`, `gammareg`, `general_t`, `logreg`, `poisreg`, `coxreg`, `general_z`, `pearson`, `spearman`, `kendall`, `var`, `prop`.
+* `plot_type`: String indicating the type of plot. Must be one of the following: `cdf` (confidence distribution), `pdf` (confidence density), `p_val` (*p*-value function), `s_val` (Surprisal).
+* `n_values` (optional): Integer indicating the number of points that are used to generate the graphics. The higher this number, the higher the computation time and resolution.
+* `est_names` (optional): String vector indicating the names of the estimate(s). Must be equal the number of estimates.
+* `conf_level` (optional): Numerical vector indicating the confidence level(s). Bust be between 0 and 1.
+* `null_values` (optional): Numerical vector indicating the null value(s) in the plot
+* `trans` (optional): String indicating the transformation function that will be applied to the estimates and confidence curves. For example: "exp" for an exponential transformation of the log-odds in logistic regression. 
+* `alternative`: String indicating if the confidence level(s) are two-sided or one-sided. Must be one of the following: `two_sided`, `one_sided`.
+* `log_yaxis`: Logical. Indicating if a portion of the y-axis should be displayed on the logarithmic scale.
+* `cut_logyaxis`: Numerical value indicating the threshold below which the y-axis will be displayed logarithmically. Must lie between 0 and 1.
+* `xlab` (optional): String indicating the label of the x-axis.
+* `xlim` (optional): Optional numerical vector of length 2 indicating the limits of the x-axis on the *untransformed* scale.
+* `together`: Logical. Indicating if graphics for multiple estimates should be displayed together or on separate plots.
+* `plot_p_limit`: Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale (i.e. `log_yaxis = TRUE`).
 
 ### Required arguments for different estimate types
 
@@ -97,13 +98,6 @@ The main function `conf_dist()` returns five objects in a list:
 
 
 ```r
-
-#-----------------------------------------------------------------------------
-# Sourcing function
-#-----------------------------------------------------------------------------
-
-#source("confidence_distributions.R")
-
 #-----------------------------------------------------------------------------
 # T-Test
 #-----------------------------------------------------------------------------
@@ -454,54 +448,15 @@ Xie Mg, Singh K. (2013): Confidence distribution, the frequentist distribution e
 
 [Denis Infanger](https://dsbg.unibas.ch/de/personen/denis-infanger/)
 
-## Session info
+<!-- ## Session info -->
 
 
-```
-#> R version 3.6.0 (2019-04-26)
-#> Platform: x86_64-w64-mingw32/x64 (64-bit)
-#> Running under: Windows 10 x64 (build 17134)
-#> 
-#> Matrix products: default
-#> 
-#> locale:
-#> [1] LC_COLLATE=C                        LC_CTYPE=German_Switzerland.1252   
-#> [3] LC_MONETARY=German_Switzerland.1252 LC_NUMERIC=C                       
-#> [5] LC_TIME=German_Switzerland.1252    
-#> 
-#> attached base packages:
-#> [1] stats     graphics  grDevices utils     datasets  methods   base     
-#> 
-#> other attached packages:
-#> [1] zipfR_0.6-10          scales_1.0.0          ggplot2_3.1.1        
-#> [4] usethis_1.5.0         devtools_2.0.2        pvaluefunctions_1.0.0
-#> 
-#> loaded via a namespace (and not attached):
-#>  [1] Rcpp_1.0.1         RColorBrewer_1.1-2 highr_0.8         
-#>  [4] pillar_1.3.1       plyr_1.8.4         compiler_3.6.0    
-#>  [7] prettyunits_1.0.2  remotes_2.0.4      tools_3.6.0       
-#> [10] testthat_2.1.1     digest_0.6.18      pkgbuild_1.0.3    
-#> [13] pkgload_1.0.2      evaluate_0.13      tibble_2.1.1      
-#> [16] memoise_1.1.0      gtable_0.3.0       pkgconfig_2.0.2   
-#> [19] rlang_0.3.4        cli_1.1.0          rstudioapi_0.10   
-#> [22] commonmark_1.7     curl_3.3           xfun_0.6          
-#> [25] httr_1.4.0         knitr_1.22         dplyr_0.8.0.1     
-#> [28] withr_2.1.2        stringr_1.4.0      roxygen2_6.1.1    
-#> [31] xml2_1.2.0         desc_1.2.0         fs_1.3.0          
-#> [34] tidyselect_0.2.5   rprojroot_1.3-2    grid_3.6.0        
-#> [37] glue_1.3.1         R6_2.4.0           processx_3.3.0    
-#> [40] sessioninfo_1.1.1  callr_3.2.0        purrr_0.3.2       
-#> [43] magrittr_1.5       backports_1.1.4    ps_1.3.0          
-#> [46] assertthat_0.2.1   colorspace_1.4-1   labeling_0.3      
-#> [49] stringi_1.4.3      lazyeval_0.2.2     munsell_0.5.0     
-#> [52] crayon_1.3.4
-```
 
-## License
+<!-- ## License -->
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+<!-- [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) -->
 
-[GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0).
+<!-- [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0). -->
 
 
 
