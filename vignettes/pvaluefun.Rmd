@@ -6,10 +6,8 @@ output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{P-value functions}
   %\VignetteEngine{knitr::knitr}
-  %\usepackage[utf8]{inputenc}
+  \usepackage[utf8]{inputenc}
 ---
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
@@ -97,17 +95,17 @@ There is only one function needed to create the plots: `conf_dist()`. The functi
 
 The main function `conf_dist()` returns five objects in a list:
 
-* **`res_frame`**: A data frame containing the values used to construct the plot.
-* **`conf_frame`**: A data frame containing the confidence intervals for the specified confidence levels for all estimates.
-* **`counternull_frame`**: A data frame containing the counternull values for the specified null values (see Rosenthal & Rubin (1994) for more information about the counternull).
-* **`point_est`**: A data frame containing the point estimates for all estimates. The point estimates correspond to the mean, median or mode of the confidence density (see Xie & Singh (2013) for more information). Estimates are produced using numerical procedures: Increase the number of points `n_values` for higher numerical precision.
-* **`plot`**: A [ggplot2](https://ggplot2.tidyverse.org/) plot object.
+* `res_frame`: A data frame containing the values used to construct the plot.
+* onf_frame`: A data frame containing the confidence intervals for the specified confidence levels for all estimates.
+* **`counternull_frame`: A data frame containing the counternull values for the specified null values (see Rosenthal & Rubin (1994) for more information about the counternull).
+* `point_est`: A data frame containing the point estimates for all estimates. The point estimates correspond to the mean, median or mode of the confidence density (see Xie & Singh (2013) for more information). Estimates are produced using numerical procedures: Increase the number of points `n_values` for higher numerical precision.
+* `plot`: A [ggplot2](https://ggplot2.tidyverse.org/) plot object.
 
 ## Examples
 
 ### Two-sample *t*-test with unequal variances (Welch-Test)
 
-```{r ttest, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "tiff", dev.args = list(compression = "lzw"), dpi = 300}
+```{r ttest, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center'}
 #-----------------------------------------------------------------------------
 # T-Test
 #-----------------------------------------------------------------------------
@@ -142,7 +140,7 @@ res <- conf_dist(
 ### Single coefficient from a linear regression model
 #### *P*-value function
 
-```{r linreg_single_pval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "tiff", dev.args = list(compression = "lzw"), dpi = 300}
+```{r linreg_single_pval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center'}
 #-----------------------------------------------------------------------------
 # Model
 #-----------------------------------------------------------------------------
@@ -176,7 +174,7 @@ res <- conf_dist(
 ```
 
 #### Confidence distribution
-```{r linreg_single_cdf, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "tiff", dev.args = list(compression = "lzw"), dpi = 300}
+```{r linreg_single_cdf, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center'}
 res <- conf_dist(
   estimate = c(-0.02143)
   , df = c(43)
@@ -203,7 +201,7 @@ res <- conf_dist(
 ### Multiple coefficients from a linear regression model
 #### *P*-value functions
 
-```{r linreg_multiple_pval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "tiff", dev.args = list(compression = "lzw"), dpi = 300}
+```{r linreg_multiple_pval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center'}
 res <- conf_dist(
   estimate = c(0.13115, 0.04913)
   , df = c(43, 43)
@@ -225,7 +223,7 @@ res <- conf_dist(
 ```
 
 #### Surprisal values
-```{r linreg_multiple_sval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "tiff", dev.args = list(compression = "lzw"), dpi = 300}
+```{r linreg_multiple_sval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center'}
 res <- conf_dist(
   estimate = c(0.13115, 0.04913)
   , df = c(43, 43)
@@ -248,7 +246,7 @@ res <- conf_dist(
 
 ### Pearson correlation coefficient (one-sided)
 
-```{r corr_pearson, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "tiff", dev.args = list(compression = "lzw"), dpi = 300}
+```{r corr_pearson, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center'}
 #-----------------------------------------------------------------------------
 # Calculate Pearson's correlation coefficient
 #-----------------------------------------------------------------------------
@@ -280,7 +278,7 @@ res <- conf_dist(
 
 ### Odds ratio from logistic regression
 
-```{r logreg, message = FALSE, warning = FALSE, fig.width = 9.2, fig.height = 7.2, out.width = "80%", fig.align='center', dev = "tiff", dev.args = list(compression = "lzw"), dpi = 300}
+```{r logreg, message = FALSE, warning = FALSE, fig.width = 9.2, fig.height = 7.2, out.width = "80%", fig.align='center'}
 #-----------------------------------------------------------------------------
 # Calculate logistic regression model using a dataset from UCLA
 #-----------------------------------------------------------------------------
@@ -320,7 +318,7 @@ res <- conf_dist(
 
 ### Proportion
 
-```{r prop, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "tiff", dev.args = list(compression = "lzw"), dpi = 300}
+```{r prop, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center'}
 res <- conf_dist(
   estimate = c(0.44)
   , n = c(50)

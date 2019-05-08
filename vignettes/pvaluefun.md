@@ -6,7 +6,7 @@ output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{P-value functions}
   %\VignetteEngine{knitr::knitr}
-  %\usepackage[utf8]{inputenc}
+  \usepackage[utf8]{inputenc}
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -86,11 +86,11 @@ There is only one function needed to create the plots: `conf_dist()`. The functi
 
 The main function `conf_dist()` returns five objects in a list:
 
-* **`res_frame`**: A data frame containing the values used to construct the plot.
-* **`conf_frame`**: A data frame containing the confidence intervals for the specified confidence levels for all estimates.
-* **`counternull_frame`**: A data frame containing the counternull values for the specified null values (see Rosenthal & Rubin (1994) for more information about the counternull).
-* **`point_est`**: A data frame containing the point estimates for all estimates. The point estimates correspond to the mean, median or mode of the confidence density (see Xie & Singh (2013) for more information). Estimates are produced using numerical procedures: Increase the number of points `n_values` for higher numerical precision.
-* **`plot`**: A [ggplot2](https://ggplot2.tidyverse.org/) plot object.
+* `res_frame`: A data frame containing the values used to construct the plot.
+* onf_frame`: A data frame containing the confidence intervals for the specified confidence levels for all estimates.
+* **`counternull_frame`: A data frame containing the counternull values for the specified null values (see Rosenthal & Rubin (1994) for more information about the counternull).
+* `point_est`: A data frame containing the point estimates for all estimates. The point estimates correspond to the mean, median or mode of the confidence density (see Xie & Singh (2013) for more information). Estimates are produced using numerical procedures: Increase the number of points `n_values` for higher numerical precision.
+* `plot`: A [ggplot2](https://ggplot2.tidyverse.org/) plot object.
 
 ## Examples
 
@@ -141,7 +141,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="figure/ttest-1.tiff" title="plot of chunk ttest" alt="plot of chunk ttest" width="80%" style="display: block; margin: auto;" />
+<img src="figure/ttest-1.png" title="plot of chunk ttest" alt="plot of chunk ttest" width="80%" style="display: block; margin: auto;" />
 
 ### Single coefficient from a linear regression model
 #### *P*-value function
@@ -201,7 +201,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="figure/linreg_single_pval-1.tiff" title="plot of chunk linreg_single_pval" alt="plot of chunk linreg_single_pval" width="80%" style="display: block; margin: auto;" />
+<img src="figure/linreg_single_pval-1.png" title="plot of chunk linreg_single_pval" alt="plot of chunk linreg_single_pval" width="80%" style="display: block; margin: auto;" />
 
 #### Confidence distribution
 
@@ -227,7 +227,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="figure/linreg_single_cdf-1.tiff" title="plot of chunk linreg_single_cdf" alt="plot of chunk linreg_single_cdf" width="80%" style="display: block; margin: auto;" />
+<img src="figure/linreg_single_cdf-1.png" title="plot of chunk linreg_single_cdf" alt="plot of chunk linreg_single_cdf" width="80%" style="display: block; margin: auto;" />
 
 
 ### Multiple coefficients from a linear regression model
@@ -255,7 +255,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="figure/linreg_multiple_pval-1.tiff" title="plot of chunk linreg_multiple_pval" alt="plot of chunk linreg_multiple_pval" width="80%" style="display: block; margin: auto;" />
+<img src="figure/linreg_multiple_pval-1.png" title="plot of chunk linreg_multiple_pval" alt="plot of chunk linreg_multiple_pval" width="80%" style="display: block; margin: auto;" />
 
 #### Surprisal values
 
@@ -280,7 +280,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="figure/linreg_multiple_sval-1.tiff" title="plot of chunk linreg_multiple_sval" alt="plot of chunk linreg_multiple_sval" width="80%" style="display: block; margin: auto;" />
+<img src="figure/linreg_multiple_sval-1.png" title="plot of chunk linreg_multiple_sval" alt="plot of chunk linreg_multiple_sval" width="80%" style="display: block; margin: auto;" />
 
 ### Pearson correlation coefficient (one-sided)
 
@@ -326,7 +326,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="figure/corr_pearson-1.tiff" title="plot of chunk corr_pearson" alt="plot of chunk corr_pearson" width="80%" style="display: block; margin: auto;" />
+<img src="figure/corr_pearson-1.png" title="plot of chunk corr_pearson" alt="plot of chunk corr_pearson" width="80%" style="display: block; margin: auto;" />
 
 ### Odds ratio from logistic regression
 
@@ -396,7 +396,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="figure/logreg-1.tiff" title="plot of chunk logreg" alt="plot of chunk logreg" width="80%" style="display: block; margin: auto;" />
+<img src="figure/logreg-1.png" title="plot of chunk logreg" alt="plot of chunk logreg" width="80%" style="display: block; margin: auto;" />
 
 ### Proportion
 
@@ -422,7 +422,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="figure/prop-1.tiff" title="plot of chunk prop" alt="plot of chunk prop" width="80%" style="display: block; margin: auto;" />
+<img src="figure/prop-1.png" title="plot of chunk prop" alt="plot of chunk prop" width="80%" style="display: block; margin: auto;" />
 
 ## References
 
