@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 
 ## Overview
 
-This package contains R functions to create graphics of *p*-value functions, confidence distributions, confidence densities, or the [Surprisal value (S-value)](http://www.umsl.edu/~fraundorfp/egsurpri.html) (Greenland 2019). An R-script to reproduce the plots in the publication is also available.
+This package contains R functions to create graphics of *p*-value functions, confidence distributions, confidence densities, or the [Surprisal value (S-value)](http://www.umsl.edu/~fraundorfp/egsurpri.html) (Greenland 2019).
 
 ## Installation
 
@@ -42,7 +42,6 @@ library(devtools)
 source_url("https://raw.githubusercontent.com/DInfanger/pvaluefunctions/master/R/confidence_distributions.R")
 
 ```
-
 
 ## Dependencies
 
