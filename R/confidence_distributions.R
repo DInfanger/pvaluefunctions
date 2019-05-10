@@ -1634,14 +1634,17 @@ cdist_propdiff <- function(
   conf_levels <- seq(eps, 1 - eps, length.out = ceiling(n_values/2))
   x_calc <- sapply(conf_levels, wilson_cicc_diff, estimate = estimate, n = n, alternative = alternative)
 
-  res_mat_tmp <- matrix(NA, nrow = length(x_calc), ncol = 6)
+  val_min <- wilson_cicc_diff(estimate, n, conf_level = eps)
+  val_between <- seq(min(val_min), max(val_min), length.out = 100)
 
-  res_mat_tmp[, 1] <- c(x_calc[1, ], x_calc[2, ])
+  res_mat_tmp <- matrix(NA, nrow = length(x_calc) + 100, ncol = 6)
+
+  res_mat_tmp[, 1] <- c(x_calc[1, ], x_calc[2, ], val_between)
   is.na(res_mat_tmp[, 2]) <- TRUE # No confidence distribution for this one
   is.na(res_mat_tmp[, 3]) <- TRUE # No confidence density for this one
-  res_mat_tmp[, 4] <- c(1 - conf_levels, 1 - conf_levels)
-  res_mat_tmp[, 5] <- c((1 - conf_levels)/2, (1 - conf_levels)/2)
-  res_mat_tmp[, 6] <- rep(1, dim(x_calc)[2])
+  res_mat_tmp[, 4] <- c(1 - conf_levels, 1 - conf_levels, rep(NA, 100))
+  res_mat_tmp[, 5] <- c((1 - conf_levels)/2, (1 - conf_levels)/2, rep(NA, 100))
+  res_mat_tmp[, 6] <- rep(1, times = (length(x_calc) + 100))
 
   res_mat <- rbind(res_mat, res_mat_tmp)
 
