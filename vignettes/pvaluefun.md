@@ -1,7 +1,7 @@
 ---
 title: "P-value functions"
 author: "Denis Infanger"
-date: "2019-05-08"
+date: "2019-05-10"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{P-value functions}
@@ -9,13 +9,11 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 
 
 ## Overview
 
-This package contains R functions to create graphics of *p*-value functions, confidence distributions, confidence densities, or the [Surprisal value (S-value)](http://www.umsl.edu/~fraundorfp/egsurpri.html) (Greenland 2019). An R-script to reproduce the plots in the publication is also available.
+This package contains R functions to create graphics of *p*-value functions, confidence distributions, confidence densities, or the [Surprisal value (S-value)](http://www.umsl.edu/~fraundorfp/egsurpri.html) (Greenland 2019).
 
 ## Installation
 
@@ -31,7 +29,6 @@ require(pvaluefunctions)
 <!-- To reproduce the plots from the publication, download the file `paper_plots.R` and run it *after* loading the main function contained in the file `confidence_distributions.R` (see above). -->
 
 <!-- Alternatively, you can source the files directly from the GitHub repository using the [`devtools`](https://CRAN.R-project.org/package=devtools) package: -->
-
 
 
 
@@ -56,12 +53,12 @@ It is therefore recommended that you install the developmental version of ggplot
 There is only one function needed to create the plots: `conf_dist()`. The function has the following arguments:
 
 * `estimate`: Numerical vector containing the estimate(s).
-* `n`: Numerical vector containing the sample size(s). Required for correlations, variances and proportions. Must be equal the number of estimates.
+* `n`: Numerical vector containing the sample size(s). Required for correlations, variances, proportions and differences between proportions. Must be equal the number of estimates.
 * `df`: Numerical vector containing the degrees of freedom. Required for statistics based on the *t*-distribution (e.g. linear regression) and *t*-tests. Must be equal the number of estimates.
 * `stderr`: Numerical vector containing the standard error(s) of the estimate(s). Required for statistics based on the *t*-distribution (e.g. linear regression) and the normal distribution (e.g. logistic regression). Must be equal the number of estimate(s).
 * `tstat`: Numerical vector containing the *t*-statistic(s). Required for *t*-tests (means and mean differences). Must be equal the number of estimates. 
-* `type`: String indicating the type of the estimate. Must be one of the following: `ttest`, `linreg`, `gammareg`, `general_t`, `logreg`, `poisreg`, `coxreg`, `general_z`, `pearson`, `spearman`, `kendall`, `var`, `prop`.
-* `plot_type`: String indicating the type of plot. Must be one of the following: `cdf` (confidence distribution), `pdf` (confidence density), `p_val` (*p*-value function), `s_val` (Surprisal).
+* `type`: String indicating the type of the estimate. Must be one of the following: `ttest`, `linreg`, `gammareg`, `general_t`, `logreg`, `poisreg`, `coxreg`, `general_z`, `pearson`, `spearman`, `kendall`, `var`, `prop`, `propdiff`.
+* `plot_type`: String indicating the type of plot. Must be one of the following: `cdf` (confidence distribution), `pdf` (confidence density), `p_val` (*p*-value function), `s_val` (Surprisal). For differences between independent proportions, only *p*-value functions and Surprisal value functions are available.
 * `n_values` (optional): Integer indicating the number of points that are used to generate the graphics. The higher this number, the higher the computation time and resolution.
 * `est_names` (optional): String vector indicating the names of the estimate(s). Must be equal the number of estimates.
 * `conf_level` (optional): Numerical vector indicating the confidence level(s). Bust be between 0 and 1.
@@ -80,7 +77,7 @@ There is only one function needed to create the plots: `conf_dist()`. The functi
 * *t*-tests: `estimate`, `df`, `tstat`.
 * Linear regression, Gamma regression, general estimates based on the *t*-distribution: `estimate`, `df`, `stderr`.
 * Logistic regression, Poisson regression, Cox regression, general estimates based on the normal distribution: `estimate`, `stderr`.
-* Correlation coefficients (Pearson, Spearman, Kendall), proportions, variances: `estimate`, `n`.
+* Correlation coefficients (Pearson, Spearman, Kendall), proportions, difference between proportions, variances: `estimate`, `n`.
 
 ### Returned values
 
@@ -424,6 +421,30 @@ res <- conf_dist(
 
 <img src="figure/prop-1.png" title="plot of chunk prop" alt="plot of chunk prop" width="80%" style="display: block; margin: auto;" />
 
+### Difference between two independent proportions
+
+
+```r
+res <- conf_dist(
+  estimate = c(68/100, 98/150)
+  , n = c(100, 150)
+  , type = "propdiff"
+  , plot_type = "p_val"
+  , n_values = 1e4L
+  , conf_level = c(0.95, 0.90, 0.80)
+  , null_values = c(0)
+  , trans = "identity"
+  , alternative = "two_sided"
+  , log_yaxis = TRUE
+  , cut_logyaxis = 0.05
+  , xlab = "Difference between proportions"
+  , together = FALSE
+  , plot_p_limit = 1 - 0.9999
+)
+```
+
+<img src="figure/propdiff-1.png" title="plot of chunk propdiff" alt="plot of chunk propdiff" width="80%" style="display: block; margin: auto;" />
+
 ## References
 
 Bender R, Berg G, Zeeb H. (2005): Tutorial: using confidence curves in medical research. *Biom J.* 47(2): 237-47.
@@ -431,6 +452,8 @@ Bender R, Berg G, Zeeb H. (2005): Tutorial: using confidence curves in medical r
 Fraser  D. A. S. (2019): The *p*-value function and statistical inference. *The American Statistician,* 73:sup1, 135-147.
 
 Greenland S (2019): Valid *P*-Values Behave Exactly as They Should: Some Misleading Criticisms of *P*-Values and Their Resolution with *S*-Values. *The American Statistician,* 73sup1, 106-114.
+
+Newcombe R. G. (1998): Interval estimation for the difference between independent proportions: comparison of eleven methods. *Statist. Med.* 17: 873-890.
 
 Poole C. (1987a): Beyond the confidence interval. *Am J Public Health.* 77(2): 195-9.
 

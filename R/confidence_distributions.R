@@ -12,15 +12,15 @@ if (getRversion() >= "2.15.1") {
 #'
 #' The function \code{conf_dist} generates confidence distributions (cdf), confidence densities (pdf), shannon suprisal (s-value) functions and \emph{p}-value functions for several commonly used estimates. In addition, counternulls (see Rosenthal et al. 1994) and point estimates are calculated.
 #'
-#' \emph{P}-value functions and confidence intervals are calculated based on the \emph{t}-distribution for \emph{t}-tests, linear regression coefficients, and gamma regression models (GLM). The normal distribution is used for logistic regression, poisson regression and cox regression models. For correlation coefficients, Fisher's transform is used using the corresponding variances (see Bonett et al. 2000). \emph{P}-value functions and confidence intervals for variances are constructed using the Chi2 distribution. Finally, Wilson's score intervals are used for one proportion.
+#' \emph{P}-value functions and confidence intervals are calculated based on the \emph{t}-distribution for \emph{t}-tests, linear regression coefficients, and gamma regression models (GLM). The normal distribution is used for logistic regression, poisson regression and cox regression models. For correlation coefficients, Fisher's transform is used using the corresponding variances (see Bonett et al. 2000). \emph{P}-value functions and confidence intervals for variances are constructed using the Chi2 distribution. Finally, Wilson's score intervals are used for one proportion. For differences of proportions, the Wilson score interval with continuity correction is used (Newcombe 1998).
 #'
 #' @param estimate Numerical vector containing the estimate(s).
-#' @param n Numerical vector containing the sample size(s). Required for correlations, variances and proportions. Must be equal the number of estimates.
+#' @param n Numerical vector containing the sample size(s). Required for correlations, variances, proportions and differences between proportions. Must be equal the number of estimates.
 #' @param df Numerical vector containing the degrees of freedom. Required for statistics based on the \emph{t}-distribution (e.g. linear regression) and \emph{t}-tests. Must be equal the number of estimates.
 #' @param stderr Numerical vector containing the standard error(s) of the estimate(s). Required for statistics based on the \emph{t}-distribution (e.g. linear regression) and the normal distribution (e.g. logistic regression). Must be equal the number of estimate(s).
 #' @param tstat Numerical vector containing the \emph{t}-statistic(s). Required for \emph{t}-tests (means and mean differences). Must be equal the number of estimates.
-#' @param type String indicating the type of the estimate. Must be one of the following: \code{ttest}, \code{linreg}, \code{gammareg}, \code{general_t}, \code{logreg}, \code{poisreg}, \code{coxreg}, \code{general_z}, \code{pearson}, \code{spearman}, \code{kendall}, \code{var}, \code{prop}.
-#' @param plot_type String indicating the type of plot. Must be one of the following: \code{cdf} (confidence distribution), \code{pdf} (confidence density), \code{p_val} (\emph{p}-value function), \code{s_val} (Surprisal).
+#' @param type String indicating the type of the estimate. Must be one of the following: \code{ttest}, \code{linreg}, \code{gammareg}, \code{general_t}, \code{logreg}, \code{poisreg}, \code{coxreg}, \code{general_z}, \code{pearson}, \code{spearman}, \code{kendall}, \code{var}, \code{prop}, \code{propdiff}.
+#' @param plot_type String indicating the type of plot. Must be one of the following: \code{cdf} (confidence distribution), \code{pdf} (confidence density), \code{p_val} (\emph{p}-value function), \code{s_val} (Surprisal value functions). For differences between independent proportions, only \emph{p}-value functions and Surprisal values are available.
 #' @param n_values (optional) Integer indicating the number of points that are used to generate the graphics. The higher this number, the higher the computation time and resolution.
 #' @param est_names (optional) String vector indicating the names of the estimate(s). Must be equal the number of estimates.
 #' @param conf_level (optional) Numerical vector indicating the confidence level(s). Bust be between 0 and 1.
@@ -39,6 +39,8 @@ if (getRversion() >= "2.15.1") {
 #'
 #' Bonett DG, Wright TA. Sample size requirements for estimating Pearson, Kendall and Spearman correlations. 2000;65(1):23-28.
 #'
+#' Newcombe RG. Interval estimation for the difference between independent proportions: comparison of eleven methods. Statist. Med. 1998;17:873-890.
+#'
 #' Poole C. Confidence intervals exclude nothing. Am J Public Health. 1987;77(4):492-493.
 #'
 #' Poole C. Beyond the confidence interval. Am J Public Health. 1987;77(2):195-199.
@@ -54,7 +56,9 @@ if (getRversion() >= "2.15.1") {
 #' Xie Mg, Singh K. Confidence distribution, the frequentist distribution estimator of a parameter: A review. Internat Statist Rev. 2013;81(1):3-39.
 #' @examples
 #'
+#' #======================================================================================
 #' # Create a p-value function for an estimate using the normal distribution
+#' #======================================================================================
 #'
 #' conf_dist(
 #' estimate = c(-0.13)
@@ -74,8 +78,9 @@ if (getRversion() >= "2.15.1") {
 #' , together = TRUE
 #' , plot_p_limit = 1 - 0.9999
 #' )
-#'
+#' #======================================================================================
 #' # P-value function for a single regression coefficient (Agriculture in the model below)
+#' #======================================================================================
 #'
 #' mod <- lm(Infant.Mortality~Agriculture + Fertility + Examination, data = swiss)
 #' summary(mod)
@@ -96,6 +101,27 @@ if (getRversion() >= "2.15.1") {
 #'  , xlab = "Coefficient Agriculture"
 #'  , together = FALSE
 #'  , plot_p_limit = 1 - 0.999
+#')
+#'
+#' #======================================================================================
+#' # Difference between two independent proportions
+#' #======================================================================================
+#'
+#'res <- conf_dist(
+#'  estimate = c(68/100, 98/150)
+#'  , n = c(100, 150)
+#'  , type = "propdiff"
+#'  , plot_type = "p_val"
+#'  , n_values = 1e4L
+#'  , conf_level = c(0.95, 0.90, 0.80)
+#'  , null_values = c(0)
+#'  , trans = "identity"
+#'  , alternative = "two_sided"
+#'  , log_yaxis = TRUE
+#'  , cut_logyaxis = 0.05
+#'  , xlab = "Difference between proportions"
+#'  , together = FALSE
+#'  , plot_p_limit = 1 - 0.9999
 #')
 #'
 #' @seealso \code{\link[concurve]{plotpint}}
@@ -125,29 +151,6 @@ conf_dist <- function(
   , together = FALSE
   , plot_p_limit = (1 - 0.999)
 ) {
-
-  # Generates confidence distributions (cdf), confidence densities (pdf), shannon suprisal (s-value) and p-value functions for several estimates.
-  #
-  # Args:
-  #      estimate: Numerical vector containing the estimates.
-  #      n: Numerical vector containing the sample sizes. Required for correlations, variances and proportions. Must be equal the number of estimates.
-  #      df: Numerical vector containing the degrees of freedom. Required for statistics based on the t-distribution (e.g. linear regression) and t-tests. Must be equal the number of estimates.
-  #      stderr: Numerical vector containing the standard errors of the estimates. Required for statistics based on the t-distribution (e.g. linear regression) and the normal distribution (e.g. logistic regression). Must be equal the number of estimates.
-  #      tstat: Numerical vector containing the t-statistics. Required for t-tests (means and mean differences). Must be equal the number of estimates.
-  #      type: String indicating the type estimate. Must be one of the following: "ttest", "linreg", "gammareg", "general_t", "logreg", "poisreg", "coxreg", "general_z", "pearson", "spearman", "kendall", "var", "prop".
-  #      plot_type: String indicating the type of plot. Must be one of the following: "cdf", "pdf", "p_val", "s_val".
-  #      n_values: Integer indicating the number of points that are used to generate the graphics.
-  #      est_names: Optional string vector indicating the names of the estimates.
-  #      conf_level: Optional numerical vector indicating the confidence levels. Bust be between 0 and 1.
-  #      null_values: Optional numerical vector indicating the null values in the graphic.
-  #      trans: Optional string indicating the transformation function that will be applied to the estimates and confidence curves. For example: "exp" for an exponential transformation of log-odds in logistic regression.
-  #      alternative: String indicating if the confidence levels are two-sided or one-sided. Must be one of the following: "two_sided", "one_sided".
-  #      log_yaxis: Logical. Indicating if a portion of the y-axis should be displayed on the logarithmic scale.
-  #      cut_logyaxis: Numerical value indicating the threshold below which the y-axis will be displayed logarithmically. Must lie between 0 and 1.
-  #      xlab: Optional string indicating the label of the x-axis.
-  #      xlim: Optional numerical vector of length 2 indicating the limits of the x-axis on the untransformed scale.
-  #      together: Logical. Indicating if graphics for multiple estimates should be displayed together or on separate plots.
-  #      plot_p_limit: Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale.
 
   #-----------------------------------------------------------------------------
   # Load required packages
@@ -191,7 +194,7 @@ conf_dist <- function(
     conf_level <- conf_level[-which((2 - 2*conf_level) >= 1)]
   }
 
-  if (type %in% c("pearson", "spearman", "kendall", "var", "prop") && !trans %in% "identity") {
+  if (type %in% c("pearson", "spearman", "kendall", "var", "prop", "propdiff") && !trans %in% "identity") {
     trans <- "identity"
     cat("\nTransformation changed to identity.\n")
   }
@@ -210,10 +213,21 @@ conf_dist <- function(
   #   stop("Only exponential, logarithmic and square root transformations are supported.")
   # }
 
-  if (type %in% "prop" && (any(estimate < 0) || any(estimate > 1))) {
+  if (type %in% c("prop", "propdiff") && (any(estimate < 0) || any(estimate > 1))) {
     stop("Please provide proportion estimates as decimals between 0 and 1.")
   }
 
+  if (type %in% "propdiff" && ((length(estimate) != 2) || (length(n) != 2))) {
+    stop("Please provide exactly two estimates and to sample sizes (n) for a difference in proportions.")
+  }
+
+  if (type %in% "propdiff" && !plot_type %in% c("p_val", "s_val")) {
+    stop("Currently, only P-value functions (p_val) and S-value functions (s_val) are allowed for difference in proportions.")
+  }
+
+  if (type %in% "propdiff" &&( ((estimate[1]*n[1])%%1 >= 0.05) || ((estimate[2]*n[2])%%1 >= 0.05))) {
+    warning("Number of successes (i.e. estimate*n) of proportions not integer! The the number of successes was rounded (i.e. round(estimate*n)).")
+  }
 
   if (!is.null(conf_level) & any(conf_level <= 0) || any(conf_level >= 1)) {
     stop("Confidence levels must lie between 0 and 1.")
@@ -231,8 +245,12 @@ conf_dist <- function(
     stop("Length of x-axis label must be 1.")
   }
 
-  if (!is.null(est_names) & (length(est_names) != length(estimate))) {
+  if (!type %in% "propdiff" && !is.null(est_names) & (length(est_names) != length(estimate))) {
     stop("Length of estimates does not match length of estimate names.")
+  }
+
+  if (type %in% "propdiff" && !is.null(est_names) & (length(est_names) > 1)) {
+    stop("Only one estimate name for a proportion difference.")
   }
 
   if (!is.null(xlim) & (length(xlim) != 2L)) {
@@ -243,12 +261,16 @@ conf_dist <- function(
     xlim <- sort(xlim, decreasing = FALSE)
   }
 
-  if (is.null(type) || (!type %in% c("ttest", "linreg", "gammareg", "general_t", "logreg", "poisreg", "coxreg", "general_z", "pearson", "spearman", "kendall", "var", "prop"))) {
-    stop("\"type\" must be one of: ttest, linreg, gammareg, general_t, logreg, poisreg, coxreg, general_z, pearson, spearman, kendall, var and prop.")
+  if (is.null(type) || (!type %in% c("ttest", "linreg", "gammareg", "general_t", "logreg", "poisreg", "coxreg", "general_z", "pearson", "spearman", "kendall", "var", "prop", "propdiff"))) {
+    stop("\"type\" must be one of: ttest, linreg, gammareg, general_t, logreg, poisreg, coxreg, general_z, pearson, spearman, kendall, var, prop and propdiff.")
   }
 
   if (is.null(est_names)) {
-    est_names <- (1L:length(estimate))
+    if (type %in% "propdiff") {
+      est_names <- (1L)
+    } else {
+      est_names <- (1L:length(estimate))
+    }
   }
 
   if (type %in% "ttest" & (is.null(tstat) || is.null(df))){
@@ -384,6 +406,19 @@ conf_dist <- function(
       , null_values = null_values
       , alternative = alternative
     )
+
+  } else if (type %in% "propdiff") {
+
+    res <-  cdist_propdiff(
+      estimate = estimate
+      , n = n
+      , n_values = n_values
+      , conf_level = conf_level
+      , null_values = null_values
+      , alternative = alternative
+    )
+
+    estimate <- estimate[1] - estimate[2]
 
   }
 
@@ -581,12 +616,12 @@ conf_dist <- function(
   # Labeller functions for custom log-scale
 
   lab_onesided <- Vectorize(function(x){
-    if (!is.na(x) && (x < cut_logyaxis_one) & (round((x %% 1)*10) == 0)) {sprintf("%.5g", x)}
+    if(!is.na(x) && (x < cut_logyaxis_one) & (round((x %% 1)*10) == 0)) {sprintf("%.5g", x)}
     else {sprintf("%.2f", x)}
   })
 
   lab_twosided <- Vectorize(function(x){
-    if (!is.na(x) && (x <= cut_logyaxis) & (round((x %% 1)*10) == 0)) {sprintf("%.5g", x)}
+    if(!is.na(x) && (x <= cut_logyaxis) & (round((x %% 1)*10) == 0)) {sprintf("%.5g", x)}
     else {sprintf("%.1f", x)}
   })
 
@@ -656,7 +691,7 @@ conf_dist <- function(
   p <- p + xlab(xlab) +
     ylab(y_lab) +
     # coord_cartesian(ylim = limit) +
-    scale_x_continuous(breaks = pretty_breaks(n = 15))
+    scale_x_continuous(breaks = scales::pretty_breaks(n = 15))
 
   if (plot_type %in% "p_val") {
     if (log_yaxis == TRUE & (p_cutoff < cut_logyaxis)) {
@@ -719,14 +754,14 @@ conf_dist <- function(
 
     p <- p + scale_y_reverse(
       limits = c(max(res$res_frame$s_val, na.rm = TRUE), 0)
-      , breaks = pretty_breaks(n = 10)(c(0, max(res$res_frame$s_val, na.rm = TRUE)))
+      , breaks = scales::pretty_breaks(n = 10)(c(0, max(res$res_frame$s_val, na.rm = TRUE)))
       # , labels = lab_twosided
       # , trans = trans_surprisal()
       , sec.axis = sec_axis(
         trans = ~. + log2(2)
         , name = expression(paste("Surprisal in bits (one-sided ",~italic("P"), "-value)", sep = ""))
         # , labels = lab_onesided
-        , breaks = pretty_breaks(n = 10)(c(1, -log2(min(res$res_frame$p_two, na.rm = TRUE)/2)))
+        , breaks = scales::pretty_breaks(n = 10)(c(1, -log2(min(res$res_frame$p_two, na.rm = TRUE)/2)))
       )
     )
 
@@ -749,7 +784,7 @@ conf_dist <- function(
     p <- p + geom_hline(yintercept = hlines_tmp, linetype = 2)
 
   } else if (plot_type %in% c("pdf", "cdf")) {
-    p <- p + scale_y_continuous(breaks = pretty_breaks(n = 10))
+    p <- p + scale_y_continuous(breaks = scales::pretty_breaks(n = 10))
   }
 
   if (!is.null(null_values)) {
@@ -757,10 +792,10 @@ conf_dist <- function(
   }
 
   if (plot_type %in% c("p_val", "s_val", "cdf", "pdf") && !is.null(xlim) & ((together == TRUE & (length(estimate) >= 2)) | (length(estimate) < 2))) {
-    # p <- p + scale_x_continuous(limits = do.call(trans, list(x = xlim)), breaks = pretty_breaks(n = 15))
+    # p <- p + scale_x_continuous(limits = do.call(trans, list(x = xlim)), breaks = scales::pretty_breaks(n = 15))
     p <- p +
       # coord_cartesian(xlim = do.call(trans, list(x = xlim)), ylim = limit) +
-      scale_x_continuous(breaks = pretty_breaks(n = 10), limits = xlim)
+      scale_x_continuous(breaks = scales::pretty_breaks(n = 10), limits = xlim)
   }
 
   if (length(estimate) >= 2 & together == FALSE) {
@@ -1366,6 +1401,59 @@ wilson_ci <- function(
 
 }
 
+wilson_cicc <- function(
+  estimate
+  , n
+  , conf_level
+  , alternative
+) {
+
+  z <- qnorm((conf_level + 1)/2)
+  x <- round(estimate*n) # To get number of successes/failures
+  estimate_compl <- 1 - estimate # Complement of estimate
+
+  lower <- max(0, (2*x + z^2 - 1 - z*sqrt(z^2 - 2 - 1/n + 4*estimate*(n*estimate_compl + 1)))/(2*(n + z^2)))
+  upper <- min(1, (2*x + z^2 + 1 + z*sqrt(z^2 + 2 - 1/n + 4*estimate*(n*estimate_compl - 1)))/(2*(n + z^2)))
+
+  c(lower, upper)
+
+}
+
+wilson_cicc_diff <- function(
+  estimate
+  , n
+  , conf_level
+  , alternative
+) {
+
+  est_diff <- (estimate[1] - estimate[2])
+
+  res1 <- wilson_cicc(
+    estimate = estimate[1]
+    , n = n[1]
+    , conf_level = conf_level
+    , alternative = alternative
+  )
+
+  res2 <- wilson_cicc(
+    estimate = estimate[2]
+    , n = n[2]
+    , conf_level = conf_level
+    , alternative = alternative
+  )
+
+  l1 <- res1[1]
+  u1 <- res1[2]
+  l2 <- res2[1]
+  u2 <- res2[2]
+
+  lim1 <- max(-1, est_diff + sqrt((estimate[1] - l1)^2 + (u2 - estimate[2])^2))
+  lim2 <- min(1, est_diff - sqrt((u1 - estimate[1])^2 + (estimate[2] - l2)^2))
+
+  sort(c(lim1, lim2), decreasing = FALSE)
+
+}
+
 cdist_prop1 <- function(
   estimate = NULL
   , n = NULL
@@ -1515,14 +1603,185 @@ cdist_prop1 <- function(
 
 }
 
+cdist_propdiff <- function(
+  estimate = NULL
+  , n = NULL
+  , n_values = NULL
+  , conf_level = NULL
+  , null_values = NULL
+  , alternative = NULL
+){
+
+  # estimate <- c(0.5, 49/90)
+  # n <- c(100, 90)
+  # n_values <- 1e4
+  # conf_level <- c(0.95, 0.99)
+  # null_values <- c(0, 0.5)
+  # alternative <- "two_sided"
+
+  eps <- 1e-15
+
+  res_mat <- matrix(NA, nrow = 0, ncol = 6)
+
+  conf_mat <- matrix(NA, nrow = 0, ncol = 4)
+
+  counternull_mat <- matrix(NA, nrow = 0, ncol = 3)
+
+  # for (i in seq_along(estimate)) {
+
+  # limits <- wilson_cicc_diff(estimate = estimate, n = n, conf_level = (1 - eps), alternative = alternative)
+
+  conf_levels <- seq(eps, 1 - eps, length.out = ceiling(n_values/2))
+  x_calc <- sapply(conf_levels, wilson_cicc_diff, estimate = estimate, n = n, alternative = alternative)
+
+  res_mat_tmp <- matrix(NA, nrow = length(x_calc), ncol = 6)
+
+  res_mat_tmp[, 1] <- c(x_calc[1, ], x_calc[2, ])
+  is.na(res_mat_tmp[, 2]) <- TRUE # No confidence distribution for this one
+  is.na(res_mat_tmp[, 3]) <- TRUE # No confidence density for this one
+  res_mat_tmp[, 4] <- c(1 - conf_levels, 1 - conf_levels)
+  res_mat_tmp[, 5] <- c((1 - conf_levels)/2, (1 - conf_levels)/2)
+  res_mat_tmp[, 6] <- rep(1, dim(x_calc)[2])
+
+  res_mat <- rbind(res_mat, res_mat_tmp)
+
+  # Confidence intervals
+
+  if (!is.null(conf_level)) {
+
+    conf_tmp <- switch(
+      alternative
+      , two_sided = conf_level
+      , one_sided = 2*conf_level - 1
+    )
+
+    conf_mat_tmp <- matrix(NA, ncol = 4, nrow = length(conf_level))
+
+    limits_tmp <- matrix(NA, ncol = 2, nrow = length(conf_tmp))
+
+    for (j in seq_along(conf_tmp)) {
+      limits_tmp[j, ] <- wilson_cicc_diff(estimate = estimate, n = n, conf_level = conf_tmp[j], alternative = alternative)
+    }
+
+    conf_mat_tmp[, 1] <- conf_level
+    conf_mat_tmp[, 2] <- limits_tmp[, 1]
+    conf_mat_tmp[, 3] <- limits_tmp[, 2]
+    conf_mat_tmp[, 4] <- rep(1, length(conf_level))
+
+    conf_mat <- rbind(conf_mat, conf_mat_tmp)
+
+  }
+
+  # Counternulls
+
+  if (!is.null(null_values)) {
+
+    cnull_tmp <- rep(NA, length(null_values))
+
+    tmp_fun_up <- function(conf_level, estimate, n, null_values) {
+      wilson_cicc_diff(estimate = estimate, n = n, conf_level = conf_level)[2] - null_values
+    }
+
+    tmp_fun_low <- function(conf_level, estimate, n, null_values) {
+      wilson_cicc_diff(estimate = estimate, n = n, conf_level = conf_level)[1] - null_values
+    }
+
+    for (j in seq_along(null_values)) {
+
+      if ((null_values[j] > max(res_mat_tmp[, 1])) || (null_values[j] < min(res_mat_tmp[, 1]))) {
+        is.na(cnull_tmp[j]) <- TRUE
+      } else {
+
+        if (null_values[j] > -diff(estimate)) {
+
+          null_conf <- uniroot(
+            tmp_fun_up
+            , lower = 1e-15
+            , upper = 1 - 1e-15
+            , null_values = null_values[j]
+            , estimate = estimate
+            , n = n
+          )$root
+
+          cnull_tmp[j] <- wilson_cicc_diff(estimate = estimate, n = n, conf_level = null_conf)[1]
+
+        } else if (null_values[j] < -diff(estimate)) {
+
+          null_conf <- uniroot(
+            tmp_fun_low
+            , lower = 1e-15
+            , upper = 1 - 1e-15
+            , null_values = null_values[j]
+            , estimate = estimate
+            , n = n
+          )$root
+
+          cnull_tmp[j] <- wilson_cicc_diff(estimate = estimate, n = n, conf_level = null_conf)[2]
+        }
+      }
+    }
+
+
+    counternull_mat_tmp <- matrix(NA, ncol = 3, nrow = length(null_values))
+    counternull_mat_tmp[, 1] <- null_values
+    counternull_mat_tmp[, 2] <- cnull_tmp
+    counternull_mat_tmp[, 3] <- rep(1, length(null_values))
+    counternull_mat <- rbind(counternull_mat, counternull_mat_tmp)
+
+  }
+
+  # }
+
+  res_frame <- as.data.frame(res_mat)
+
+  names(res_frame) <- c("values", "conf_dist", "conf_dens", "p_two", "p_one", "variable")
+
+  if (!is.null(conf_level)) {
+
+    conf_frame <- as.data.frame(conf_mat)
+
+    names(conf_frame) <- c("conf_level", "lwr", "upr", "variable")
+
+  } else {
+    conf_frame <- NULL
+  }
+
+  if (!is.null(null_values)) {
+
+    counternull_frame <- as.data.frame(counternull_mat)
+
+    names(counternull_frame) <- c("null_value", "counternull", "variable")
+
+  } else {
+    counternull_frame <- NULL
+  }
+
+  # Point estimators
+
+  point_est_frame <- data.frame(
+    est_mean = rep(NA, 1)
+    , est_median = rep(NA, 1)
+    , est_mode = rep(NA, 1)
+    , variable = seq(1, 1, 1)
+  )
+
+  return(list(
+    res_frame = res_frame
+    , conf_frame = conf_frame
+    , counternull_frame = counternull_frame
+    , point_est = point_est_frame
+  ))
+
+}
+
 # Define new mixed scale: log for p <= 0.05, else linear
 
 magnify_trans_log <- function(interval_low = 0.05, interval_high = 1,  reducer = 0.05, reducer2 = 8) {
 
   trans <- Vectorize(function(x, i_low = interval_low, i_high = interval_high, r = reducer, r2 = reducer2) {
-    if (is.na(x) || (x >= i_low & x <= i_high)) {
+    if(is.na(x) || (x >= i_low & x <= i_high)) {
       x
-    } else if (x < i_low & !is.na(x)) {
+    } else if(x < i_low & !is.na(x)) {
       (log10(x / r)/r2 + i_low)
     } else {
       log10((x - i_high) / r + i_high)/r2
@@ -1530,9 +1789,9 @@ magnify_trans_log <- function(interval_low = 0.05, interval_high = 1,  reducer =
   })
 
   inv <- Vectorize(function(x, i_low = interval_low, i_high = interval_high, r = reducer, r2 = reducer2) {
-    if (is.na(x) || (x >= i_low & x <= i_high)) {
+    if(is.na(x) || (x >= i_low & x <= i_high)) {
       x
-    } else if (x < i_low & !is.na(x)) {
+    } else if(x < i_low & !is.na(x)) {
       10^(-(i_low - x)*r2)*r
     } else {
       i_high + 10^(x*r2)*r - i_high*r
@@ -1547,18 +1806,16 @@ magnify_trans_log <- function(interval_low = 0.05, interval_high = 1,  reducer =
 # trans_surprisal <- function() {
 #
 #   trans <- Vectorize(function(x) {
-#     if (!is.na(x)) {
+#     if(!is.na(x)) {
 #       -log2(x)
 #     }
 #   })
 #
 #   inv <- Vectorize(function(x) {
-#     if (!is.na(x)) {
+#     if(!is.na(x)) {
 #       2^(-x)
 #     }
 #   })
 #
 #   trans_new(name = 'surprisal', transform = trans, inverse = inv, domain = c(1e-16, Inf))
 # }
-
-

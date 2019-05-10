@@ -14,7 +14,7 @@ conf_dist(estimate = NULL, n = NULL, df = NULL, stderr = NULL,
 \arguments{
 \item{estimate}{Numerical vector containing the estimate(s).}
 
-\item{n}{Numerical vector containing the sample size(s). Required for correlations, variances and proportions. Must be equal the number of estimates.}
+\item{n}{Numerical vector containing the sample size(s). Required for correlations, variances, proportions and differences between proportions. Must be equal the number of estimates.}
 
 \item{df}{Numerical vector containing the degrees of freedom. Required for statistics based on the \emph{t}-distribution (e.g. linear regression) and \emph{t}-tests. Must be equal the number of estimates.}
 
@@ -22,9 +22,9 @@ conf_dist(estimate = NULL, n = NULL, df = NULL, stderr = NULL,
 
 \item{tstat}{Numerical vector containing the \emph{t}-statistic(s). Required for \emph{t}-tests (means and mean differences). Must be equal the number of estimates.}
 
-\item{type}{String indicating the type of the estimate. Must be one of the following: \code{ttest}, \code{linreg}, \code{gammareg}, \code{general_t}, \code{logreg}, \code{poisreg}, \code{coxreg}, \code{general_z}, \code{pearson}, \code{spearman}, \code{kendall}, \code{var}, \code{prop}.}
+\item{type}{String indicating the type of the estimate. Must be one of the following: \code{ttest}, \code{linreg}, \code{gammareg}, \code{general_t}, \code{logreg}, \code{poisreg}, \code{coxreg}, \code{general_z}, \code{pearson}, \code{spearman}, \code{kendall}, \code{var}, \code{prop}, \code{propdiff}.}
 
-\item{plot_type}{String indicating the type of plot. Must be one of the following: \code{cdf} (confidence distribution), \code{pdf} (confidence density), \code{p_val} (\emph{p}-value function), \code{s_val} (Surprisal).}
+\item{plot_type}{String indicating the type of plot. Must be one of the following: \code{cdf} (confidence distribution), \code{pdf} (confidence density), \code{p_val} (\emph{p}-value function), \code{s_val} (Surprisal value functions). For differences between independent proportions, only \emph{p}-value functions and Surprisal values are available.}
 
 \item{n_values}{(optional) Integer indicating the number of points that are used to generate the graphics. The higher this number, the higher the computation time and resolution.}
 
@@ -57,11 +57,13 @@ conf_dist(estimate = NULL, n = NULL, df = NULL, stderr = NULL,
 The function \code{conf_dist} generates confidence distributions (cdf), confidence densities (pdf), shannon suprisal (s-value) functions and \emph{p}-value functions for several commonly used estimates. In addition, counternulls (see Rosenthal et al. 1994) and point estimates are calculated.
 }
 \details{
-\emph{P}-value functions and confidence intervals are calculated based on the \emph{t}-distribution for \emph{t}-tests, linear regression coefficients, and gamma regression models (GLM). The normal distribution is used for logistic regression, poisson regression and cox regression models. For correlation coefficients, Fisher's transform is used using the corresponding variances (see Bonett et al. 2000). \emph{P}-value functions and confidence intervals for variances are constructed using the Chi2 distribution. Finally, Wilson's score intervals are used for one proportion.
+\emph{P}-value functions and confidence intervals are calculated based on the \emph{t}-distribution for \emph{t}-tests, linear regression coefficients, and gamma regression models (GLM). The normal distribution is used for logistic regression, poisson regression and cox regression models. For correlation coefficients, Fisher's transform is used using the corresponding variances (see Bonett et al. 2000). \emph{P}-value functions and confidence intervals for variances are constructed using the Chi2 distribution. Finally, Wilson's score intervals are used for one proportion. For differences of proportions, the Wilson score interval with continuity correction is used (Newcombe 1998).
 }
 \examples{
 
+#======================================================================================
 # Create a p-value function for an estimate using the normal distribution
+#======================================================================================
 
 conf_dist(
 estimate = c(-0.13)
@@ -81,8 +83,9 @@ estimate = c(-0.13)
 , together = TRUE
 , plot_p_limit = 1 - 0.9999
 )
-
+#======================================================================================
 # P-value function for a single regression coefficient (Agriculture in the model below)
+#======================================================================================
 
 mod <- lm(Infant.Mortality~Agriculture + Fertility + Examination, data = swiss)
 summary(mod)
@@ -105,11 +108,34 @@ res <- conf_dist(
  , plot_p_limit = 1 - 0.999
 )
 
+#======================================================================================
+# Difference between two independent proportions
+#======================================================================================
+
+res <- conf_dist(
+ estimate = c(68/100, 98/150)
+ , n = c(100, 150)
+ , type = "propdiff"
+ , plot_type = "p_val"
+ , n_values = 1e4L
+ , conf_level = c(0.95, 0.90, 0.80)
+ , null_values = c(0)
+ , trans = "identity"
+ , alternative = "two_sided"
+ , log_yaxis = TRUE
+ , cut_logyaxis = 0.05
+ , xlab = "Difference between proportions"
+ , together = FALSE
+ , plot_p_limit = 1 - 0.9999
+)
+
 }
 \references{
 Bender R, Berg G, Zeeb H. Tutorial: using confidence curves in medical research. Biom J. 2005;47(2):237-247.
 
 Bonett DG, Wright TA. Sample size requirements for estimating Pearson, Kendall and Spearman correlations. 2000;65(1):23-28.
+
+Newcombe RG. Interval estimation for the difference between independent proportions: comparison of eleven methods. Statist. Med. 1998;17:873-890.
 
 Poole C. Confidence intervals exclude nothing. Am J Public Health. 1987;77(4):492-493.
 
