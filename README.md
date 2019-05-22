@@ -148,7 +148,7 @@ The function has the following arguments:
 
 ### Required arguments for different estimate types
 
-  - \(t\)-tests: `estimate`, `df`, `tstat`.
+  - *t*-tests: `estimate`, `df`, `tstat`.
   - Linear regression, Gamma regression, general estimates based on the
     *t*-distribution: `estimate`, `df`, `stderr`.
   - Logistic regression, Poisson regression, Cox regression, general
@@ -565,27 +565,27 @@ distribution estimator of a parameter: A review. *Internat Statist Rev.*
     #> [1] stats     graphics  grDevices utils     datasets  methods   base     
     #> 
     #> other attached packages:
-    #> [1] pvaluefunctions_1.0.0
+    #> [1] pvaluefunctions_1.0.1
     #> 
     #> loaded via a namespace (and not attached):
-    #>  [1] Rcpp_1.0.1         RColorBrewer_1.1-2 pillar_1.3.1      
-    #>  [4] plyr_1.8.4         compiler_3.6.0     prettyunits_1.0.2 
-    #>  [7] remotes_2.0.4      tools_3.6.0        testthat_2.1.1    
-    #> [10] digest_0.6.18      pkgbuild_1.0.3     pkgload_1.0.2     
-    #> [13] tibble_2.1.1       gtable_0.3.0       evaluate_0.13     
-    #> [16] memoise_1.1.0      pkgconfig_2.0.2    rlang_0.3.4       
-    #> [19] cli_1.1.0          curl_3.3           yaml_2.2.0        
-    #> [22] xfun_0.6           dplyr_0.8.0.1      withr_2.1.2       
-    #> [25] stringr_1.4.0      knitr_1.22         desc_1.2.0        
-    #> [28] fs_1.3.0           devtools_2.0.2     tidyselect_0.2.5  
-    #> [31] rprojroot_1.3-2    grid_3.6.0         glue_1.3.1        
-    #> [34] R6_2.4.0           processx_3.3.0     rmarkdown_1.12    
-    #> [37] sessioninfo_1.1.1  purrr_0.3.2        callr_3.2.0       
-    #> [40] ggplot2_3.1.1      magrittr_1.5       scales_1.0.0      
-    #> [43] backports_1.1.4    ps_1.3.0           htmltools_0.3.6   
-    #> [46] usethis_1.5.0      assertthat_0.2.1   colorspace_1.4-1  
-    #> [49] labeling_0.3       stringi_1.4.3      lazyeval_0.2.2    
-    #> [52] munsell_0.5.0      crayon_1.3.4
+    #>  [1] Rcpp_1.0.1         RColorBrewer_1.1-2 pillar_1.4.0      
+    #>  [4] compiler_3.6.0     prettyunits_1.0.2  remotes_2.0.4     
+    #>  [7] tools_3.6.0        testthat_2.1.1     digest_0.6.19     
+    #> [10] pkgbuild_1.0.3     pkgload_1.0.2      tibble_2.1.1      
+    #> [13] gtable_0.3.0       evaluate_0.13      memoise_1.1.0     
+    #> [16] pkgconfig_2.0.2    rlang_0.3.4        cli_1.1.0         
+    #> [19] curl_3.3           yaml_2.2.0         xfun_0.7          
+    #> [22] dplyr_0.8.1        withr_2.1.2        stringr_1.4.0     
+    #> [25] knitr_1.23         desc_1.2.0         fs_1.3.1          
+    #> [28] devtools_2.0.2     tidyselect_0.2.5   rprojroot_1.3-2   
+    #> [31] grid_3.6.0         glue_1.3.1         R6_2.4.0          
+    #> [34] processx_3.3.1     rmarkdown_1.12     sessioninfo_1.1.1 
+    #> [37] purrr_0.3.2        callr_3.2.0        ggplot2_3.1.1.9000
+    #> [40] magrittr_1.5       scales_1.0.0       backports_1.1.4   
+    #> [43] ps_1.3.0           htmltools_0.3.6    usethis_1.5.0     
+    #> [46] assertthat_0.2.1   colorspace_1.4-1   labeling_0.3      
+    #> [49] stringi_1.4.3      lazyeval_0.2.2     munsell_0.5.0     
+    #> [52] crayon_1.3.4
 
 ## License
 

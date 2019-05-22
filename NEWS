@@ -1,5 +1,5 @@
 1.1.0
-  * Improved vignette with reduced figure size
+  * Improved vignette with reduced figure size and several orthographic errors fixed
   * New estimate type implemented: Difference between two independent proportions (type = "propdiff")
 
 1.0.0 (04.05.2019)
