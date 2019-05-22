@@ -62,42 +62,42 @@ It is therefore recommended that you install the developmental version of ggplot
 
 There is only one function needed to create the plots: `conf_dist()`. The function has the following arguments:
 
-* **`estimate`**: Numerical vector containing the estimate(s).
-* **`n`**: Numerical vector containing the sample size(s). Required for correlations, variances and proportions. Must be equal the number of estimates.
-* **`df`**: Numerical vector containing the degrees of freedom. Required for statistics based on the *t*-distribution (e.g. linear regression) and *t*-tests. Must be equal the number of estimates.
-* **`stderr`**: Numerical vector containing the standard error(s) of the estimate(s). Required for statistics based on the *t*-distribution (e.g. linear regression) and the normal distribution (e.g. logistic regression). Must be equal the number of estimate(s).
-* **`tstat`**: Numerical vector containing the *t*-statistic(s). Required for *t*-tests (means and mean differences). Must be equal the number of estimates. 
-* **`type`**: String indicating the type estimate. Must be one of the following: `ttest`, `linreg`, `gammareg`, `general_t`, `logreg`, `poisreg`, `coxreg`, `general_z`, `pearson`, `spearman`, `kendall`, `var`, `prop`.
-* **`plot_type`**: String indicating the type of plot. Must be one of the following: `cdf` (confidence distribution), `pdf` (confidence density), `p_val` (*p*-value function), `s_val` (Surprisal).
-* **`n_values`** (optional): Integer indicating the number of points that are used to generate the graphics. The higher this number, the higher the computation time and resolution.
-* **`est_names`** (optional): String vector indicating the names of the estimate(s). Must be equal the number of estimates.
-* **`conf_level`** (optional): Numerical vector indicating the confidence level(s). Bust be between 0 and 1.
-* **`null_values`** (optional): Numerical vector indicating the null value(s) in the plot
-* **`trans`** (optional): String indicating the transformation function that will be applied to the estimates and confidence curves. For example: "exp" for an exponential transformation of the log-odds in logistic regression. 
-* **`alternative`**: String indicating if the confidence level(s) are two-sided or one-sided. Must be one of the following: `two_sided`, `one_sided`.
-* **`log_yaxis`**: Logical. Indicating if a portion of the y-axis should be displayed on the logarithmic scale.
-* **`cut_logyaxis`**: Numerical value indicating the threshold below which the y-axis will be displayed logarithmically. Must lie between 0 and 1.
-* **`xlab`** (optional): String indicating the label of the x-axis.
-* **`xlim`** (optional): Optional numerical vector of length 2 indicating the limits of the x-axis on the *untransformed* scale.
-* **`together`**: Logical. Indicating if graphics for multiple estimates should be displayed together or on separate plots.
-* **`plot_p_limit`**: Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale (i.e. `log_yaxis = TRUE`).
+* `estimate`: Numerical vector containing the estimate(s).
+* `n`: Numerical vector containing the sample size(s). Required for correlations, variances, proportions and differences between proportions. Must be equal the number of estimates.
+* `df`: Numerical vector containing the degrees of freedom. Required for statistics based on the *t*-distribution (e.g. linear regression) and *t*-tests. Must be equal the number of estimates.
+* `stderr`: Numerical vector containing the standard error(s) of the estimate(s). Required for statistics based on the *t*-distribution (e.g. linear regression) and the normal distribution (e.g. logistic regression). Must be equal the number of estimate(s).
+* `tstat`: Numerical vector containing the *t*-statistic(s). Required for *t*-tests (means and mean differences). Must be equal the number of estimates. 
+* `type`: String indicating the type of the estimate. Must be one of the following: `ttest`, `linreg`, `gammareg`, `general_t`, `logreg`, `poisreg`, `coxreg`, `general_z`, `pearson`, `spearman`, `kendall`, `var`, `prop`, `propdiff`.
+* `plot_type`: String indicating the type of plot. Must be one of the following: `cdf` (confidence distribution), `pdf` (confidence density), `p_val` (*p*-value function), `s_val` (Surprisal). For differences between independent proportions, only *p*-value functions and Surprisal value functions are available.
+* `n_values` (optional): Integer indicating the number of points that are used to generate the graphics. The higher this number, the higher the computation time and resolution.
+* `est_names` (optional): String vector indicating the names of the estimate(s). Must be equal the number of estimates.
+* `conf_level` (optional): Numerical vector indicating the confidence level(s). Bust be between 0 and 1.
+* `null_values` (optional): Numerical vector indicating the null value(s) in the plot
+* `trans` (optional): String indicating the transformation function that will be applied to the estimates and confidence curves. For example: "exp" for an exponential transformation of the log-odds in logistic regression. 
+* `alternative`: String indicating if the confidence level(s) are two-sided or one-sided. Must be one of the following: `two_sided`, `one_sided`.
+* `log_yaxis`: Logical. Indicating if a portion of the y-axis should be displayed on the logarithmic scale.
+* `cut_logyaxis`: Numerical value indicating the threshold below which the y-axis will be displayed logarithmically. Must lie between 0 and 1.
+* `xlab` (optional): String indicating the label of the x-axis.
+* `xlim` (optional): Optional numerical vector of length 2 indicating the limits of the x-axis on the *untransformed* scale.
+* `together`: Logical. Indicating if graphics for multiple estimates should be displayed together or on separate plots.
+* `plot_p_limit`: Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale (i.e. `log_yaxis = TRUE`).
 
 ### Required arguments for different estimate types
 
 * *t*-tests: `estimate`, `df`, `tstat`.
 * Linear regression, Gamma regression, general estimates based on the *t*-distribution: `estimate`, `df`, `stderr`.
 * Logistic regression, Poisson regression, Cox regression, general estimates based on the normal distribution: `estimate`, `stderr`.
-* Correlation coefficients (Pearson, Spearman, Kendall), proportions, variances: `estimate`, `n`.
+* Correlation coefficients (Pearson, Spearman, Kendall), proportions, difference between proportions, variances: `estimate`, `n`.
 
 ### Returned values
 
 The main function `conf_dist()` returns five objects in a list:
 
-* **`res_frame`**: A data frame containing the values used to construct the plot.
-* **`conf_frame`**: A data frame containing the confidence intervals for the specified confidence levels for all estimates.
-* **`counternull_frame`**: A data frame containing the counternull values for the specified null values (see Rosenthal & Rubin (1994) for more information about the counternull).
-* **`point_est`**: A data frame containing the point estimates for all estimates. The point estimates correspond to the mean, median or mode of the confidence density (see Xie & Singh (2013) for more information). Estimates are produced using numerical procedures: Increase the number of points `n_values` for higher numerical precision.
-* **`plot`**: A [ggplot2](https://ggplot2.tidyverse.org/) plot object.
+* `res_frame`: A data frame containing the values used to construct the plot.
+* onf_frame`: A data frame containing the confidence intervals for the specified confidence levels for all estimates.
+* **`counternull_frame`: A data frame containing the counternull values for the specified null values (see Rosenthal & Rubin (1994) for more information about the counternull).
+* `point_est`: A data frame containing the point estimates for all estimates. The point estimates correspond to the mean, median or mode of the confidence density (see Xie & Singh (2013) for more information). Estimates are produced using numerical procedures: Increase the number of points `n_values` for higher numerical precision.
+* `plot`: A [ggplot2](https://ggplot2.tidyverse.org/) plot object.
 
 ## Examples
 
@@ -106,7 +106,7 @@ The main function `conf_dist()` returns five objects in a list:
 ```{r ttest, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
 
 #-----------------------------------------------------------------------------
-# Installing package from GitHub and loading package
+# Installing package from GitHub and load package
 #-----------------------------------------------------------------------------
 
 devtools::install_github("DInfanger/pvaluefunctions")
@@ -343,6 +343,27 @@ res <- conf_dist(
   # , xlim = log(c(0.95, 1.2))
   , together = FALSE
   , plot_p_limit = 1 - 0.999
+)
+```
+
+### Difference between two independent proportions
+
+```{r propdiff, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
+res <- conf_dist(
+  estimate = c(68/100, 98/150)
+  , n = c(100, 150)
+  , type = "propdiff"
+  , plot_type = "p_val"
+  , n_values = 1e4L
+  , conf_level = c(0.95, 0.90, 0.80)
+  , null_values = c(0)
+  , trans = "identity"
+  , alternative = "two_sided"
+  , log_yaxis = TRUE
+  , cut_logyaxis = 0.05
+  , xlab = "Difference between proportions"
+  , together = FALSE
+  , plot_p_limit = 1 - 0.9999
 )
 ```
 
