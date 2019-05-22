@@ -1,7 +1,7 @@
 #========================================================================
 # Construct confidence distributions, densities and p-value functions
 # Author: Denis Infanger
-# Date (dd.mm.yyyy): 22.09.2018
+# Creation date (dd.mm.yyyy): 22.09.2018
 #========================================================================
 
 if (getRversion() >= "2.15.1") {
@@ -1692,7 +1692,7 @@ cdist_propdiff <- function(
     for (j in seq_along(null_values)) {
 
       if ((null_values[j] > max(res_mat_tmp[, 1])) || (null_values[j] < min(res_mat_tmp[, 1]))) {
-        is.na(cnull_tmp[j]) <- TRUE
+        is.na(cnull_tmp[j]) <- TRUE # Set values in the "gap" to missing for plotting
       } else {
 
         if (null_values[j] > -diff(estimate)) {
