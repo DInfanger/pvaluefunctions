@@ -410,7 +410,7 @@ res <- conf_dist(
   , null_values = c(0, 0.3)
   , trans = "identity"
   , alternative = "two_sided"
-  , xlab = "Difference of proportions"
+  , xlab = "Difference between proportions"
   # , xlim = c(-0.75, 0.5)
   , together = FALSE
   , plot_p_limit = 1 - 0.9999

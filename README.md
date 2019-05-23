@@ -23,6 +23,9 @@
       - [Proportion](#proportion)
       - [Difference between two independent
         proportions](#difference-between-two-independent-proportions)
+      - [Difference between two independent proportions: Agresti-Caffo
+        adjusted Wald
+        interval](#difference-between-two-independent-proportions-agresti-caffo-adjusted-wald-interval)
   - [References](#references)
   - [Contact](#contact)
   - [Session info](#session-info)
@@ -537,6 +540,66 @@ res <- conf_dist(
 
 <img src="README_files/figure-gfm/propdiff-1.png" width="80%" style="display: block; margin: auto;" />
 
+### Difference between two independent proportions: Agresti-Caffo adjusted Wald interval
+
+The standard Wald interval can be modified in a simple manner to
+drastically improve its coverage probabilities. Simply add 1 to the
+number of successes and add 2 to the sample size for both proportions.
+Then proceed to calculate the Wald interval with these modified data.
+The point estimate for the difference between proportions is still
+calculated using the unmodified data. The function `conf_dist` does not
+have a dedicaded type for this kind of estimator but as the Wald
+interval is based on the normal distribution, we can use `type =
+general_z` to create the *p*-value function.
+
+``` r
+
+# First proportion
+
+x1 <- 8
+n1 <- 40
+
+# Second proportion
+
+x2 <- 11
+n2 <- 30
+
+# Apply the correction 
+
+p1hat <- (x1 + 1)/(n1 + 2)
+p2hat <- (x2 + 1)/(n2 + 2)
+
+# The estimator (unmodified)
+
+est0 <- (x1/n1) - (x2/n2)
+
+# The modified estimator and its standard error using the correction
+
+est <- p1hat - p2hat
+se <- sqrt(((p1hat*(1 - p1hat))/(n1 + 2)) + ((p2hat*(1 - p2hat))/(n2 + 2)))
+
+res <- conf_dist(
+  estimate = c(est)
+  , stderr = c(se)
+  , type = "general_z"
+  , plot_type = "p_val"
+  , n_values = 1e4L
+  # , est_names = c("Estimate")
+  , log_yaxis = TRUE
+  , cut_logyaxis = 0.05
+  , conf_level = c(0.95, 0.99)
+  , null_values = c(0, 0.3)
+  , trans = "identity"
+  , alternative = "two_sided"
+  , xlab = "Difference between proportions"
+  # , xlim = c(-0.75, 0.5)
+  , together = FALSE
+  , plot_p_limit = 1 - 0.9999
+)
+```
+
+<img src="README_files/figure-gfm/propdiff_agresticaffo-1.png" width="80%" style="display: block; margin: auto;" />
+
 ## References
 
 Bender R, Berg G, Zeeb H. (2005): Tutorial: using confidence curves in
@@ -605,7 +668,7 @@ distribution estimator of a parameter: A review. *Internat Statist Rev.*
     #> [25] knitr_1.23         desc_1.2.0         fs_1.3.1          
     #> [28] devtools_2.0.2     tidyselect_0.2.5   rprojroot_1.3-2   
     #> [31] grid_3.6.0         glue_1.3.1         R6_2.4.0          
-    #> [34] processx_3.3.1     rmarkdown_1.12     sessioninfo_1.1.1 
+    #> [34] processx_3.3.1     rmarkdown_1.13     sessioninfo_1.1.1 
     #> [37] purrr_0.3.2        callr_3.2.0        ggplot2_3.1.1.9000
     #> [40] magrittr_1.5       scales_1.0.0       backports_1.1.4   
     #> [43] ps_1.3.0           htmltools_0.3.6    usethis_1.5.0     
