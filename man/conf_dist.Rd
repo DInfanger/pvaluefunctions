@@ -65,24 +65,25 @@ The function \code{conf_dist} generates confidence distributions (cdf), confiden
 # Create a p-value function for an estimate using the normal distribution
 #======================================================================================
 
-conf_dist(
-estimate = c(-0.13)
-, stderr = c(0.224494)
-, type = "general_z"
-, plot_type = "p_val"
-, n_values = 1e4L
-, est_names = c("Parameter value")
-, log_yaxis = FALSE
-, cut_logyaxis = 0.05
-, conf_level = c(0.95)
-, null_values = c(0)
-, trans = "identity"
-, alternative = "two_sided"
-, xlab = "Var"
-, xlim = c(-1, 1)
-, together = TRUE
-, plot_p_limit = 1 - 0.9999
+res <- conf_dist(
+  estimate = c(-0.13)
+  , stderr = c(0.224494)
+  , type = "general_z"
+  , plot_type = "p_val"
+  , n_values = 1e4L
+  , est_names = c("Parameter value")
+  , log_yaxis = FALSE
+  , cut_logyaxis = 0.05
+  , conf_level = c(0.95)
+  , null_values = c(0)
+  , trans = "identity"
+  , alternative = "two_sided"
+  , xlab = "Var"
+  , xlim = c(-1, 1)
+  , together = TRUE
+  , plot_p_limit = 1 - 0.9999
 )
+
 #======================================================================================
 # P-value function for a single regression coefficient (Agriculture in the model below)
 #======================================================================================
@@ -91,42 +92,85 @@ mod <- lm(Infant.Mortality~Agriculture + Fertility + Examination, data = swiss)
 summary(mod)
 
 res <- conf_dist(
- estimate = c(-0.02143)
- , df = c(43)
- , stderr = (0.02394)
- , type = "linreg"
- , plot_type = "p_val"
- , n_values = 1e4L
- , conf_level = c(0.95, 0.90, 0.80)
- , null_values = c(0)
- , trans = "identity"
- , alternative = "two_sided"
- , log_yaxis = TRUE
- , cut_logyaxis = 0.05
- , xlab = "Coefficient Agriculture"
- , together = FALSE
- , plot_p_limit = 1 - 0.999
+  estimate = c(-0.02143)
+  , df = c(43)
+  , stderr = (0.02394)
+  , type = "linreg"
+  , plot_type = "p_val"
+  , n_values = 1e4L
+  , conf_level = c(0.95, 0.90, 0.80)
+  , null_values = c(0)
+  , trans = "identity"
+  , alternative = "two_sided"
+  , log_yaxis = TRUE
+  , cut_logyaxis = 0.05
+  , xlab = "Coefficient Agriculture"
+  , together = FALSE
+  , plot_p_limit = 1 - 0.999
 )
 
 #======================================================================================
-# Difference between two independent proportions
+# Difference between two independent proportions: Newcombe with continuity correction
 #======================================================================================
 
 res <- conf_dist(
- estimate = c(68/100, 98/150)
- , n = c(100, 150)
- , type = "propdiff"
- , plot_type = "p_val"
- , n_values = 1e4L
- , conf_level = c(0.95, 0.90, 0.80)
- , null_values = c(0)
- , trans = "identity"
- , alternative = "two_sided"
- , log_yaxis = TRUE
- , cut_logyaxis = 0.05
- , xlab = "Difference between proportions"
- , together = FALSE
- , plot_p_limit = 1 - 0.9999
+  estimate = c(68/100, 98/150)
+  , n = c(100, 150)
+  , type = "propdiff"
+  , plot_type = "p_val"
+  , n_values = 1e4L
+  , conf_level = c(0.95, 0.90, 0.80)
+  , null_values = c(0)
+  , trans = "identity"
+  , alternative = "two_sided"
+  , log_yaxis = TRUE
+  , cut_logyaxis = 0.05
+  , xlab = "Difference between proportions"
+  , together = FALSE
+  , plot_p_limit = 1 - 0.9999
+)
+
+#======================================================================================
+# Difference between two independent proportions: Agresti & Caffo
+#======================================================================================
+
+# First proportion
+x1 <- 8
+n1 <- 40
+
+# Second proportion
+x2 <- 11
+n2 <- 30
+
+# Apply the correction
+p1hat <- (x1 + 1)/(n1 + 2)
+p2hat <- (x2 + 1)/(n2 + 2)
+
+# The original estimator
+est0 <- (x1/n1) - (x2/n2)
+
+# The unmodified estimator and its standard error using the correction
+
+est <- p1hat - p2hat
+se <- sqrt(((p1hat*(1 - p1hat))/(n1 + 2)) + ((p2hat*(1 - p2hat))/(n2 + 2)))
+
+res <- conf_dist(
+  estimate = c(est)
+  , stderr = c(se)
+  , type = "general_z"
+  , plot_type = "p_val"
+  , n_values = 1e4L
+  # , est_names = c("Estimate")
+  , log_yaxis = TRUE
+  , cut_logyaxis = 0.05
+  , conf_level = c(0.95, 0.99)
+  , null_values = c(0, 0.3)
+  , trans = "identity"
+  , alternative = "two_sided"
+  , xlab = "Difference of proportions"
+  # , xlim = c(-0.75, 0.5)
+  , together = FALSE
+  , plot_p_limit = 1 - 0.9999
 )
 
 }
