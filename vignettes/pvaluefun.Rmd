@@ -23,10 +23,10 @@ This package contains R functions to create graphics of *p*-value functions, con
 
 ## Installation
 
-Install and load the package from CRAN.
+Install (`install.packages("pvaluefunctions")`) and load the package from CRAN.
 
 ```{r load_package, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE}
-require(pvaluefunctions)
+library(pvaluefunctions)
 ```
 
 <!-- Download the file `confidence_distributions.R` to your computer. You can either `source()` the function in R or open it, select and run everything. After loading the function, it's ready for use. -->
