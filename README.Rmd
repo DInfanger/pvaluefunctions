@@ -18,29 +18,25 @@ knitr::opts_chunk$set(
 
 ## Overview
 
-This repository contains R functions to create graphics of *p*-value functions, confidence distributions, confidence densities, or the [Surprisal value (S-value)](http://www.umsl.edu/~fraundorfp/egsurpri.html) (Greenland 2019). An R-script to reproduce the plots in the publication is also available.
+This is the repository for the R-package [`pvaluefunctions`](https://cran.r-project.org/package=pvaluefunctions). The package contains R functions to create graphics of *p*-value functions, confidence distributions, confidence densities, or the [Surprisal value (S-value)](http://www.umsl.edu/~fraundorfp/egsurpri.html) (Greenland 2019).
 
 ## Installation
 
-Upon release, you can download the package directly from CRAN by typing `install.packages("pvaluefunctions")`.
+You can install the package directly from CRAN by typing `install.packages("pvaluefunctions")`. After installation, load it in R using `library(pvaluefunctions)`.
 
-Download the file `confidence_distributions.R` to your computer. You can either `source()` the function in R or open it, select and run everything. After loading the function, it's ready for use.
+<!-- Download the file `confidence_distributions.R` to your computer. You can either `source()` the function in R or open it, select and run everything. After loading the function, it's ready for use. -->
 
-To reproduce the plots from the publication, download the file `paper_plots.R` and run it *after* loading the main function contained in the file `confidence_distributions.R` (see above).
+<!-- To reproduce the plots from the publication, download the file `paper_plots.R` and run it *after* loading the main function contained in the file `confidence_distributions.R` (see above). -->
 
-Alternatively, you can source the files directly from the GitHub repository using the [`devtools`](https://CRAN.R-project.org/package=devtools) package:
+<!-- Alternatively, you can source the main function directly from this GitHub repository using the [`devtools`](https://CRAN.R-project.org/package=devtools) package: -->
 
-```{r source_github, message = FALSE, warning = FALSE, echo = TRUE, eval = FALSE}
+```{r source_github, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
 library(devtools)
 
 # Load main function
 source_url("https://raw.githubusercontent.com/DInfanger/pvaluefunctions/master/R/confidence_distributions.R")
 
-# Load file to reproduce figures in the publication
-source_url("https://raw.githubusercontent.com/DInfanger/pvalue_functions/master/R/paper_plots.R")
-
 ```
-
 
 ## Dependencies
 
