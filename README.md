@@ -1,6 +1,8 @@
-*P*-value functions
+pvaluefunctions
 ================
 
+  - [*P*-value functions
+    <img src="man/figures/logo.svg" align="right" width="120" />](#p-value-functions)
   - [Overview](#overview)
   - [Installation](#installation)
   - [Dependencies](#dependencies)
@@ -32,6 +34,12 @@
   - [License](#license)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
+## *P*-value functions <img src="man/figures/logo.svg" align="right" width="120" />
+
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/pvaluefunctions)](https://cran.r-project.org/package=pvaluefunctions)
+[![](https://cranlogs.r-pkg.org/badges/grand-total/pvaluefunctions)](https://cran.r-project.org/package=pvaluefunctions)
+[![Rdoc](http://www.rdocumentation.org/badges/version/pvaluefunctions)](http://www.rdocumentation.org/packages/pvaluefunctions)
 
 ## Overview
 
@@ -225,7 +233,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="README_files/figure-gfm/ttest-1.png" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-ttest-1.png" width="80%" style="display: block; margin: auto;" />
 
 ### Single coefficient from a linear regression model
 
@@ -285,7 +293,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="README_files/figure-gfm/linreg_single_pval-1.png" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-linreg_single_pval-1.png" width="80%" style="display: block; margin: auto;" />
 
 #### Confidence distribution
 
@@ -311,7 +319,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="README_files/figure-gfm/linreg_single_cdf-1.png" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-linreg_single_cdf-1.png" width="80%" style="display: block; margin: auto;" />
 
 ### Multiple coefficients from a linear regression model
 
@@ -338,7 +346,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="README_files/figure-gfm/linreg_multiple_pval-1.png" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-linreg_multiple_pval-1.png" width="80%" style="display: block; margin: auto;" />
 
 #### Surprisal values
 
@@ -363,7 +371,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="README_files/figure-gfm/linreg_multiple_sval-1.png" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-linreg_multiple_sval-1.png" width="80%" style="display: block; margin: auto;" />
 
 ### Pearson correlation coefficient (one-sided)
 
@@ -408,7 +416,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="README_files/figure-gfm/corr_pearson-1.png" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-corr_pearson-1.png" width="80%" style="display: block; margin: auto;" />
 
 ### Odds ratio from logistic regression
 
@@ -477,7 +485,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="README_files/figure-gfm/logreg-1.png" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-logreg-1.png" width="80%" style="display: block; margin: auto;" />
 
 ### Proportion
 
@@ -502,7 +510,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="README_files/figure-gfm/prop-1.png" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-prop-1.png" width="80%" style="display: block; margin: auto;" />
 
 ### Difference between two independent proportions
 
@@ -525,7 +533,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="README_files/figure-gfm/propdiff-1.png" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-propdiff-1.png" width="80%" style="display: block; margin: auto;" />
 
 ### Difference between two independent proportions: Agresti-Caffo adjusted Wald interval
 
@@ -585,7 +593,7 @@ res <- conf_dist(
 )
 ```
 
-<img src="README_files/figure-gfm/propdiff_agresticaffo-1.png" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-propdiff_agresticaffo-1.png" width="80%" style="display: block; margin: auto;" />
 
 ## References
 
