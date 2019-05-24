@@ -1,9 +1,11 @@
 ^packrat/
 ^\.Rprofile$
+^\.RData$
+^\.Rhistory$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^cran-comments\.md$
 ^CRAN-RELEASE$
-^README_files$
 ^vignettes/figure$
 ^Readme\.Rmd$
+

@@ -1,7 +1,7 @@
 ---
 title: "P-value functions"
 author: "Denis Infanger"
-date: "2019-05-23"
+date: "2019-05-24"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{P-value functions}
@@ -17,11 +17,11 @@ This package contains R functions to create graphics of *p*-value functions, con
 
 ## Installation
 
-Install and load the package from CRAN.
+Install (`install.packages("pvaluefunctions")`) and load the package from CRAN.
 
 
 ```r
-require(pvaluefunctions)
+library(pvaluefunctions)
 ```
 
 <!-- Download the file `confidence_distributions.R` to your computer. You can either `source()` the function in R or open it, select and run everything. After loading the function, it's ready for use. -->
