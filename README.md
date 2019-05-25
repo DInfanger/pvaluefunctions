@@ -545,10 +545,9 @@ The point estimate for the difference between proportions is still
 calculated using the unmodified data. The function `conf_dist` does not
 have a dedicaded type for this kind of estimator but as the Wald
 interval is based on the normal distribution, we can use `type =
-general_z` to create the *p*-value function.
+"general_z"` to create the *p*-value function.
 
 ``` r
-
 # First proportion
 
 x1 <- 8
@@ -649,7 +648,7 @@ distribution estimator of a parameter: A review. *Internat Statist Rev.*
     #> [1] stats     graphics  grDevices utils     datasets  methods   base     
     #> 
     #> other attached packages:
-    #> [1] pvaluefunctions_1.1.0
+    #> [1] pvaluefunctions_1.2.0
     #> 
     #> loaded via a namespace (and not attached):
     #>  [1] Rcpp_1.0.1         RColorBrewer_1.1-2 pillar_1.4.0      
