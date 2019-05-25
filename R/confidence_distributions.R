@@ -25,12 +25,12 @@ if (getRversion() >= "2.15.1") {
 #' @param est_names (optional) String vector indicating the names of the estimate(s). Must be equal the number of estimates.
 #' @param conf_level (optional) Numerical vector indicating the confidence level(s). Bust be between 0 and 1.
 #' @param null_values (optional) Numerical vector indicating the null value(s) in the plot
-#' @param trans (optional) String indicating the transformation function that will be applied to the estimates and confidence curves. For example: \code{exp} for an exponential transformation of the log-odds in logistic regression.
+#' @param trans (optional) String indicating the transformation function that will be applied to the estimates and confidence curves. For example: \code{"exp"} for an exponential transformation of the log-odds in logistic regression.
 #' @param alternative String indicating if the confidence level(s) are two-sided or one-sided. Must be one of the following: \code{two_sided}, \code{one_sided}.
 #' @param log_yaxis Logical. Indicating if a portion of the y-axis should be displayed on the logarithmic scale.
 #' @param cut_logyaxis Numerical value indicating the threshold below which the y-axis will be displayed logarithmically. Must lie between 0 and 1.
 #' @param xlab (optional) String indicating the label of the x-axis.
-#' @param xlim (optional) Optional numerical vector of length 2 indicating the limits of the x-axis on the untransformed scale.
+#' @param xlim (optional) Optional numerical vector of length 2 indicating the limits of the x-axis on the \emph{untransformed} scale. For example: If you want to plot \emph{p}-value functions for odds ratios from logistic regressions, the limits have to be given on the log-odds scale.
 #' @param together Logical. Indicating if graphics for multiple estimates should be displayed together or on separate plots.
 #' @param plot_p_limit Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale (i.e. \code{log_yaxis = TRUE}).
 #'
