@@ -24,15 +24,16 @@ if (getRversion() >= "2.15.1") {
 #' @param n_values (optional) Integer indicating the number of points that are used to generate the graphics. The higher this number, the higher the computation time and resolution.
 #' @param est_names (optional) String vector indicating the names of the estimate(s). Must be equal the number of estimates.
 #' @param conf_level (optional) Numerical vector indicating the confidence level(s). Bust be between 0 and 1.
-#' @param null_values (optional) Numerical vector indicating the null value(s) in the plot
+#' @param null_values (optional) Numerical vector indicating the null value(s) in the plot on the \emph{untransformed} scale. For example: The null values for an odds ratio of 1 is 0 on the log-odds scale.
 #' @param trans (optional) String indicating the transformation function that will be applied to the estimates and confidence curves. For example: \code{"exp"} for an exponential transformation of the log-odds in logistic regression.
 #' @param alternative String indicating if the confidence level(s) are two-sided or one-sided. Must be one of the following: \code{two_sided}, \code{one_sided}.
 #' @param log_yaxis Logical. Indicating if a portion of the y-axis should be displayed on the logarithmic scale.
 #' @param cut_logyaxis Numerical value indicating the threshold below which the y-axis will be displayed logarithmically. Must lie between 0 and 1.
 #' @param xlab (optional) String indicating the label of the x-axis.
-#' @param xlim (optional) Optional numerical vector of length 2 indicating the limits of the x-axis on the \emph{untransformed} scale. For example: If you want to plot \emph{p}-value functions for odds ratios from logistic regressions, the limits have to be given on the log-odds scale.
+#' @param xlim (optional) Optional numerical vector of length 2 indicating the limits of the x-axis on the \emph{untransformed} scale. For example: If you want to plot \emph{p}-value functions for odds ratios from logistic regressions, the limits have to be given on the log-odds scale. Get's overriden if null values are outside of this range.
 #' @param together Logical. Indicating if graphics for multiple estimates should be displayed together or on separate plots.
 #' @param plot_p_limit Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale (i.e. \code{log_yaxis = TRUE}).
+#' @param plot_counternull Logical. Indicating if the counternull should be plotted as a point. Only available for \emph{p}-value functions and s-value functions. If the counternull values are outside of the plotted functions, they are not shown.
 #'
 #' @return \code{conf_dist} returns four data frames and a ggplot2-plot object: \code{res_frame} (contains parameter values, \emph{p}-values, s-values, confidence distribution and density, variable names and type of hypothesis), \code{conf_frame} (contains the used confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull for the corresponding null values), \code{point_est} (contains the mean, median and mode point estimates) and \code{plot} (a ggplot2-plot).
 #' @references Bender R, Berg G, Zeeb H. Tutorial: using confidence curves in medical research. Biom J. 2005;47(2):237-247.
@@ -77,6 +78,7 @@ if (getRversion() >= "2.15.1") {
 #'   , xlim = c(-1, 1)
 #'   , together = TRUE
 #'   , plot_p_limit = 1 - 0.9999
+#'   , plot_counternull = TRUE
 #' )
 #'
 #' #======================================================================================
@@ -102,6 +104,7 @@ if (getRversion() >= "2.15.1") {
 #'   , xlab = "Coefficient Agriculture"
 #'   , together = FALSE
 #'   , plot_p_limit = 1 - 0.999
+#'   , plot_counternull = FALSE
 #' )
 #'
 #' #======================================================================================
@@ -123,6 +126,7 @@ if (getRversion() >= "2.15.1") {
 #'   , xlab = "Difference between proportions"
 #'   , together = FALSE
 #'   , plot_p_limit = 1 - 0.9999
+#'   , plot_counternull = FALSE
 #' )
 #'
 #' #======================================================================================
@@ -166,6 +170,7 @@ if (getRversion() >= "2.15.1") {
 #'   # , xlim = c(-0.75, 0.5)
 #'   , together = FALSE
 #'   , plot_p_limit = 1 - 0.9999
+#'   , plot_counternull = FALSE
 #' )
 #'
 #' @seealso \code{\link[concurve]{plotpint}}
@@ -194,6 +199,7 @@ conf_dist <- function(
   , xlim = NULL
   , together = FALSE
   , plot_p_limit = (1 - 0.999)
+  , plot_counternull = FALSE
 ) {
 
   #-----------------------------------------------------------------------------
@@ -640,6 +646,40 @@ conf_dist <- function(
   }
 
   #-----------------------------------------------------------------------------
+  # Add counternull values to the result frame for plotting
+  #-----------------------------------------------------------------------------
+
+  if (!is.null(null_values) && plot_counternull == TRUE && plot_type %in% c("p_val", "s_val")) {
+
+    res$res_frame$counternull <- NA
+
+    null_values_trans <- do.call(trans, list(x = null_values))
+
+    for (i in seq_along(estimate)) {
+
+      plot_range_tmp <- range(res$res_frame$values[res$res_frame$variable %in% est_names[i]], na.rm = TRUE)
+
+      for (j in seq_along(null_values)) {
+
+        counternull_tmp <- res$counternull_frame$counternull[res$counternull_frame$variable %in% est_names[i] & res$counternull_frame$null_value %in% null_values_trans[j]]
+
+        if ((counternull_tmp <= plot_range_tmp[2]) & (counternull_tmp >= plot_range_tmp[1])) {
+
+          counternull_index_tmp <- which.min(abs(res$res_frame$values[res$res_frame$variable %in% est_names[i]] - counternull_tmp))
+
+          res$res_frame$counternull[res$res_frame$variable %in% est_names[i]][counternull_index_tmp] <- res$res_frame$p_two[res$res_frame$variable %in% est_names[i]][which.min(abs(res$res_frame$values[res$res_frame$variable %in% est_names[i]] - null_values_trans[j]))]
+
+        }
+      }
+    }
+
+    if (plot_type %in% "s_val") {
+      res$res_frame$counternull <- -log2(res$res_frame$counternull)
+    }
+
+  }
+
+  #-----------------------------------------------------------------------------
   # Plot using ggplot2
   #-----------------------------------------------------------------------------
 
@@ -891,6 +931,19 @@ conf_dist <- function(
     #     , hjust = "inward"
     #   )
     # }
+  }
+
+  if (!is.null(null_values) && plot_counternull == TRUE && plot_type %in% c("p_val", "s_val") && !all(is.na(res$res_frame$counternull))) {
+
+    if (together == TRUE) {
+
+      p <- p + geom_point(aes(x = values, y = counternull, colour = variable), size = 4, pch = 21, fill = "white", stroke = 1.7)
+
+    } else if (together == FALSE) {
+
+      p <- p + geom_point(aes(x = values, y = counternull), colour = "black", size = 4, pch = 21, fill = "white", stroke = 1.7)
+
+    }
   }
 
   res$plot <- p
