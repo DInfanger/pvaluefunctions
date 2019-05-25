@@ -139,8 +139,8 @@ The function has the following arguments:
     the y-axis will be displayed logarithmically. Must lie between 0 and
     1.
   - `xlab` (optional): String indicating the label of the x-axis.
-  - `xlim` (optional): Optional numerical vector of length 2 indicating
-    the limits of the x-axis on the *untransformed* scale.
+  - `xlim` (optional): Numerical vector of length 2 indicating the
+    limits of the x-axis on the *untransformed* scale.
   - `together`: Logical. Indicating if graphics for multiple estimates
     should be displayed together or on separate plots.
   - `plot_p_limit`: Numerical value indicating the lower limit of the
@@ -165,9 +165,9 @@ The main function `conf_dist()` returns five objects in a list:
     the plot.
   - onf\_frame\`: A data frame containing the confidence intervals for
     the specified confidence levels for all estimates.
-  - \*\*`counternull_frame`: A data frame containing the counternull
-    values for the specified null values (see Rosenthal & Rubin (1994)
-    for more information about the counternull).
+  - `counternull_frame`: A data frame containing the counternull values
+    for the specified null values (see Rosenthal & Rubin (1994) for more
+    information about the counternull).
   - `point_est`: A data frame containing the point estimates for all
     estimates. The point estimates correspond to the mean, median or
     mode of the confidence density (see Xie & Singh (2013) for more
