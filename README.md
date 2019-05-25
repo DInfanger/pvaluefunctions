@@ -128,8 +128,8 @@ The function has the following arguments:
     value(s) in the plot
   - `trans` (optional): String indicating the transformation function
     that will be applied to the estimates and confidence curves. For
-    example: “exp” for an exponential transformation of the log-odds in
-    logistic regression.
+    example: `"exp"` for an exponential transformation of the log-odds
+    in logistic regression.
   - `alternative`: String indicating if the confidence level(s) are
     two-sided or one-sided. Must be one of the following: `two_sided`,
     `one_sided`.
@@ -140,7 +140,9 @@ The function has the following arguments:
     1.
   - `xlab` (optional): String indicating the label of the x-axis.
   - `xlim` (optional): Numerical vector of length 2 indicating the
-    limits of the x-axis on the *untransformed* scale.
+    limits of the x-axis on the *untransformed* scale. For example: If
+    you want to plot *p*-value functions for odds ratios from logistic
+    regressions, the limits have to be given on the log-odds scale.
   - `together`: Logical. Indicating if graphics for multiple estimates
     should be displayed together or on separate plots.
   - `plot_p_limit`: Numerical value indicating the lower limit of the
