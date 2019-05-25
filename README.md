@@ -23,8 +23,9 @@ pvaluefunctions
       - [Odds ratio from logistic
         regression](#odds-ratio-from-logistic-regression)
       - [Proportion](#proportion)
-      - [Difference between two independent
-        proportions](#difference-between-two-independent-proportions)
+      - [Difference between two independent proportions: Wilson’s score
+        by Newcombe with continuity
+        correction](#difference-between-two-independent-proportions-wilsons-score-by-newcombe-with-continuity-correction)
       - [Difference between two independent proportions: Agresti-Caffo
         adjusted Wald
         interval](#difference-between-two-independent-proportions-agresti-caffo-adjusted-wald-interval)
@@ -125,7 +126,9 @@ The function has the following arguments:
   - `conf_level` (optional): Numerical vector indicating the confidence
     level(s). Bust be between 0 and 1.
   - `null_values` (optional): Numerical vector indicating the null
-    value(s) in the plot
+    value(s) in the plot on the *untransformed* scale. For example: If
+    you want to plot odds ratios from logistic regressions, the
+    `null_values` have to be given on the log-odds scale.
   - `trans` (optional): String indicating the transformation function
     that will be applied to the estimates and confidence curves. For
     example: `"exp"` for an exponential transformation of the log-odds
@@ -142,12 +145,17 @@ The function has the following arguments:
   - `xlim` (optional): Numerical vector of length 2 indicating the
     limits of the x-axis on the *untransformed* scale. For example: If
     you want to plot *p*-value functions for odds ratios from logistic
-    regressions, the limits have to be given on the log-odds scale.
+    regressions, the limits have to be given on the log-odds scale. Gets
+    overriden if null values are outside of this range.
   - `together`: Logical. Indicating if graphics for multiple estimates
     should be displayed together or on separate plots.
   - `plot_p_limit`: Numerical value indicating the lower limit of the
     y-axis. Must be greater than 0 for a logarithmic scale
     (i.e. `log_yaxis = TRUE`).
+  - `plot_counternull`: Logical. Indicating if the counternull should be
+    plotted as a point. Only available for -value functions and s-value
+    functions. If the counternull values are outside of the plotted
+    functions, they are not shown.
 
 ### Required arguments for different estimate types
 
@@ -232,6 +240,7 @@ res <- conf_dist(
   , xlab = "Mean difference (group 1 - group 2)"
   , together = FALSE
   , plot_p_limit = 1 - 0.999
+  , plot_counternull = TRUE
 )
 ```
 
@@ -292,6 +301,7 @@ res <- conf_dist(
   , xlab = "Coefficient Agriculture"
   , together = FALSE
   , plot_p_limit = 1 - 0.999
+  , plot_counternull = FALSE
 )
 ```
 
@@ -318,6 +328,7 @@ res <- conf_dist(
   , xlim = c(-0.12, 0.065)
   , together = FALSE
   # , plot_p_limit = 1 - 0.999
+  , plot_counternull = FALSE
 )
 ```
 
@@ -345,6 +356,7 @@ res <- conf_dist(
   , xlab = "Coefficients"
   , together = TRUE
   , plot_p_limit = 1 - 0.999
+  , plot_counternull = FALSE
 )
 ```
 
@@ -370,6 +382,7 @@ res <- conf_dist(
   , xlab = "Coefficients"
   , together = TRUE
   , plot_p_limit = 1 - 0.999
+  , plot_counternull = TRUE
 )
 ```
 
@@ -415,6 +428,7 @@ res <- conf_dist(
   , xlab = "Pearson correlation"
   , together = TRUE
   , plot_p_limit = 1 - 0.999
+  , plot_counternull = FALSE
 )
 ```
 
@@ -484,6 +498,7 @@ res <- conf_dist(
   , xlim = log(c(0.4, 5))
   , together = FALSE
   , plot_p_limit = 1 - 0.999
+  , plot_counternull = TRUE
 )
 ```
 
@@ -509,12 +524,13 @@ res <- conf_dist(
   # , xlim = log(c(0.95, 1.2))
   , together = FALSE
   , plot_p_limit = 1 - 0.999
+  , plot_counternull = FALSE
 )
 ```
 
 <img src="man/figures/README-prop-1.png" width="80%" style="display: block; margin: auto;" />
 
-### Difference between two independent proportions
+### Difference between two independent proportions: Wilson’s score by Newcombe with continuity correction
 
 ``` r
 res <- conf_dist(
@@ -532,10 +548,11 @@ res <- conf_dist(
   , xlab = "Difference between proportions"
   , together = FALSE
   , plot_p_limit = 1 - 0.9999
+  , plot_counternull = FALSE
 )
 ```
 
-<img src="man/figures/README-propdiff-1.png" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-propdiff_Wilson-1.png" width="80%" style="display: block; margin: auto;" />
 
 ### Difference between two independent proportions: Agresti-Caffo adjusted Wald interval
 
@@ -547,9 +564,10 @@ The point estimate for the difference between proportions is still
 calculated using the unmodified data. The function `conf_dist` does not
 have a dedicaded type for this kind of estimator but as the Wald
 interval is based on the normal distribution, we can use `type =
-"general_z"` to create the *p*-value function.
+general_z` to create the *p*-value function.
 
 ``` r
+
 # First proportion
 
 x1 <- 8
@@ -587,10 +605,11 @@ res <- conf_dist(
   , null_values = c(0, 0.3)
   , trans = "identity"
   , alternative = "two_sided"
-  , xlab = "Difference between proportions"
+  , xlab = "Difference of proportions"
   # , xlim = c(-0.75, 0.5)
   , together = FALSE
   , plot_p_limit = 1 - 0.9999
+  , plot_counternull = FALSE
 )
 ```
 
