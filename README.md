@@ -29,6 +29,8 @@ pvaluefunctions
       - [Difference between two independent proportions: Agresti-Caffo
         adjusted Wald
         interval](#difference-between-two-independent-proportions-agresti-caffo-adjusted-wald-interval)
+      - [Confidence density of a variance estimate from a normal
+        distribution](#confidence-density-of-a-variance-estimate-from-a-normal-distribution)
   - [References](#references)
   - [Contact](#contact)
   - [Session info](#session-info)
@@ -334,6 +336,9 @@ res <- conf_dist(
 
 <img src="man/figures/README-linreg_single_cdf-1.png" width="80%" style="display: block; margin: auto;" />
 
+The point where the confidence distribution is \(0.5\) is the median
+unbiased estimator (see Xie & Singh (2013) for a review and proofs).
+
 ### Multiple coefficients from a linear regression model
 
 #### *P*-value functions
@@ -489,13 +494,13 @@ res <- conf_dist(
   , n_values = 1e4L
   , est_names = c("GPA")
   , conf_level = c(0.95, 0.90, 0.80)
-  , null_values = c(log(1))
+  , null_values = c(log(1)) # null value on the log-odds scale
   , trans = "exp"
   , alternative = "two_sided"
   , log_yaxis = TRUE
   , cut_logyaxis = 0.05
   , xlab = "Odds Ratio (GPA)"
-  , xlim = log(c(0.4, 5))
+  , xlim = log(c(0.4, 5.2)) # axis limits on the log-odds scale
   , together = FALSE
   , plot_p_limit = 1 - 0.999
   , plot_counternull = TRUE
@@ -615,6 +620,48 @@ res <- conf_dist(
 
 <img src="man/figures/README-propdiff_agresticaffo-1.png" width="80%" style="display: block; margin: auto;" />
 
+### Confidence density of a variance estimate from a normal distribution
+
+The confidence density of a variance estimate is skewed. This means that
+the mean, mode and median of the confidence density will not be
+identical, in general.
+
+``` r
+
+# Simulate some data from a normal distribution
+
+set.seed(142857)
+var_est <- var(x <- rnorm(20, 100, 15))
+
+res <- conf_dist(
+  estimate = var_est
+  , n = length(x)
+  , type = "var"
+  , plot_type = "pdf"
+  , n_values = 1e4L
+  , est_names = c("Variance")
+  , log_yaxis = TRUE
+  , cut_logyaxis = 0.05
+  , conf_level = c(0.95)
+  # , null_values = c(15^2, 18^2)
+  , trans = "identity"
+  , alternative = "two_sided"
+  , xlab = "Variance"
+  , xlim = c(100, 900)
+  , together = TRUE
+  , plot_p_limit = 1 - 0.999
+  , plot_counternull = TRUE
+)
+```
+
+``` r
+# Add vertical lines at the point estimates (mode, median, mean)
+
+res$plot + ggplot2::geom_vline(xintercept = as.numeric(res$point_est[1, 1:3]), linetype = 2, size = 1)
+```
+
+<img src="man/figures/README-variance_plot-1.png" width="80%" style="display: block; margin: auto;" />
+
 ## References
 
 Bender R, Berg G, Zeeb H. (2005): Tutorial: using confidence curves in
@@ -684,12 +731,12 @@ distribution estimator of a parameter: A review. *Internat Statist Rev.*
     #> [28] devtools_2.0.2     tidyselect_0.2.5   rprojroot_1.3-2   
     #> [31] grid_3.6.0         glue_1.3.1         R6_2.4.0          
     #> [34] processx_3.3.1     rmarkdown_1.13     sessioninfo_1.1.1 
-    #> [37] purrr_0.3.2        callr_3.2.0        ggplot2_3.1.1.9000
-    #> [40] magrittr_1.5       scales_1.0.0       backports_1.1.4   
-    #> [43] ps_1.3.0           htmltools_0.3.6    usethis_1.5.0     
-    #> [46] assertthat_0.2.1   colorspace_1.4-1   labeling_0.3      
-    #> [49] stringi_1.4.3      lazyeval_0.2.2     munsell_0.5.0     
-    #> [52] crayon_1.3.4
+    #> [37] zipfR_0.6-10       purrr_0.3.2        callr_3.2.0       
+    #> [40] ggplot2_3.1.1.9000 magrittr_1.5       scales_1.0.0      
+    #> [43] backports_1.1.4    ps_1.3.0           htmltools_0.3.6   
+    #> [46] usethis_1.5.0      assertthat_0.2.1   colorspace_1.4-1  
+    #> [49] labeling_0.3       stringi_1.4.3      lazyeval_0.2.2    
+    #> [52] munsell_0.5.0      crayon_1.3.4
 
 ## License
 

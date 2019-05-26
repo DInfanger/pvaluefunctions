@@ -421,6 +421,45 @@ res <- conf_dist(
 
 ```
 
+### Confidence density of a variance estimate from a normal distribution
+
+The confidence density of a variance estimate is skewed. This means that the mean, mode and median of the confidence density will not be identical, in general.
+
+```{r variance_calcs, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', eval = TRUE, echo = TRUE, fig.show = "hide"}
+
+# Simulate some data from a normal distribution
+
+set.seed(142857)
+var_est <- var(x <- rnorm(20, 100, 15))
+
+res <- conf_dist(
+  estimate = var_est
+  , n = length(x)
+  , type = "var"
+  , plot_type = "pdf"
+  , n_values = 1e4L
+  , est_names = c("Variance")
+  , log_yaxis = TRUE
+  , cut_logyaxis = 0.05
+  , conf_level = c(0.95)
+  # , null_values = c(15^2, 18^2)
+  , trans = "identity"
+  , alternative = "two_sided"
+  , xlab = "Variance"
+  , xlim = c(100, 900)
+  , together = TRUE
+  , plot_p_limit = 1 - 0.999
+  , plot_counternull = TRUE
+)
+
+```
+
+```{r variance_plot, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', eval = TRUE, echo = TRUE}
+# Add vertical lines at the point estimates (mode, median, mean)
+
+res$plot + ggplot2::geom_vline(xintercept = as.numeric(res$point_est[1, 1:3]), linetype = 2, size = 1)
+```
+
 ## References
 
 Bender R, Berg G, Zeeb H. (2005): Tutorial: using confidence curves in medical research. *Biom J.* 47(2): 237-47.
