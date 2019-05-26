@@ -937,7 +937,8 @@ conf_dist <- function(
 
     if (together == TRUE) {
 
-      p <- p + geom_point(aes(x = values, y = counternull, colour = variable), size = 4, pch = 21, fill = "white", stroke = 1.7)
+      p <- p + geom_point(aes(x = values, y = counternull, colour = variable), size = 4, pch = 21, fill = "white", stroke = 1.7) +
+        guides(colour = guide_legend(override.aes = list(pch = NA)))
 
     } else if (together == FALSE) {
 
