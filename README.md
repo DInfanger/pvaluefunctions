@@ -162,10 +162,11 @@ The function has the following arguments:
 ### Required arguments for different estimate types
 
   - *t*-tests: `estimate`, `df`, `tstat`.
-  - Linear regression, Gamma regression, general estimates based on the
-    *t*-distribution: `estimate`, `df`, `stderr`.
+  - Linear regression, Gamma regression, general estimates with
+    inference based on the *t*-distribution: `estimate`, `df`, `stderr`.
   - Logistic regression, Poisson regression, Cox regression, general
-    estimates based on the normal distribution: `estimate`, `stderr`.
+    estimates with inference based on the normal distribution:
+    `estimate`, `stderr`.
   - Correlation coefficients (Pearson, Spearman, Kendall), proportions,
     difference between proportions, variances: `estimate`, `n`.
 
@@ -175,7 +176,7 @@ The main function `conf_dist()` returns five objects in a list:
 
   - `res_frame`: A data frame containing the values used to construct
     the plot.
-  - onf\_frame\`: A data frame containing the confidence intervals for
+  - `conf_frame`: A data frame containing the confidence intervals for
     the specified confidence levels for all estimates.
   - `counternull_frame`: A data frame containing the counternull values
     for the specified null values (see Rosenthal & Rubin (1994) for more
