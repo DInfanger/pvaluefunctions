@@ -42,7 +42,8 @@ pvaluefunctions
 
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/pvaluefunctions)](https://cran.r-project.org/package=pvaluefunctions)
 [![downloads](https://cranlogs.r-pkg.org/badges/pvaluefunctions)](https://cran.r-project.org/package=pvaluefunctions)
-<http://cranlogs.r-pkg.org/badges/grand-total/pvaluefunctions>
+[![total
+downloads](https://cranlogs.r-pkg.org/badges/grand-total/pvaluefunctions)](http://cranlogs.r-pkg.org/badges/grand-total/pvaluefunctions)
 [![Rdoc](http://www.rdocumentation.org/badges/version/pvaluefunctions)](http://www.rdocumentation.org/packages/pvaluefunctions)
 
 ## Overview
