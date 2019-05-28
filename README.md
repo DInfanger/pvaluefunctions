@@ -41,7 +41,8 @@ pvaluefunctions
 ## *P*-value functions <img src="man/figures/logo2.svg" align="right" width="120" />
 
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/pvaluefunctions)](https://cran.r-project.org/package=pvaluefunctions)
-[![](https://cranlogs.r-pkg.org/badges/grand-total/pvaluefunctions)](https://cran.r-project.org/package=pvaluefunctions)
+[![downloads](https://cranlogs.r-pkg.org/badges/pvaluefunctions)](https://cran.r-project.org/package=pvaluefunctions)
+<http://cranlogs.r-pkg.org/badges/grand-total/pvaluefunctions>
 [![Rdoc](http://www.rdocumentation.org/badges/version/pvaluefunctions)](http://www.rdocumentation.org/packages/pvaluefunctions)
 
 ## Overview
@@ -162,11 +163,10 @@ The function has the following arguments:
 ### Required arguments for different estimate types
 
   - *t*-tests: `estimate`, `df`, `tstat`.
-  - Linear regression, Gamma regression, general estimates with
-    inference based on the *t*-distribution: `estimate`, `df`, `stderr`.
+  - Linear regression, Gamma regression, general estimates based on the
+    *t*-distribution: `estimate`, `df`, `stderr`.
   - Logistic regression, Poisson regression, Cox regression, general
-    estimates with inference based on the normal distribution:
-    `estimate`, `stderr`.
+    estimates based on the normal distribution: `estimate`, `stderr`.
   - Correlation coefficients (Pearson, Spearman, Kendall), proportions,
     difference between proportions, variances: `estimate`, `n`.
 
@@ -176,7 +176,7 @@ The main function `conf_dist()` returns five objects in a list:
 
   - `res_frame`: A data frame containing the values used to construct
     the plot.
-  - `conf_frame`: A data frame containing the confidence intervals for
+  - onf\_frame\`: A data frame containing the confidence intervals for
     the specified confidence levels for all estimates.
   - `counternull_frame`: A data frame containing the counternull values
     for the specified null values (see Rosenthal & Rubin (1994) for more
@@ -720,7 +720,7 @@ distribution estimator of a parameter: A review. *Internat Statist Rev.*
     #> [1] pvaluefunctions_1.2.0
     #> 
     #> loaded via a namespace (and not attached):
-    #>  [1] Rcpp_1.0.1         RColorBrewer_1.1-2 pillar_1.4.0      
+    #>  [1] Rcpp_1.0.1         RColorBrewer_1.1-2 pillar_1.4.1      
     #>  [4] compiler_3.6.0     prettyunits_1.0.2  remotes_2.0.4     
     #>  [7] tools_3.6.0        testthat_2.1.1     digest_0.6.19     
     #> [10] pkgbuild_1.0.3     pkgload_1.0.2      tibble_2.1.1      
