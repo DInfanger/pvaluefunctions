@@ -193,7 +193,7 @@ conf_dist <- function(
   , null_values = NULL
   , trans = "identity"
   , alternative = "two_sided"
-  , log_yaxis = TRUE
+  , log_yaxis = FALSE
   , cut_logyaxis = 0.05
   , xlab = NULL
   , xlim = NULL
@@ -715,7 +715,6 @@ conf_dist <- function(
 
   y_var <- switch(
     plot_type
-    # , p_val = ifelse(alternative %in% "two_sided", "p_two", "p_one")
     , p_val = "p_two"
     , cdf = "conf_dist"
     , pdf = "conf_dens"
@@ -724,7 +723,6 @@ conf_dist <- function(
 
   y_lab <- switch(
     plot_type
-    # , p_val = ifelse(alternative %in% "two_sided", expression(paste(italic("P"), "-value (two-sided) / Significance level "~alpha, sep = "")), expression(paste(italic("P"), "-value (one-sided) / Significance level "~alpha, sep = "")))
     , p_val = expression(paste(italic("P"), "-value (two-sided) / Significance level"~alpha, sep = ""))
     , cdf = "Confidence distribution"
     , pdf = "Confidence density"
@@ -742,11 +740,6 @@ conf_dist <- function(
       scale_colour_manual(values = c("black", "#08A9CF"))  +
       theme(
         legend.position="none"
-        # , legend.text=element_text(size=15)
-        # , legend.key=element_blank()
-        # , legend.title=element_text(size=15)
-        # , legend.key.width=unit(.01,"npc")
-        # , legend.key.height=unit(.025,"npc")
       )
   } else if (alternative == "two_sided" & (together == FALSE | (together == TRUE & length(estimate) < 2))) {
     p <- p + geom_line(size = 1.5, colour = "black")
@@ -763,19 +756,8 @@ conf_dist <- function(
       )
   }
 
-  # limit <- switch(
-  #   plot_type
-  #   # , p_val = c(0, ifelse(alternative %in% "two_sided", 1, 0.5))
-  #   , p_val = c(ifelse(log_yaxis == TRUE, ifelse(alternative %in% "two_sided", plot_p_limit, plot_p_limit*2), 0), 1)
-  #   , cdf = c(0, 1)
-  #   , pdf = c(0, NA)
-  #   , s_val = c(0, NA)
-  # )
-
   p <- p + xlab(xlab) +
-    ylab(y_lab) +
-    # coord_cartesian(ylim = limit) +
-    scale_x_continuous(breaks = scales::pretty_breaks(n = 15))
+    ylab(y_lab)
 
   if (plot_type %in% "p_val") {
     if (log_yaxis == TRUE & (p_cutoff < cut_logyaxis)) {
@@ -793,12 +775,6 @@ conf_dist <- function(
         breaks_two <- c(10^(log10(seq(ceiling(cut_logyaxis/0.1)*0.1, 1, by = 0.1))))
         breaks_one <- c(10^(log10(seq(ceiling(cut_logyaxis_one/0.05)*0.05, 0.5, 0.05))))
       }
-
-      # if (alternative %in% "two_sided") {
-      #   breaks_two <- c(breaks_two, cut_logyaxis)
-      # } else if (alternative %in% "one_sided") {
-      #   breaks_one <- c(breaks_one, cut_logyaxis_one)
-      # }
 
       # Remove possible duplicates
 
@@ -853,12 +829,6 @@ conf_dist <- function(
 
   if (plot_type %in% c("p_val", "s_val", "cdf") && !is.null(conf_level)) {
 
-    # hlines_tmp <- switch(
-    #   alternative
-    #   , two_sided = (1 - conf_level)
-    #   , one_sided = (2 - 2*conf_level)
-    # )
-
     hlines_tmp <- text_frame$p_value
 
     if (plot_type %in% "s_val") {
@@ -875,12 +845,34 @@ conf_dist <- function(
     p <- p + geom_vline(data = res$counternull_frame, aes(xintercept = null_value), linetype = 1, size = 0.5)
   }
 
-  if (plot_type %in% c("p_val", "s_val", "cdf", "pdf") && !is.null(xlim) & ((together == TRUE & (length(estimate) >= 2)) | (length(estimate) < 2))) {
-    # p <- p + scale_x_continuous(limits = do.call(trans, list(x = xlim)), breaks = scales::pretty_breaks(n = 15))
+  if (trans %in% "exp" && plot_type %in% "p_val") {
+
+    curr_x_limits <- ggplot_build(p)$layout$panel_params[[1]]$x.range
+
+    p <- p + scale_x_continuous(trans = "log", breaks = scales::pretty_breaks(n = 10))
+
+    if (log_yaxis == TRUE) {
+      p <- p + annotate("rect", xmin=0, xmax=100, ymin=ifelse(alternative %in% "two_sided", plot_p_limit, plot_p_limit*2), ymax=cut_logyaxis, alpha=0.1, colour = grey(0.9))
+    }
+
+    p <- p + coord_cartesian(xlim = c(min(curr_x_limits, xlim), max(curr_x_limits, xlim)), expand = TRUE)
+
+    if (!is.null(hlines_tmp)) {
+      p <- p + geom_hline(yintercept = hlines_tmp, linetype = 2)
+    }
+
+  } else if (trans %in% "exp" && plot_type %in% c("cdf", "pdf", "s_val")){
+
     p <- p +
-      # coord_cartesian(xlim = do.call(trans, list(x = xlim)), ylim = limit) +
+      scale_x_continuous(trans = "log", breaks = scales::pretty_breaks(n = 10), limits = xlim)
+
+  } else {
+
+    p <- p +
       scale_x_continuous(breaks = scales::pretty_breaks(n = 10), limits = xlim)
+
   }
+  # }
 
   if (length(estimate) >= 2 & together == FALSE) {
     if (plot_type %in% "pdf"){
@@ -910,7 +902,10 @@ conf_dist <- function(
       text_frame$p_value <- -log2(text_frame$p_value)
     }
 
-    # if (!is.null(conf_level) & (together == FALSE | (together == TRUE & (length(estimate) < 2)))) {
+    if (trans %in% "exp" && alternative %in% "two_sided") {
+      text_frame$theor_values <- 0
+    }
+
     p <- p + geom_label(
       data = text_frame
       , mapping = aes(x = theor_values, y = p_value, label = label)
@@ -920,17 +915,6 @@ conf_dist <- function(
       , size = 5.5
       , hjust = "inward"
     )
-    # } else if (!is.null(conf_level) & (together == TRUE & (length(estimate) >= 2))) {
-    #   p <- p + geom_label(
-    #     data = text_frame
-    #     , mapping = aes(x = theor_values, y = p_value, label = label)
-    #     , inherit.aes = FALSE
-    #     , label.size = NA
-    #     , parse = TRUE
-    #     , size = 5.5
-    #     , hjust = "inward"
-    #   )
-    # }
   }
 
   if (!is.null(null_values) && plot_counternull == TRUE && plot_type %in% c("p_val", "s_val") && !all(is.na(res$res_frame$counternull))) {
@@ -945,11 +929,12 @@ conf_dist <- function(
       p <- p + geom_point(aes(x = values, y = counternull), colour = "black", size = 4, pch = 21, fill = "white", stroke = 1.7)
 
     }
+
   }
 
   res$plot <- p
 
-  print(p)
+  suppressWarnings(print(p))
 
   return(res)
 
