@@ -521,15 +521,57 @@ conf_dist <- function(
   # Calculate the limits of the x-axis if not provided
   #-----------------------------------------------------------------------------
 
-  if (is.null(xlim) & plot_type %in% c("p_val", "s_val")) {
-    res_tmp <- res$res_frame
-    res_tmp$values[res$res_frame$p_two < plot_p_limit] <- NA
-    # res_tmp$p_two[res$res_frame$p_two < plot_p_limit] <- NA
+  # If there are limits given, take those in any case
+  if(is.null(xlim)) {
 
-    xlim <- range(res_tmp$values, na.rm = TRUE)
+    xlim <- c(NA, NA)
 
-    rm(res_tmp)
+    if (is.null(null_values)) {
+
+      # If no limits and no null values given, take the plot_p_limit
+      res_tmp <- res$res_frame
+      res_tmp$values[res$res_frame$p_two < plot_p_limit] <- NA
+
+      xlim <- range(res_tmp$values, na.rm = TRUE)
+
+      rm(res_tmp)
+
+    } else if (!is.null(null_values)) {
+
+      # If no limits but null values given, look if the plot_p_limits are outside the null_values
+      res_tmp <- res$res_frame
+      res_tmp$values[res$res_frame$p_two < plot_p_limit] <- NA
+
+      plot_range_tmp <- range(res_tmp$values, na.rm = TRUE)
+
+      # If the smallest null value is outside of the plotting area, set the lower limit to that null value
+      if (min(null_values, na.rm = TRUE) <= plot_range_tmp[1]) {
+        xlim[1] <- min(null_values, na.rm = TRUE)
+      } else {
+        xlim[1] <- plot_range_tmp[1]
+      }
+
+      # If the largest null value is outside of the plotting area, set the upper limit to that null value
+      if (max(null_values, na.rm = TRUE) >= plot_range_tmp[2]) {
+        xlim[2] <- max(null_values, na.rm = TRUE)
+      } else {
+        xlim[2] <- plot_range_tmp[2]
+      }
+
+      rm(res_tmp, plot_range_tmp)
+
+    }
   }
+
+  # if (is.null(xlim) & plot_type %in% c("p_val", "s_val")) {
+  #   res_tmp <- res$res_frame
+  #   res_tmp$values[res$res_frame$p_two < plot_p_limit] <- NA # Set all values were the p-value is below the specified value to missing
+  #   # res_tmp$p_two[res$res_frame$p_two < plot_p_limit] <- NA
+  #
+  #   xlim <- range(res_tmp$values, na.rm = TRUE)
+  #
+  #   rm(res_tmp)
+  # }
 
   #-----------------------------------------------------------------------------
   # Text frame coordinates and contents for plotting the confidence levels
@@ -543,7 +585,7 @@ conf_dist <- function(
 
       theor_val_tmp <- switch(
         alternative
-        , two_sided = rep(-Inf, each = length(conf_level))
+        , two_sided = rep(ifelse(trans %in% "exp", 0, -Inf), each = length(conf_level))
         , one_sided = rep(Inf, each = length(conf_level))
       )
 
@@ -572,7 +614,7 @@ conf_dist <- function(
 
       theor_val_tmp <- switch(
         alternative
-        , two_sided = rep(-Inf, each = length(conf_level))
+        , two_sided = rep(ifelse(trans %in% "exp", 0, -Inf), each = length(conf_level))
         , one_sided = rep(Inf, each = length(conf_level))
       )
 
@@ -603,7 +645,9 @@ conf_dist <- function(
     res$point_est[, c("est_mean", "est_median", "est_mode")] <- do.call(trans, list(x = res$point_est[, c("est_mean", "est_median", "est_mode")]))
 
     if (!is.null(conf_level)) {
-      text_frame$theor_values[is.finite(text_frame$theor_values)] <- do.call(trans, list(x = text_frame$theor_values[is.finite(text_frame$theor_values)]))
+      if (!trans %in% "exp") {
+        text_frame$theor_values[is.finite(text_frame$theor_values)] <- do.call(trans, list(x = text_frame$theor_values[is.finite(text_frame$theor_values)]))
+      }
       res$conf_frame$lwr <- do.call(trans, list(x = res$conf_frame$lwr))
       res$conf_frame$upr <- do.call(trans, list(x = res$conf_frame$upr))
     }
@@ -676,7 +720,6 @@ conf_dist <- function(
     if (plot_type %in% "s_val") {
       res$res_frame$counternull <- -log2(res$res_frame$counternull)
     }
-
   }
 
   #-----------------------------------------------------------------------------
@@ -713,6 +756,8 @@ conf_dist <- function(
 
   theme_set(theme_bw())
 
+  # Set variable to be plotted on y-axis depending on the type of the plot
+
   y_var <- switch(
     plot_type
     , p_val = "p_two"
@@ -720,6 +765,8 @@ conf_dist <- function(
     , pdf = "conf_dens"
     , s_val = "s_val"
   )
+
+  # Set label of the y-axis depending on the type of the plot
 
   y_lab <- switch(
     plot_type
@@ -729,35 +776,52 @@ conf_dist <- function(
     , s_val = expression(paste("Surprisal in bits (two-sided ",~italic("P"), "-value)", sep = ""))
   )
 
+  # Create a ggplot2-object with no geoms
+
   p <- ggplot(res$res_frame, aes(x = values, y = eval(parse(text = y_var)), group = variable))
+
+  # If 2 or more estimates are plotted together, differentiate them by color
 
   if ((length(estimate) >= 2) & together == TRUE) {
     p <- p + aes(colour = variable)
   }
 
-  if (alternative == "one_sided" & (together == FALSE | (together == TRUE & length(estimate) < 2))) {
+  # For only one one-sided p-value curve, set the colors to black and blue
+
+  if (alternative %in% "one_sided" & (together == FALSE | (together == TRUE & length(estimate) < 2))) {
     p <- p + geom_line(aes(colour = hypothesis), size = 1.5) +
       scale_colour_manual(values = c("black", "#08A9CF"))  +
       theme(
         legend.position="none"
       )
-  } else if (alternative == "two_sided" & (together == FALSE | (together == TRUE & length(estimate) < 2))) {
+
+    # For only one two-sided p-value curve, set the color to black
+
+  } else if (alternative %in% "two_sided" & (together == FALSE | (together == TRUE & length(estimate) < 2))) {
     p <- p + geom_line(size = 1.5, colour = "black")
+
+    # For 2 or more estimates plotted together: set the colors according to "Set1" palette
+
   } else if (together == TRUE & (length(estimate) >= 2)) {
     p <- p + geom_line(size = 1.5) +
       scale_colour_brewer(palette = "Set1", name = "") +
       theme(
         legend.position="top"
         , legend.text=element_text(size=15)
-        # , legend.key=element_blank()
         , legend.title=element_text(size=15)
-        # , legend.key.width=unit(.01,"npc")
-        # , legend.key.height=unit(.025,"npc")
       )
   }
 
+  # Add the labels for the axes
+
   p <- p + xlab(xlab) +
     ylab(y_lab)
+
+  #-----------------------------------------------------------------------------
+  # y-axis
+  #-----------------------------------------------------------------------------
+
+  # For p-value curves: Set the left and right y-axes, possibly with a logarithmic part
 
   if (plot_type %in% "p_val") {
     if (log_yaxis == TRUE & (p_cutoff < cut_logyaxis)) {
@@ -810,22 +874,45 @@ conf_dist <- function(
     }
   }
 
+  # For s-value curves: Reverse the y-axis and transform it according to log2
+
   if (plot_type %in% "s_val") {
 
     p <- p + scale_y_reverse(
       limits = c(max(res$res_frame$s_val, na.rm = TRUE), 0)
       , breaks = scales::pretty_breaks(n = 10)(c(0, max(res$res_frame$s_val, na.rm = TRUE)))
-      # , labels = lab_twosided
-      # , trans = trans_surprisal()
       , sec.axis = sec_axis(
         trans = ~. + log2(2)
         , name = expression(paste("Surprisal in bits (one-sided ",~italic("P"), "-value)", sep = ""))
-        # , labels = lab_onesided
         , breaks = scales::pretty_breaks(n = 10)(c(1, -log2(min(res$res_frame$p_two, na.rm = TRUE)/2)))
       )
     )
 
   }
+
+  #-----------------------------------------------------------------------------
+  # x-axis
+  #-----------------------------------------------------------------------------
+
+  if (trans %in% "exp") {
+
+    # Plot x-axis on a log-scale (can't set "xlim" here, because then the gray area cannot be added!)
+    p <- p + scale_x_continuous(trans = "log", breaks = scales::pretty_breaks(n = 10))
+
+    # If y-axis is plotted on a log-scale, re-add the gray rectangle
+    if (log_yaxis == TRUE) {
+      p <- p + annotate("rect", xmin=0, xmax=100, ymin=ifelse(alternative %in% "two_sided", plot_p_limit, plot_p_limit*2), ymax=cut_logyaxis, alpha=0.1, colour = grey(0.9))
+    }
+
+  }
+
+  # Set x-limits now
+
+  p <- p + coord_cartesian(xlim = xlim, expand = TRUE)
+
+  #-----------------------------------------------------------------------------
+  # Horizontal lines at the significance levels if specified
+  #-----------------------------------------------------------------------------
 
   if (plot_type %in% c("p_val", "s_val", "cdf") && !is.null(conf_level)) {
 
@@ -837,58 +924,91 @@ conf_dist <- function(
 
     p <- p + geom_hline(yintercept = hlines_tmp, linetype = 2)
 
-  } else if (plot_type %in% c("pdf", "cdf")) {
-    p <- p + scale_y_continuous(breaks = scales::pretty_breaks(n = 10))
   }
+
+  #-----------------------------------------------------------------------------
+  # Vertical lines at the null values if specified
+  #-----------------------------------------------------------------------------
 
   if (!is.null(null_values)) {
-    p <- p + geom_vline(data = res$counternull_frame, aes(xintercept = null_value), linetype = 1, size = 0.5)
+
+    plot_limits <- do.call(trans, list(x = ggplot_build(p)$layout$panel_params[[1]]$x.range))
+
+    # Which null_values are outside of the plotting limits
+
+    null_outside_plot <- which((res$counternull_frame$null_value <= plot_limits[1]) | (res$counternull_frame$null_value >= plot_limits[2]))
+
+    # Only add lines for those null values that are inside the plotting limits
+    if (length(null_outside_plot) > 0 && length(null_outside_plot) < length(null_values)) {
+      p <- p + geom_vline(data = res$counternull_frame, aes(xintercept = null_value), linetype = 1, size = 0.5)
+    } else if (length(null_outside_plot) == 0) {
+      p <- p + geom_vline(data = res$counternull_frame, aes(xintercept = null_value), linetype = 1, size = 0.5)
+
+    }
+
+    rm(plot_limits, null_outside_plot)
   }
 
-  if (trans %in% "exp" && plot_type %in% "p_val") {
-
-    xlim_new <- NA
-
-    # curr_x_limits <- ggplot_build(p)$layout$panel_params[[1]]$x.range
-
-    p <- p + scale_x_continuous(trans = "log", breaks = scales::pretty_breaks(n = 10))
-
-    if (log_yaxis == TRUE) {
-      p <- p + annotate("rect", xmin=0, xmax=100, ymin=ifelse(alternative %in% "two_sided", plot_p_limit, plot_p_limit*2), ymax=cut_logyaxis, alpha=0.1, colour = grey(0.9))
-    }
-
-    if (!is.null(null_values_trans) && xlim[1] <= min(null_values_trans)) {
-      xlim_new[1] <- xlim[1]
-    } else if (!is.null(null_values_trans) && xlim[1] > min(null_values_trans)) {
-      xlim_new[1] <- min(res$res_frame$values, na.rm = TRUE)
-    }
-
-    if (!is.null(null_values_trans) && xlim[2] >= max(null_values_trans)) {
-      xlim_new[2] <- xlim[2]
-    } else if (!is.null(null_values_trans) && xlim[2] < max(null_values_trans)) {
-      xlim_new[2] <- max(res$res_frame$values, na.rm = TRUE)
-    }
-
-    p <- p + coord_cartesian(xlim = xlim_new, expand = TRUE)
-
-    if (!is.null(hlines_tmp)) {
-      p <- p + geom_hline(yintercept = hlines_tmp, linetype = 2)
-    }
-
-  } else if (trans %in% "exp" && plot_type %in% c("cdf", "pdf", "s_val")){
-
-    p <- p +
-      # coord_cartesian(xlim = do.call(trans, list(x = xlim)), ylim = limit) +
-      scale_x_continuous(trans = "log", breaks = scales::pretty_breaks(n = 10), limits = xlim)
-
-  } else {
-
-    p <- p +
-      # coord_cartesian(xlim = do.call(trans, list(x = xlim)), ylim = limit) +
-      scale_x_continuous(breaks = scales::pretty_breaks(n = 10), limits = xlim)
-
-  }
+  # if (trans %in% "exp" && plot_type %in% "p_val") {
+  #
+  #   xlim_new <- xlim
+  #
+  #   # curr_x_limits <- ggplot_build(p)$layout$panel_params[[1]]$x.range
+  #
+  #   p <- p + scale_x_continuous(trans = "log", breaks = scales::pretty_breaks(n = 10))
+  #
+  #   if (log_yaxis == TRUE) {
+  #     p <- p + annotate("rect", xmin=0, xmax=100, ymin=ifelse(alternative %in% "two_sided", plot_p_limit, plot_p_limit*2), ymax=cut_logyaxis, alpha=0.1, colour = grey(0.9))
+  #   }
+  #
+  #   if (exists("null_values_trans") && xlim[1] <= min(null_values_trans)) {
+  #     xlim_new[1] <- xlim[1]
+  #   } else if (exists("null_values_trans") && xlim[1] > min(null_values_trans)) {
+  #     xlim_new[1] <- min(res$res_frame$values, na.rm = TRUE)
+  #   }
+  #
+  #   if (exists("null_values_trans") && xlim[2] >= max(null_values_trans)) {
+  #     xlim_new[2] <- xlim[2]
+  #   } else if (exists("null_values_trans") && xlim[2] < max(null_values_trans)) {
+  #     xlim_new[2] <- max(res$res_frame$values, na.rm = TRUE)
+  #   }
+  #
+  #   p <- p + coord_cartesian(xlim = xlim_new, expand = TRUE)
+  #
+  #   if (exists("hlines_tmp")) {
+  #     p <- p + geom_hline(yintercept = hlines_tmp, linetype = 2)
+  #   }
+  #
+  # } else if (trans %in% "exp" && plot_type %in% c("cdf", "pdf", "s_val")){
+  #
+  #   p <- p +
+  #     scale_x_continuous(trans = "log", breaks = scales::pretty_breaks(n = 10), limits = xlim)
+  #
+  # } else {
+  #
+  #   xlim_new <- xlim
+  #
+  #   if (!is.null(null_values) && xlim[1] <= min(null_values)) {
+  #     xlim_new[1] <- xlim[1]
+  #   } else if (!is.null(null_values) && xlim[1] > min(null_values)) {
+  #     xlim_new[1] <- min(res$res_frame$values, na.rm = TRUE)
+  #   }
+  #
+  #   if (!is.null(null_values) && xlim[2] >= max(null_values)) {
+  #     xlim_new[2] <- xlim[2]
+  #   } else if (!is.null(null_values) && xlim[2] < max(null_values)) {
+  #     xlim_new[2] <- max(res$res_frame$values, na.rm = TRUE)
+  #   }
+  #
+  #   p <- p +
+  #     scale_x_continuous(breaks = scales::pretty_breaks(n = 10), limits = xlim_new)
+  #
   # }
+  # }
+
+  #-----------------------------------------------------------------------------
+  # Facets for multiple estimates not plotted together
+  #-----------------------------------------------------------------------------
 
   if (length(estimate) >= 2 & together == FALSE) {
     if (plot_type %in% "pdf"){
@@ -897,6 +1017,48 @@ conf_dist <- function(
       p <- p + facet_wrap(~variable, scales = "free_x")
     }
   }
+
+  #-----------------------------------------------------------------------------
+  # Add text boxes at the specified significance levels, if any
+  #-----------------------------------------------------------------------------
+
+  if (!plot_type %in% "pdf" && !is.null(conf_level)) {
+    if (plot_type %in% "s_val") {
+      text_frame$p_value <- -log2(text_frame$p_value)
+    }
+
+    p <- p + geom_label(
+      data = text_frame
+      , mapping = aes(x = theor_values, y = p_value, label = label)
+      , inherit.aes = FALSE
+      , label.size = NA
+      , parse = TRUE
+      , size = 5.5
+      , hjust = "inward"
+    )
+  }
+
+  #-----------------------------------------------------------------------------
+  # Add points for the counternull if specified
+  #-----------------------------------------------------------------------------
+
+  if (!is.null(null_values) && plot_counternull == TRUE && plot_type %in% c("p_val", "s_val") && !all(is.na(res$res_frame$counternull))) {
+
+    if (together == TRUE) {
+
+      p <- p + geom_point(aes(x = values, y = counternull, colour = variable), size = 4, pch = 21, fill = "white", stroke = 1.7) +
+        guides(colour = guide_legend(override.aes = list(pch = NA)))
+
+    } else if (together == FALSE) {
+
+      p <- p + geom_point(aes(x = values, y = counternull), colour = "black", size = 4, pch = 21, fill = "white", stroke = 1.7)
+
+    }
+  }
+
+  #-----------------------------------------------------------------------------
+  # Make the plot prettier by increasing font size
+  #-----------------------------------------------------------------------------
 
   p <- p  + theme(
     axis.title.y.left=element_text(colour = "black", size = 17, hjust = 0.5, margin = margin(0, 10, 0, 0)),
@@ -912,41 +1074,6 @@ conf_dist <- function(
     # strip.background=element_rect(fill="white")
     strip.text.x=element_text(size=15)
   )
-
-  if (!plot_type %in% "pdf" && !is.null(conf_level)) {
-    if (plot_type %in% "s_val") {
-      text_frame$p_value <- -log2(text_frame$p_value)
-    }
-
-    if (trans %in% "exp" && alternative %in% "two_sided") {
-      text_frame$theor_values <- 0
-    }
-
-    p <- p + geom_label(
-      data = text_frame
-      , mapping = aes(x = theor_values, y = p_value, label = label)
-      , inherit.aes = FALSE
-      , label.size = NA
-      , parse = TRUE
-      , size = 5.5
-      , hjust = "inward"
-    )
-  }
-
-  if (!is.null(null_values) && plot_counternull == TRUE && plot_type %in% c("p_val", "s_val") && !all(is.na(res$res_frame$counternull))) {
-
-    if (together == TRUE) {
-
-      p <- p + geom_point(aes(x = values, y = counternull, colour = variable), size = 4, pch = 21, fill = "white", stroke = 1.7) +
-        guides(colour = guide_legend(override.aes = list(pch = NA)))
-
-    } else if (together == FALSE) {
-
-      p <- p + geom_point(aes(x = values, y = counternull), colour = "black", size = 4, pch = 21, fill = "white", stroke = 1.7)
-
-    }
-
-  }
 
   res$plot <- p
 
