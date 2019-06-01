@@ -1,5 +1,8 @@
 1.2.0
   * Added option `plot_counternull` to plot the counternull value(s) on the graphics if applicable and possible.
+  * Effect sizes on the log-scale (e.g. Odds ratio, Hazard ratio, Incidence rate ratio) are not plotted on a logarithmic x-axis.
+  * The default is now to omit a logarithmic part of the y-axis.
+  * Warnings from ggplot2 are now suppressed.
 
 1.1.0
   * Improved vignette with reduced figure size and several orthographic errors fixed. Added a new example (difference between proportions)
