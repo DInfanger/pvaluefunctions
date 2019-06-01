@@ -827,6 +827,24 @@ conf_dist <- function(
 
   }
 
+  if (plot_type %in% c("p_val", "s_val", "cdf") && !is.null(conf_level)) {
+
+    hlines_tmp <- text_frame$p_value
+
+    if (plot_type %in% "s_val") {
+      hlines_tmp <- -log2(hlines_tmp)
+    }
+
+    p <- p + geom_hline(yintercept = hlines_tmp, linetype = 2)
+
+  } else if (plot_type %in% c("pdf", "cdf")) {
+    p <- p + scale_y_continuous(breaks = scales::pretty_breaks(n = 10))
+  }
+
+  if (!is.null(null_values)) {
+    p <- p + geom_vline(data = res$counternull_frame, aes(xintercept = null_value), linetype = 1, size = 0.5)
+  }
+
   if (trans %in% "exp" && plot_type %in% "p_val") {
 
     xlim_new <- NA
