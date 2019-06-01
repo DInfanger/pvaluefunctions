@@ -1,7 +1,7 @@
 ---
 title: "P-value functions"
 author: "Denis Infanger"
-date: "2019-05-25"
+date: "2019-06-01"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{P-value functions}
@@ -76,8 +76,8 @@ There is only one function needed to create the plots: `conf_dist()`. The functi
 ### Required arguments for different estimate types
 
 * *t*-tests: `estimate`, `df`, `tstat`.
-* Linear regression, Gamma regression, general estimates based on the *t*-distribution: `estimate`, `df`, `stderr`.
-* Logistic regression, Poisson regression, Cox regression, general estimates based on the normal distribution: `estimate`, `stderr`.
+* Linear regression, Gamma regression, general estimates with inference based on the *t*-distribution: `estimate`, `df`, `stderr`.
+* Logistic regression, Poisson regression, Cox regression, general estimates with inference based on the normal distribution: `estimate`, `stderr`.
 * Correlation coefficients (Pearson, Spearman, Kendall), proportions, difference between proportions, variances: `estimate`, `n`.
 
 ### Returned values
@@ -85,8 +85,8 @@ There is only one function needed to create the plots: `conf_dist()`. The functi
 The main function `conf_dist()` returns five objects in a list:
 
 * `res_frame`: A data frame containing the values used to construct the plot.
-* onf_frame`: A data frame containing the confidence intervals for the specified confidence levels for all estimates.
-* **`counternull_frame`: A data frame containing the counternull values for the specified null values (see Rosenthal & Rubin (1994) for more information about the counternull).
+* `conf_frame`: A data frame containing the confidence intervals for the specified confidence levels for all estimates.
+* `counternull_frame`: A data frame containing the counternull values for the specified null values (see Rosenthal & Rubin (1994) for more information about the counternull).
 * `point_est`: A data frame containing the point estimates for all estimates. The point estimates correspond to the mean, median or mode of the confidence density (see Xie & Singh (2013) for more information). Estimates are produced using numerical procedures: Increase the number of points `n_values` for higher numerical precision.
 * `plot`: A [ggplot2](https://ggplot2.tidyverse.org/) plot object.
 
@@ -508,6 +508,48 @@ res <- conf_dist(
 ```
 
 <img src="figure/propdiff_agresticaffo-1.png" title="plot of chunk propdiff_agresticaffo" alt="plot of chunk propdiff_agresticaffo" width="80%" style="display: block; margin: auto;" />
+
+### Confidence density of a variance estimate from a normal distribution
+
+The confidence density of a variance estimate is skewed. This means that the mean, mode and median of the confidence density will not be identical, in general.
+
+
+```r
+
+# Simulate some data from a normal distribution
+
+set.seed(142857)
+var_est <- var(x <- rnorm(20, 100, 15))
+
+res <- conf_dist(
+  estimate = var_est
+  , n = length(x)
+  , type = "var"
+  , plot_type = "pdf"
+  , n_values = 1e4L
+  , est_names = c("Variance")
+  , log_yaxis = TRUE
+  , cut_logyaxis = 0.05
+  , conf_level = c(0.95)
+  # , null_values = c(15^2, 18^2)
+  , trans = "identity"
+  , alternative = "two_sided"
+  , xlab = "Variance"
+  , xlim = c(100, 900)
+  , together = TRUE
+  , plot_p_limit = 1 - 0.999
+  , plot_counternull = TRUE
+)
+```
+
+
+```r
+# Add vertical lines at the point estimates (mode, median, mean)
+
+res$plot + ggplot2::geom_vline(xintercept = as.numeric(res$point_est[1, 1:3]), linetype = 2, size = 1)
+```
+
+<img src="figure/variance_plot-1.png" title="plot of chunk variance_plot" alt="plot of chunk variance_plot" width="80%" style="display: block; margin: auto;" />
 
 ## References
 

@@ -8,7 +8,7 @@ conf_dist(estimate = NULL, n = NULL, df = NULL, stderr = NULL,
   tstat = NULL, type = NULL, plot_type = "p_val",
   n_values = 10000L, est_names = NULL, conf_level = NULL,
   null_values = NULL, trans = "identity", alternative = "two_sided",
-  log_yaxis = TRUE, cut_logyaxis = 0.05, xlab = NULL, xlim = NULL,
+  log_yaxis = FALSE, cut_logyaxis = 0.05, xlab = NULL, xlim = NULL,
   together = FALSE, plot_p_limit = (1 - 0.999),
   plot_counternull = FALSE)
 }
