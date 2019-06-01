@@ -328,7 +328,7 @@ res <- conf_dist(
   , log_yaxis = TRUE
   , cut_logyaxis = 0.05
   , xlab = "Odds Ratio (GPA)"
-  , xlim = log(c(0.4, 5.2)) # axis limits on the log-odds scale
+  , xlim = log(c(0.7, 5.2)) # axis limits on the log-odds scale
   , together = FALSE
   , plot_p_limit = 1 - 0.999
   , plot_counternull = TRUE

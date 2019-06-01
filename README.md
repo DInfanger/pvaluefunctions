@@ -502,7 +502,7 @@ res <- conf_dist(
   , log_yaxis = TRUE
   , cut_logyaxis = 0.05
   , xlab = "Odds Ratio (GPA)"
-  , xlim = log(c(0.4, 5.2)) # axis limits on the log-odds scale
+  , xlim = log(c(0.7, 5.2)) # axis limits on the log-odds scale
   , together = FALSE
   , plot_p_limit = 1 - 0.999
   , plot_counternull = TRUE
@@ -724,8 +724,8 @@ distribution estimator of a parameter: A review. *Internat Statist Rev.*
     #>  [1] Rcpp_1.0.1         RColorBrewer_1.1-2 pillar_1.4.1      
     #>  [4] compiler_3.6.0     prettyunits_1.0.2  remotes_2.0.4     
     #>  [7] tools_3.6.0        testthat_2.1.1     digest_0.6.19     
-    #> [10] pkgbuild_1.0.3     pkgload_1.0.2      tibble_2.1.1      
-    #> [13] gtable_0.3.0       evaluate_0.13      memoise_1.1.0     
+    #> [10] pkgbuild_1.0.3     pkgload_1.0.2      tibble_2.1.2      
+    #> [13] gtable_0.3.0       evaluate_0.14      memoise_1.1.0     
     #> [16] pkgconfig_2.0.2    rlang_0.3.4        cli_1.1.0         
     #> [19] curl_3.3           yaml_2.2.0         xfun_0.7          
     #> [22] dplyr_0.8.1        withr_2.1.2        stringr_1.4.0     
@@ -744,5 +744,3 @@ distribution estimator of a parameter: A review. *Internat Statist Rev.*
 
 [![License: GPL
 v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-
-[GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0).
