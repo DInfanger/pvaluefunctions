@@ -8,4 +8,5 @@
 ^CRAN-RELEASE$
 ^vignettes/figure$
 ^Readme\.Rmd$
-
+^R/confidence_distributions_experimental\.R$
+^R/testing_experimental\.R$
