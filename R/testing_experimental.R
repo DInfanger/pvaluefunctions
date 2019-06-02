@@ -93,9 +93,9 @@
 #   , type = "coxreg"
 #   , plot_type = "cdf"
 #   , n_values = 1e4L
-#   # , conf_level = c(0.95)
-#   # , null_values = log(c(1))
-#   , trans = "exp"
+#   , conf_level = c(0.95)
+#   , null_values = log(c(1))
+#   , trans = "identity"
 #   , alternative = "two_sided"
 #   , log_yaxis = FALSE
 #   , cut_logyaxis = 0.05
@@ -444,7 +444,7 @@
 #   # , stderr = se_d
 #   # , tstat = 31.504
 #   , type = "prop"
-#   , plot_type = "pdf"
+#   , plot_type = "p_val"
 #   , n_values = 1e4L
 #   , est_names = c("p1")
 #   , log_yaxis = TRUE
@@ -457,6 +457,7 @@
 #   # , xlim = c(0.2, 0.7)
 #   , together = FALSE
 #   , plot_p_limit = 1 - 0.999
+#   , plot_counternull = TRUE
 # )
 #
 # res$conf_frame
@@ -988,25 +989,25 @@
 # sd(x)
 #
 # res <- conf_dist(
-#   estimate = c(est_1)
-#   , n = c(length(x))
+#   estimate = c(est_1, 300)
+#   , n = c(length(x), 250)
 #   # , df = c(45)
 #   # , stderr = c(sqrt(601/30)/20)
 #   # , tstat = c(-4.687)
 #   , type = "var"
 #   , plot_type = "p_val"
 #   , n_values = 1e4L
-#   , est_names = c("Var1")
+#   , est_names = c("Var1", "Var2")
 #   , log_yaxis = TRUE
 #   , cut_logyaxis = 0.05
 #   , conf_level = c(0.95)
-#   # , null_values = c(15^2, 18^2)
+#   , null_values = c(15^2, 18^2)
 #   , trans = "identity"
 #   , alternative = "two_sided"
 #   , xlab = "Var"
-#   , xlim = c(200, 300)
+#   # , xlim = c(200, 300)
 #   , together = TRUE
-#   , plot_p_limit = 1 - 0.999
+#   , plot_p_limit = 1 - 0.9999
 #   , plot_counternull = TRUE
 # )
 #

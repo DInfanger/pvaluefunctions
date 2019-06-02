@@ -1044,12 +1044,12 @@ conf_dist <- function(
 
   if (!is.null(null_values) && plot_counternull == TRUE && plot_type %in% c("p_val", "s_val") && !all(is.na(res$res_frame$counternull))) {
 
-    if (together == TRUE) {
+    if (together == TRUE & (length(estimate) >= 2)) {
 
       p <- p + geom_point(aes(x = values, y = counternull, colour = variable), size = 4, pch = 21, fill = "white", stroke = 1.7) +
         guides(colour = guide_legend(override.aes = list(pch = NA)))
 
-    } else if (together == FALSE) {
+    } else if (together == FALSE | (together == TRUE & (length(estimate) < 2))) {
 
       p <- p + geom_point(aes(x = values, y = counternull), colour = "black", size = 4, pch = 21, fill = "white", stroke = 1.7)
 
