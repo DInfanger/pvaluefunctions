@@ -2,3 +2,5 @@ inst/doc
 packrat/lib*/
 .Rproj.user
 *.Rproj
+R/confidence_distributions_experimental.R
+R/testing_experimental.R
