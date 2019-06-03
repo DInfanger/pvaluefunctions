@@ -33,7 +33,7 @@ pvaluefunctions
         distribution](#confidence-density-of-a-variance-estimate-from-a-normal-distribution)
   - [References](#references)
   - [Contact](#contact)
-  - [Session info](#sessioninfo)
+  - [Session info](#session-info)
   - [License](#license)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -95,7 +95,7 @@ developmental version using the following command (after installing the
 `devtools::install_github("tidyverse/ggplot2")`
 
 To see what version of ggplot2 has been used to create the plots on this
-page, see the [Session Info](#sessioninfo).
+page, see the [Session info](#session-info).
 
 This warning will be deleted upon the release of a new version of
 ggplot2 that fixes the bug.

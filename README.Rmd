@@ -61,7 +61,7 @@ The newest version of [ggplot2 (3.1.1)](https://CRAN.R-project.org/package=ggplo
 
 It is therefore recommended that you install the developmental version of ggplot2 until the bug has been fixed. You can install the developmental version using the following command (after installing the [`devtools`](https://CRAN.R-project.org/package=devtools) package): `devtools::install_github("tidyverse/ggplot2")`
 
-To see what version of ggplot2 has been used to create the plots on this page, see the [Session Info](#sessioninfo).
+To see what version of ggplot2 has been used to create the plots on this page, see the [Session info].
 
 This warning will be deleted upon the release of a new version of ggplot2 that fixes the bug.
 
@@ -503,7 +503,7 @@ Xie Mg, Singh K. (2013): Confidence distribution, the frequentist distribution e
 
 [Denis Infanger](https://dsbg.unibas.ch/de/personen/denis-infanger/)
 
-## Session info {#sessioninfo}
+## Session info
 
 ```{r session_info, include=TRUE, echo=FALSE}
 sessionInfo()
