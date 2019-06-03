@@ -33,7 +33,7 @@ pvaluefunctions
         distribution](#confidence-density-of-a-variance-estimate-from-a-normal-distribution)
   - [References](#references)
   - [Contact](#contact)
-  - [Session info](#session-info)
+  - [Session info](#sessioninfo)
   - [License](#license)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -93,6 +93,12 @@ of ggplot2 until the bug has been fixed. You can install the
 developmental version using the following command (after installing the
 [`devtools`](https://CRAN.R-project.org/package=devtools) package):
 `devtools::install_github("tidyverse/ggplot2")`
+
+To see what version of ggplot2 has been used to create the plots on this
+page, see the [Session Info](#sessioninfo).
+
+This warning will be deleted upon the release of a new version of
+ggplot2 that fixes the bug.
 
 ## Usage
 
@@ -239,7 +245,7 @@ res <- conf_dist(
   , null_values = c(0)
   , trans = "identity"
   , alternative = "two_sided"
-  , log_yaxis = TRUE
+  , log_yaxis = FALSE
   , cut_logyaxis = 0.05
   , xlab = "Mean difference (group 1 - group 2)"
   , together = FALSE
@@ -303,6 +309,7 @@ res <- conf_dist(
   , log_yaxis = TRUE
   , cut_logyaxis = 0.05
   , xlab = "Coefficient Agriculture"
+  , xlim = c(-0.12, 0.065)
   , together = FALSE
   , plot_p_limit = 1 - 0.999
   , plot_counternull = FALSE

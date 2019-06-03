@@ -61,6 +61,10 @@ The newest version of [ggplot2 (3.1.1)](https://CRAN.R-project.org/package=ggplo
 
 It is therefore recommended that you install the developmental version of ggplot2 until the bug has been fixed. You can install the developmental version using the following command (after installing the [`devtools`](https://CRAN.R-project.org/package=devtools) package): `devtools::install_github("tidyverse/ggplot2")`
 
+To see what version of ggplot2 has been used to create the plots on this page, see the [Session Info](#sessioninfo).
+
+This warning will be deleted upon the release of a new version of ggplot2 that fixes the bug.
+
 ## Usage
 
 There is only one function needed to create the plots: `conf_dist()`. The function has the following arguments:
@@ -140,7 +144,7 @@ res <- conf_dist(
   , null_values = c(0)
   , trans = "identity"
   , alternative = "two_sided"
-  , log_yaxis = TRUE
+  , log_yaxis = FALSE
   , cut_logyaxis = 0.05
   , xlab = "Mean difference (group 1 - group 2)"
   , together = FALSE
@@ -180,6 +184,7 @@ res <- conf_dist(
   , log_yaxis = TRUE
   , cut_logyaxis = 0.05
   , xlab = "Coefficient Agriculture"
+  , xlim = c(-0.12, 0.065)
   , together = FALSE
   , plot_p_limit = 1 - 0.999
   , plot_counternull = FALSE
@@ -296,7 +301,7 @@ res <- conf_dist(
 
 ### Odds ratio from logistic regression
 
-```{r logreg, message = FALSE, warning = FALSE, fig.width = 9.2, fig.height = 7.2, out.width = "80%", fig.align='center'}
+```{r logreg, message = FALSE, warning = FALSE, fig.width = 10.0, fig.height = 7.2, out.width = "80%", fig.align='center'}
 #-----------------------------------------------------------------------------
 # Calculate logistic regression model using a dataset from UCLA
 #-----------------------------------------------------------------------------
@@ -498,7 +503,7 @@ Xie Mg, Singh K. (2013): Confidence distribution, the frequentist distribution e
 
 [Denis Infanger](https://dsbg.unibas.ch/de/personen/denis-infanger/)
 
-## Session info
+## Session info {#sessioninfo}
 
 ```{r session_info, include=TRUE, echo=FALSE}
 sessionInfo()
