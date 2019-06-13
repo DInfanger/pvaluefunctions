@@ -111,7 +111,7 @@ The main function `conf_dist()` returns five objects in a list:
 
 ### Two-sample *t*-test with unequal variances (Welch-Test)
 
-```{r ttest, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
+```{r ttest, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png")}
 
 #-----------------------------------------------------------------------------
 # Installing package from GitHub and load package

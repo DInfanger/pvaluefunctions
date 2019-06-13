@@ -1,5 +1,5 @@
 ## Resubmission
-This is an updated version of the package.
+This is an updated version of the package (version 1.2.0).
 
 ## Test environments
 * Local Windows 10 install, R 3.6.0

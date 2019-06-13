@@ -5,7 +5,7 @@
 #========================================================================
 
 if (getRversion() >= "2.15.1") {
-  utils::globalVariables(c("values", "variable", "hypothesis", "null_value", "theor_values", "p_value", "label"))
+  utils::globalVariables(c("values", "variable", "hypothesis", "null_value", "theor_values", "p_value", "label", "counternull"))
 }
 
 #' Create and Plot \emph{P}-Value Functions, S-Value Functions, Confidence Distributions and Confidence Densities

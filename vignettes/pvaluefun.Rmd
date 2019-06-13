@@ -105,7 +105,7 @@ The main function `conf_dist()` returns five objects in a list:
 
 ### Two-sample *t*-test with unequal variances (Welch-Test)
 
-```{r ttest, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center'}
+```{r ttest, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
 #-----------------------------------------------------------------------------
 # T-Test
 #-----------------------------------------------------------------------------
@@ -129,7 +129,7 @@ res <- conf_dist(
   , null_values = c(0)
   , trans = "identity"
   , alternative = "two_sided"
-  , log_yaxis = TRUE
+  , log_yaxis = FALSE
   , cut_logyaxis = 0.05
   , xlab = "Mean difference (group 1 - group 2)"
   , together = FALSE
@@ -141,7 +141,7 @@ res <- conf_dist(
 ### Single coefficient from a linear regression model
 #### *P*-value function
 
-```{r linreg_single_pval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center'}
+```{r linreg_single_pval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
 #-----------------------------------------------------------------------------
 # Model
 #-----------------------------------------------------------------------------
@@ -169,6 +169,7 @@ res <- conf_dist(
   , log_yaxis = TRUE
   , cut_logyaxis = 0.05
   , xlab = "Coefficient Agriculture"
+  , xlim = c(-0.12, 0.065)
   , together = FALSE
   , plot_p_limit = 1 - 0.999
   , plot_counternull = FALSE
@@ -176,7 +177,7 @@ res <- conf_dist(
 ```
 
 #### Confidence distribution
-```{r linreg_single_cdf, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center'}
+```{r linreg_single_cdf, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
 res <- conf_dist(
   estimate = c(-0.02143)
   , df = c(43)
@@ -200,11 +201,12 @@ res <- conf_dist(
 
 ```
 
+The point where the confidence distribution is $0.5$ is the median unbiased estimator (see Xie & Singh (2013) for a review and proofs). 
 
 ### Multiple coefficients from a linear regression model
 #### *P*-value functions
 
-```{r linreg_multiple_pval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center'}
+```{r linreg_multiple_pval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
 res <- conf_dist(
   estimate = c(0.13115, 0.04913)
   , df = c(43, 43)
@@ -227,7 +229,7 @@ res <- conf_dist(
 ```
 
 #### Surprisal values
-```{r linreg_multiple_sval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center'}
+```{r linreg_multiple_sval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
 res <- conf_dist(
   estimate = c(0.13115, 0.04913)
   , df = c(43, 43)
@@ -251,7 +253,7 @@ res <- conf_dist(
 
 ### Pearson correlation coefficient (one-sided)
 
-```{r corr_pearson, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center'}
+```{r corr_pearson, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
 #-----------------------------------------------------------------------------
 # Calculate Pearson's correlation coefficient
 #-----------------------------------------------------------------------------
@@ -284,7 +286,7 @@ res <- conf_dist(
 
 ### Odds ratio from logistic regression
 
-```{r logreg, message = FALSE, warning = FALSE, fig.width = 9.2, fig.height = 7.2, out.width = "80%", fig.align='center'}
+```{r logreg, message = FALSE, warning = FALSE, fig.width = 10.0, fig.height = 7.2, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
 #-----------------------------------------------------------------------------
 # Calculate logistic regression model using a dataset from UCLA
 #-----------------------------------------------------------------------------
@@ -310,13 +312,13 @@ res <- conf_dist(
   , n_values = 1e4L
   , est_names = c("GPA")
   , conf_level = c(0.95, 0.90, 0.80)
-  , null_values = c(log(1))
+  , null_values = c(log(1)) # null value on the log-odds scale
   , trans = "exp"
   , alternative = "two_sided"
   , log_yaxis = TRUE
   , cut_logyaxis = 0.05
   , xlab = "Odds Ratio (GPA)"
-  , xlim = log(c(0.4, 5))
+  , xlim = log(c(0.7, 5.2)) # axis limits on the log-odds scale
   , together = FALSE
   , plot_p_limit = 1 - 0.999
   , plot_counternull = TRUE
@@ -325,7 +327,7 @@ res <- conf_dist(
 
 ### Proportion
 
-```{r prop, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center'}
+```{r prop, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
 res <- conf_dist(
   estimate = c(0.44)
   , n = c(50)
@@ -349,7 +351,7 @@ res <- conf_dist(
 
 ### Difference between two independent proportions: Wilson's score by Newcombe with continuity correction
 
-```{r propdiff_Wilson, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center'}
+```{r propdiff_Wilson, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
 res <- conf_dist(
   estimate = c(68/100, 98/150)
   , n = c(100, 150)
@@ -373,7 +375,7 @@ res <- conf_dist(
 
 The standard Wald interval can be modified in a simple manner to drastically improve its coverage probabilities. Simply add 1 to the number of successes and add 2 to the sample size for both proportions. Then proceed to calculate the Wald interval with these modified data. The point estimate for the difference between proportions is still calculated using the unmodified data. The function `conf_dist` does not have a dedicaded type for this kind of estimator but as the Wald interval is based on the normal distribution, we can use `type = general_z` to create the *p*-value function.
 
-```{r propdiff_agresticaffo, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center'}
+```{r propdiff_agresticaffo, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
 
 # First proportion
 
@@ -425,7 +427,7 @@ res <- conf_dist(
 
 The confidence density of a variance estimate is skewed. This means that the mean, mode and median of the confidence density will not be identical, in general.
 
-```{r variance_calcs, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', eval = TRUE, echo = TRUE, fig.show = "hide"}
+```{r variance_calcs, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', eval = TRUE, echo = TRUE, fig.show = "hide", dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
 
 # Simulate some data from a normal distribution
 
@@ -454,11 +456,13 @@ res <- conf_dist(
 
 ```
 
-```{r variance_plot, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', eval = TRUE, echo = TRUE}
+```{r variance_plot, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', eval = TRUE, echo = TRUE, dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
 # Add vertical lines at the point estimates (mode, median, mean)
 
 res$plot + ggplot2::geom_vline(xintercept = as.numeric(res$point_est[1, 1:3]), linetype = 2, size = 1)
 ```
+
+
 
 ## References
 
@@ -467,8 +471,6 @@ Bender R, Berg G, Zeeb H. (2005): Tutorial: using confidence curves in medical r
 Fraser  D. A. S. (2019): The *p*-value function and statistical inference. *The American Statistician,* 73:sup1, 135-147.
 
 Greenland S (2019): Valid *P*-Values Behave Exactly as They Should: Some Misleading Criticisms of *P*-Values and Their Resolution with *S*-Values. *The American Statistician,* 73sup1, 106-114.
-
-Newcombe R. G. (1998): Interval estimation for the difference between independent proportions: comparison of eleven methods. *Statist. Med.* 17: 873-890.
 
 Poole C. (1987a): Beyond the confidence interval. *Am J Public Health.* 77(2): 195-9.
 
@@ -486,9 +488,9 @@ Xie Mg, Singh K. (2013): Confidence distribution, the frequentist distribution e
 
 [Denis Infanger](https://dsbg.unibas.ch/de/personen/denis-infanger/)
 
-<!-- ## Session info -->
+## Session info
 
-```{r session_info, include=FALSE, echo=FALSE, eval = FALSE}
+```{r session_info, include=TRUE, echo=FALSE}
 sessionInfo()
 ```
 
