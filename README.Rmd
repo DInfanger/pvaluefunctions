@@ -156,6 +156,8 @@ res <- conf_dist(
 ### Single coefficient from a linear regression model
 #### *P*-value function
 
+Because it's difficult to see very small *p*-values in the graph, you can set the option `log_yaxis = TRUE` so that *p*-values (i.e. the y-axes) below the value set in `cut_logyaxis` will be plotted on a logarithmic scale. This will make it much easier to see small *p*-values but has the disadvantage of creating a "kink" in the *p*-value function which is a pure artifact and puts an undue emphasis on the specified cutoff.
+
 ```{r linreg_single_pval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center'}
 #-----------------------------------------------------------------------------
 # Model
@@ -192,6 +194,7 @@ res <- conf_dist(
 ```
 
 #### Confidence distribution
+
 ```{r linreg_single_cdf, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center'}
 res <- conf_dist(
   estimate = c(-0.02143)
@@ -213,7 +216,6 @@ res <- conf_dist(
   # , plot_p_limit = 1 - 0.999
   , plot_counternull = FALSE
 )
-
 ```
 
 The point where the confidence distribution is $0.5$ is the median unbiased estimator (see Xie & Singh (2013) for a review and proofs). 
@@ -234,9 +236,9 @@ res <- conf_dist(
   , null_values = c(0)
   , trans = "identity"
   , alternative = "two_sided"
-  , log_yaxis = TRUE
+  , log_yaxis = FALSE
   , cut_logyaxis = 0.05
-  , xlab = "Coefficients"
+  , xlab = "Regression coefficients"
   , together = TRUE
   , plot_p_limit = 1 - 0.999
   , plot_counternull = FALSE
@@ -244,6 +246,7 @@ res <- conf_dist(
 ```
 
 #### Surprisal values
+
 ```{r linreg_multiple_sval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center'}
 res <- conf_dist(
   estimate = c(0.13115, 0.04913)
@@ -259,7 +262,7 @@ res <- conf_dist(
   , alternative = "two_sided"
   # , log_yaxis = TRUE
   # , cut_logyaxis = 0.05
-  , xlab = "Coefficients"
+  , xlab = "Regression coefficients"
   , together = TRUE
   , plot_p_limit = 1 - 0.999
   , plot_counternull = TRUE
@@ -290,7 +293,7 @@ res <- conf_dist(
   , null_values = c(0)
   , trans = "identity"
   , alternative = "one_sided"
-  , log_yaxis = TRUE
+  , log_yaxis = FALSE
   , cut_logyaxis = 0.05
   , xlab = "Pearson correlation"
   , together = TRUE
@@ -330,7 +333,7 @@ res <- conf_dist(
   , null_values = c(log(1)) # null value on the log-odds scale
   , trans = "exp"
   , alternative = "two_sided"
-  , log_yaxis = TRUE
+  , log_yaxis = FALSE
   , cut_logyaxis = 0.05
   , xlab = "Odds Ratio (GPA)"
   , xlim = log(c(0.7, 5.2)) # axis limits on the log-odds scale
@@ -341,6 +344,8 @@ res <- conf_dist(
 ```
 
 ### Proportion
+
+The *p*-value function (and thus the confidence intervals) are based on Wilson's score interval and not the normal approximation. This means that the *p*-value function will never be outside the interval [0, 1].
 
 ```{r prop, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center'}
 res <- conf_dist(
@@ -354,7 +359,7 @@ res <- conf_dist(
   , null_values = c(0.5)
   , trans = "identity"
   , alternative = "two_sided"
-  , log_yaxis = TRUE
+  , log_yaxis = FALSE
   , cut_logyaxis = 0.05
   , xlab = "Proportion"
   # , xlim = log(c(0.95, 1.2))
@@ -377,7 +382,7 @@ res <- conf_dist(
   , null_values = c(0)
   , trans = "identity"
   , alternative = "two_sided"
-  , log_yaxis = TRUE
+  , log_yaxis = FALSE
   , cut_logyaxis = 0.05
   , xlab = "Difference between proportions"
   , together = FALSE
@@ -423,7 +428,7 @@ res <- conf_dist(
   , plot_type = "p_val"
   , n_values = 1e4L
   # , est_names = c("Estimate")
-  , log_yaxis = TRUE
+  , log_yaxis = FALSE
   , cut_logyaxis = 0.05
   , conf_level = c(0.95, 0.99)
   , null_values = c(0, 0.3)
@@ -456,7 +461,7 @@ res <- conf_dist(
   , plot_type = "pdf"
   , n_values = 1e4L
   , est_names = c("Variance")
-  , log_yaxis = TRUE
+  , log_yaxis = FALSE
   , cut_logyaxis = 0.05
   , conf_level = c(0.95)
   # , null_values = c(15^2, 18^2)

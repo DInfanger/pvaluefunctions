@@ -60,8 +60,7 @@ functions, confidence distributions, confidence densities, or the
 
 You can install the package directly from CRAN by typing
 `install.packages("pvaluefunctions")`. After installation, load it in R
-using
-`library(pvaluefunctions)`.
+using `library(pvaluefunctions)`.
 
 <!-- Download the file `confidence_distributions.R` to your computer. You can either `source()` the function in R or open it, select and run everything. After loading the function, it's ready for use. -->
 
@@ -164,8 +163,8 @@ The function has the following arguments:
     (i.e. `log_yaxis = TRUE`).
   - `plot_counternull`: Logical. Indicating if the counternull should be
     plotted as a point. Only available for -value functions and s-value
-    functions. If the counternull values are outside of the plotted
-    functions, they are not shown.
+    functions. Counternull values that are outside of the plotted
+    functions are not shown.
 
 ### Required arguments for different estimate types
 
@@ -259,6 +258,14 @@ res <- conf_dist(
 ### Single coefficient from a linear regression model
 
 #### *P*-value function
+
+Because it’s difficult to see very small *p*-values in the graph, you
+can set the option `log_yaxis = TRUE` so that *p*-values (i.e. the
+y-axes) below the value set in `cut_logyaxis` will be plotted on a
+logarithmic scale. This will make it much easier to see small *p*-values
+but has the disadvantage of creating a “kink” in the *p*-value function
+which is a pure artifact and puts an undue emphasis on the specified
+cutoff.
 
 ``` r
 #-----------------------------------------------------------------------------
@@ -365,9 +372,9 @@ res <- conf_dist(
   , null_values = c(0)
   , trans = "identity"
   , alternative = "two_sided"
-  , log_yaxis = TRUE
+  , log_yaxis = FALSE
   , cut_logyaxis = 0.05
-  , xlab = "Coefficients"
+  , xlab = "Regression coefficients"
   , together = TRUE
   , plot_p_limit = 1 - 0.999
   , plot_counternull = FALSE
@@ -393,7 +400,7 @@ res <- conf_dist(
   , alternative = "two_sided"
   # , log_yaxis = TRUE
   # , cut_logyaxis = 0.05
-  , xlab = "Coefficients"
+  , xlab = "Regression coefficients"
   , together = TRUE
   , plot_p_limit = 1 - 0.999
   , plot_counternull = TRUE
@@ -437,7 +444,7 @@ res <- conf_dist(
   , null_values = c(0)
   , trans = "identity"
   , alternative = "one_sided"
-  , log_yaxis = TRUE
+  , log_yaxis = FALSE
   , cut_logyaxis = 0.05
   , xlab = "Pearson correlation"
   , together = TRUE
@@ -506,7 +513,7 @@ res <- conf_dist(
   , null_values = c(log(1)) # null value on the log-odds scale
   , trans = "exp"
   , alternative = "two_sided"
-  , log_yaxis = TRUE
+  , log_yaxis = FALSE
   , cut_logyaxis = 0.05
   , xlab = "Odds Ratio (GPA)"
   , xlim = log(c(0.7, 5.2)) # axis limits on the log-odds scale
@@ -520,6 +527,10 @@ res <- conf_dist(
 
 ### Proportion
 
+The *p*-value function (and thus the confidence intervals) are based on
+Wilson’s score interval and not the normal approximation. This means
+that the *p*-value function will never be outside the interval \[0, 1\].
+
 ``` r
 res <- conf_dist(
   estimate = c(0.44)
@@ -532,7 +543,7 @@ res <- conf_dist(
   , null_values = c(0.5)
   , trans = "identity"
   , alternative = "two_sided"
-  , log_yaxis = TRUE
+  , log_yaxis = FALSE
   , cut_logyaxis = 0.05
   , xlab = "Proportion"
   # , xlim = log(c(0.95, 1.2))
@@ -557,7 +568,7 @@ res <- conf_dist(
   , null_values = c(0)
   , trans = "identity"
   , alternative = "two_sided"
-  , log_yaxis = TRUE
+  , log_yaxis = FALSE
   , cut_logyaxis = 0.05
   , xlab = "Difference between proportions"
   , together = FALSE
@@ -613,7 +624,7 @@ res <- conf_dist(
   , plot_type = "p_val"
   , n_values = 1e4L
   # , est_names = c("Estimate")
-  , log_yaxis = TRUE
+  , log_yaxis = FALSE
   , cut_logyaxis = 0.05
   , conf_level = c(0.95, 0.99)
   , null_values = c(0, 0.3)
@@ -649,7 +660,7 @@ res <- conf_dist(
   , plot_type = "pdf"
   , n_values = 1e4L
   , est_names = c("Variance")
-  , log_yaxis = TRUE
+  , log_yaxis = FALSE
   , cut_logyaxis = 0.05
   , conf_level = c(0.95)
   # , null_values = c(15^2, 18^2)
@@ -729,12 +740,12 @@ distribution estimator of a parameter: A review. *Internat Statist Rev.*
     #> 
     #> loaded via a namespace (and not attached):
     #>  [1] Rcpp_1.0.1         RColorBrewer_1.1-2 pillar_1.4.1      
-    #>  [4] compiler_3.6.0     prettyunits_1.0.2  remotes_2.0.4     
+    #>  [4] compiler_3.6.0     prettyunits_1.0.2  remotes_2.1.0     
     #>  [7] tools_3.6.0        testthat_2.1.1     digest_0.6.19     
     #> [10] pkgbuild_1.0.3     pkgload_1.0.2      tibble_2.1.3      
     #> [13] gtable_0.3.0       evaluate_0.14      memoise_1.1.0     
-    #> [16] pkgconfig_2.0.2    rlang_0.3.4        cli_1.1.0         
-    #> [19] curl_3.3           yaml_2.2.0         xfun_0.7          
+    #> [16] pkgconfig_2.0.2    rlang_0.4.0        cli_1.1.0         
+    #> [19] curl_3.3           yaml_2.2.0         xfun_0.8          
     #> [22] dplyr_0.8.1        withr_2.1.2        stringr_1.4.0     
     #> [25] knitr_1.23         desc_1.2.0         fs_1.3.1          
     #> [28] devtools_2.0.2     tidyselect_0.2.5   rprojroot_1.3-2   
