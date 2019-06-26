@@ -15,7 +15,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
-   sodipodi:docname="logo2.svg">
+   sodipodi:docname="logo2_new.svg">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -26,8 +26,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.81013445"
-     inkscape:cx="257.68037"
-     inkscape:cy="381.88658"
+     inkscape:cx="334.6645"
+     inkscape:cy="565.4663"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -53,10 +53,10 @@
      inkscape:groupmode="layer"
      id="layer1">
     <g
-       id="g986">
+       id="g943">
       <path
          inkscape:transform-center-y="-7.5846268e-06"
-         transform="matrix(1.1924492,0,0,1.1925692,-3.199036,-15.551819)"
+         transform="matrix(1.1924492,0,0,1.1925692,-3.1366839,-16.60802)"
          inkscape:transform-center-x="5.0970256e-06"
          d="m 91.772326,218.69247 -75.016313,-43.31069 -3e-6,-86.621375 75.016311,-43.31069 75.016309,43.310686 10e-6,86.621379 z"
          inkscape:randomized="0"
@@ -74,7 +74,7 @@
          sodipodi:type="star" />
       <g
          style="fill:none;stroke:#ffffff;stroke-opacity:1"
-         transform="matrix(9.1520294,0,0,9.1520294,-14.85515,17.003742)"
+         transform="matrix(9.1520294,0,0,9.1520294,-14.792798,15.947541)"
          inkscape:label="Grid_Polar:X1:Y1"
          id="g6258">
         <g
@@ -150,15 +150,36 @@
              id="path6252" />
         </g>
       </g>
+      <g
+         transform="matrix(0.97750713,0,0,0.97750713,1.306803,0.62815047)"
+         id="g5098">
+        <path
+           style="fill:none;stroke:#f35723;stroke-width:8.39999962;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="m 107.3365,66.431473 c 0,0 -29.306391,113.591787 -78.824104,117.960677"
+           id="path4705"
+           inkscape:connector-curvature="0" />
+        <path
+           inkscape:connector-curvature="0"
+           id="path4878"
+           d="m 107.52287,66.451576 c 0,0 29.30641,113.591784 78.82411,117.960684"
+           style="fill:none;stroke:#f35723;stroke-width:8.39999962;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      </g>
       <path
          inkscape:connector-curvature="0"
          id="path871"
-         d="m 69.292316,57.942283 c 0,173.420267 0,175.379847 0,175.379847"
+         d="m 69.354668,56.886082 c 0,173.420268 0,175.379848 0,175.379848"
          style="fill:none;stroke:#787878;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:6, 3;stroke-dashoffset:0;stroke-opacity:1" />
+      <ellipse
+         ry="7.8549294"
+         rx="7.646266"
+         cy="151.40096"
+         cx="143.87552"
+         id="path5050"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#f35723;stroke-width:5.5999999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       <path
          inkscape:transform-center-y="-1.2464942e-06"
          inkscape:transform-center-x="2.1666666e-06"
-         d="m 106.24598,252.02992 -95.350062,-55.05038 -3e-6,-110.100769 95.350065,-55.050387 95.35006,55.050382 0,110.100774 z"
+         d="m 106.30833,250.97372 -95.350065,-55.05038 -3e-6,-110.100767 95.350058,-55.050387 95.35007,55.050382 0,110.100772 z"
          inkscape:randomized="0"
          inkscape:rounded="0"
          inkscape:flatsided="true"
@@ -166,42 +187,17 @@
          sodipodi:arg1="1.5707963"
          sodipodi:r2="95.350067"
          sodipodi:r1="110.10077"
-         sodipodi:cy="141.92915"
-         sodipodi:cx="106.24598"
+         sodipodi:cy="140.87296"
+         sodipodi:cx="106.30833"
          sodipodi:sides="6"
          id="path4892"
          style="opacity:1;fill:none;fill-opacity:1;stroke:#005185;stroke-width:11.80000019;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          sodipodi:type="star" />
-      <g
-         transform="translate(-0.026074,1.365348)"
-         id="g5923">
-        <g
-           id="g5098"
-           transform="matrix(0.97750713,0,0,0.97750713,1.2705249,0.31900367)">
-          <path
-             inkscape:connector-curvature="0"
-             id="path4705"
-             d="m 107.3365,66.431473 c 0,0 -29.306391,113.591787 -78.824104,117.960677"
-             style="fill:none;stroke:#f35723;stroke-width:8.39999962;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-          <path
-             style="fill:none;stroke:#f35723;stroke-width:8.39999962;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-             d="m 107.52287,66.451576 c 0,0 29.30641,113.591784 78.82411,117.960684"
-             id="path4878"
-             inkscape:connector-curvature="0" />
-        </g>
-        <ellipse
-           style="fill:#ffffff;fill-rule:evenodd;stroke:#f35723;stroke-width:5.5999999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-           id="path5050"
-           cx="143.83923"
-           cy="151.09181"
-           rx="7.646266"
-           ry="7.8549294" />
-      </g>
     </g>
   </g>
   <style
-     type="text/css"
-     id="style4543">
+     id="style4543"
+     type="text/css">
 	.st0{fill:#FFFFFF;stroke:#D46C5B;stroke-width:5;stroke-miterlimit:10;}
 	.st1{fill:#D46C5B;}
 	.st2{fill:#D46C5B;stroke:#D46C5B;stroke-width:5;stroke-miterlimit:10;}
@@ -209,8 +205,8 @@
 	.st4{fill:#444444;stroke:#444444;stroke-width:11;stroke-miterlimit:10;}
 </style>
   <style
-     type="text/css"
-     id="style4736">
+     id="style4736"
+     type="text/css">
 	.st0{fill:#FFFFFF;stroke:#D46C5B;stroke-width:5;stroke-miterlimit:10;}
 	.st1{fill:#D46C5B;}
 	.st2{fill:#D46C5B;stroke:#D46C5B;stroke-width:5;stroke-miterlimit:10;}
@@ -218,8 +214,8 @@
 	.st4{fill:#444444;stroke:#444444;stroke-width:11;stroke-miterlimit:10;}
 </style>
   <style
-     type="text/css"
-     id="style4894">
+     id="style4894"
+     type="text/css">
 	.st0{fill:#FFFFFF;stroke:#D46C5B;stroke-width:5;stroke-miterlimit:10;}
 	.st1{fill:#D46C5B;}
 	.st2{fill:#D46C5B;stroke:#D46C5B;stroke-width:5;stroke-miterlimit:10;}
