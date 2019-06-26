@@ -88,7 +88,7 @@ There is only one function needed to create the plots: `conf_dist()`. The functi
 * `xlim` (optional): Numerical vector of length 2 indicating the limits of the x-axis on the *untransformed* scale. For example: If you want to plot *p*-value functions for odds ratios from logistic regressions, the limits have to be given on the log-odds scale. Gets overriden if null values are outside of this range.
 * `together`: Logical. Indicating if graphics for multiple estimates should be displayed together or on separate plots.
 * `plot_p_limit`: Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale (i.e. `log_yaxis = TRUE`).
-* `plot_counternull`: Logical. Indicating if the counternull should be plotted as a point. Only available for \emph{p}-value functions and s-value functions. If the counternull values are outside of the plotted functions, they are not shown.
+* `plot_counternull`: Logical. Indicating if the counternull should be plotted as a point. Only available for \emph{p}-value functions and s-value functions. Counternull values that are outside of the plotted functions are not shown.
 
 ### Required arguments for different estimate types
 

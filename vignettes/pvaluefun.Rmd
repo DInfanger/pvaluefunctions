@@ -1,25 +1,24 @@
 ---
-title: "P-value functions"
+title: "*P*-value functions: Tutorial using the `pvaluefunctions` package"
 author: "Denis Infanger"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{P-value functions}
-  %\VignetteEngine{knitr::knitr}
-  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
-```{r, echo = FALSE}
+```{r setup, include = FALSE, echo = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE
   , comment = "#>"
-  # , tidy.opts = list(width.cutoff = 160, tidy = FALSE)
 )
 ```
 
 ## Overview
 
-This package contains R functions to create graphics of *p*-value functions, confidence distributions, confidence densities, or the [Surprisal value (S-value)](http://www.umsl.edu/~fraundorfp/egsurpri.html) (Greenland 2019).
+This vignette shows how to use the `pvaluefunctions` package wich contains an R function to create graphics of *p*-value functions, confidence distributions, confidence densities, or the [Surprisal value (S-value)](http://www.umsl.edu/~fraundorfp/egsurpri.html) (Greenland 2019).
 
 ## Installation
 
@@ -45,7 +44,7 @@ source_url("https://raw.githubusercontent.com/DInfanger/pvaluefunctions/master/R
 
 ## Dependencies
 
-The function depends on the following R packages, which need to be installed beforehand:
+The function depends on the following R packages:
 
 * ggplot2
 * scales
@@ -82,7 +81,7 @@ There is only one function needed to create the plots: `conf_dist()`. The functi
 * `xlim` (optional): Optional numerical vector of length 2 indicating the limits of the x-axis on the *untransformed* scale. For example: If you want to plot *p*-value functions for odds ratios from logistic regressions, the limits have to be given on the log-odds scale. Null values outside the limits will not be plotted.
 * `together`: Logical. Indicating if graphics for multiple estimates should be displayed together or on separate plots.
 * `plot_p_limit`: Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale (i.e. `log_yaxis = TRUE`).
-* `plot_counternull`: Logical. Indicating if the counternull should be plotted as a point. Only available for \emph{p}-value functions and s-value functions. If the counternull values are outside of the plotted functions, they are not shown.
+* `plot_counternull`: Logical. Indicating if the counternull should be plotted as a point. Only available for \emph{p}-value functions and s-value functions. Counternull values that are outside of the plotted functions are not shown.
 
 ### Required arguments for different estimate types
 
