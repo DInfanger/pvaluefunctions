@@ -10,7 +10,8 @@ conf_dist(estimate = NULL, n = NULL, df = NULL, stderr = NULL,
   null_values = NULL, trans = "identity", alternative = "two_sided",
   log_yaxis = FALSE, cut_logyaxis = 0.05, xlab = NULL, xlim = NULL,
   together = FALSE, plot_p_limit = (1 - 0.999),
-  plot_counternull = FALSE)
+  plot_counternull = FALSE, title = NULL, ylab = NULL,
+  ylab_sec = NULL)
 }
 \arguments{
 \item{estimate}{Numerical vector containing the estimate(s).}
@@ -51,7 +52,13 @@ conf_dist(estimate = NULL, n = NULL, df = NULL, stderr = NULL,
 
 \item{plot_p_limit}{Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale (i.e. \code{log_yaxis = TRUE}).}
 
-\item{plot_counternull}{Logical. Indicating if the counternull should be plotted as a point. Only available for \emph{p}-value functions and s-value functions. If the counternull values are outside of the plotted functions, they are not shown.}
+\item{plot_counternull}{Logical. Indicating if the counternull should be plotted as a point. Only available for \emph{p}-value functions and s-value functions. Counternull values that are outside of the plotted functions are not shown.}
+
+\item{title}{(optional) String containing a title of the plot.}
+
+\item{ylab}{(optional) String indicating the title for the primary (left) y-axis.}
+
+\item{ylab_sec}{(optional) String indicating the title for the secondary (right) y-axis.}
 }
 \value{
 \code{conf_dist} returns four data frames and a ggplot2-plot object: \code{res_frame} (contains parameter values, \emph{p}-values, s-values, confidence distribution and density, variable names and type of hypothesis), \code{conf_frame} (contains the used confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull for the corresponding null values), \code{point_est} (contains the mean, median and mode point estimates) and \code{plot} (a ggplot2-plot).
@@ -178,6 +185,7 @@ res <- conf_dist(
   , together = FALSE
   , plot_p_limit = 1 - 0.9999
   , plot_counternull = FALSE
+  , title = "P-value function for the difference of two independent proportions"
 )
 
 }

@@ -4,7 +4,8 @@
 -------------
 
   * NEWS file was converted to .md file.
-  * 
+  * Users can now provide a title for the plot.
+  * Users can now provide titles for the primary and secondary y-axis.
 
 1.2.0
 -------------

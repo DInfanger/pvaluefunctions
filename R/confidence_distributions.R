@@ -29,11 +29,14 @@ if (getRversion() >= "2.15.1") {
 #' @param alternative String indicating if the confidence level(s) are two-sided or one-sided. Must be one of the following: \code{two_sided}, \code{one_sided}.
 #' @param log_yaxis Logical. Indicating if a portion of the y-axis should be displayed on the logarithmic scale.
 #' @param cut_logyaxis Numerical value indicating the threshold below which the y-axis will be displayed logarithmically. Must lie between 0 and 1.
-#' @param xlab (optional) String indicating the label of the x-axis.
 #' @param xlim (optional) Optional numerical vector of length 2 indicating the limits of the x-axis on the \emph{untransformed} scale. For example: If you want to plot \emph{p}-value functions for odds ratios from logistic regressions, the limits have to be given on the log-odds scale. Get's overriden if null values are outside of this range.
 #' @param together Logical. Indicating if graphics for multiple estimates should be displayed together or on separate plots.
 #' @param plot_p_limit Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale (i.e. \code{log_yaxis = TRUE}).
 #' @param plot_counternull Logical. Indicating if the counternull should be plotted as a point. Only available for \emph{p}-value functions and s-value functions. Counternull values that are outside of the plotted functions are not shown.
+#' @param title (optional) String containing a title of the plot.
+#' @param xlab (optional) String indicating the label of the x-axis.
+#' @param ylab (optional) String indicating the title for the primary (left) y-axis.
+#' @param ylab_sec (optional) String indicating the title for the secondary (right) y-axis.
 #'
 #' @return \code{conf_dist} returns four data frames and a ggplot2-plot object: \code{res_frame} (contains parameter values, \emph{p}-values, s-values, confidence distribution and density, variable names and type of hypothesis), \code{conf_frame} (contains the used confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull for the corresponding null values), \code{point_est} (contains the mean, median and mode point estimates) and \code{plot} (a ggplot2-plot).
 #' @references Bender R, Berg G, Zeeb H. Tutorial: using confidence curves in medical research. Biom J. 2005;47(2):237-247.
@@ -171,6 +174,7 @@ if (getRversion() >= "2.15.1") {
 #'   , together = FALSE
 #'   , plot_p_limit = 1 - 0.9999
 #'   , plot_counternull = FALSE
+#'   , title = "P-value function for the difference of two independent proportions"
 #' )
 #'
 #' @seealso \code{\link[concurve]{plotpint}}
@@ -200,6 +204,9 @@ conf_dist <- function(
   , together = FALSE
   , plot_p_limit = (1 - 0.999)
   , plot_counternull = FALSE
+  , title = NULL
+  , ylab = NULL
+  , ylab_sec = NULL
 ) {
 
   #-----------------------------------------------------------------------------
@@ -247,12 +254,6 @@ conf_dist <- function(
   if (type %in% c("pearson", "spearman", "kendall", "var", "prop", "propdiff") && !trans %in% "identity") {
     trans <- "identity"
     cat("\nTransformation changed to identity.\n")
-  }
-
-  if (!is.null(xlab)){
-    # xlab <- as.character(xlab)
-  } else {
-    xlab <- "Estimate"
   }
 
   if (!plot_type %in% c("p_val", "cdf", "pdf", "s_val")) {
@@ -766,15 +767,32 @@ conf_dist <- function(
     , s_val = "s_val"
   )
 
-  # Set label of the y-axis depending on the type of the plot
+  # Set label of the x-axis if not provided
 
-  y_lab <- switch(
-    plot_type
-    , p_val = expression(paste(italic("P"), "-value (two-sided) / Significance level"~alpha, sep = ""))
-    , cdf = "Confidence distribution"
-    , pdf = "Confidence density"
-    , s_val = expression(paste("Surprisal in bits (two-sided ",~italic("P"), "-value)", sep = ""))
-  )
+  if (is.null(xlab)) {
+    xlab <- "Estimate"
+  }
+
+  # Set label of the primary and secondary y-axis depending on the type of the plot
+
+  if (is.null(ylab)) {
+    ylab <- switch(
+      plot_type
+      , p_val = expression(paste(italic("P"), "-value (two-sided) / Significance level"~alpha, sep = ""))
+      , cdf = "Confidence distribution"
+      , pdf = "Confidence density"
+      , s_val = expression(paste("Surprisal in bits (two-sided ",~italic("P"), "-value)", sep = ""))
+    )
+  }
+
+  if (is.null(ylab_sec)) {
+
+    ylab_sec <- switch(
+      plot_type
+      , p_val = expression(paste(italic("P"), "-value (one-sided) / Significance level"~alpha, sep = ""))
+      , s_val = expression(paste("Surprisal in bits (one-sided ",~italic("P"), "-value)", sep = ""))
+    )
+  }
 
   # Create a ggplot2-object with no geoms
 
@@ -815,7 +833,7 @@ conf_dist <- function(
   # Add the labels for the axes
 
   p <- p + xlab(xlab) +
-    ylab(y_lab)
+    ylab(ylab)
 
   #-----------------------------------------------------------------------------
   # y-axis
@@ -853,7 +871,7 @@ conf_dist <- function(
           , trans = magnify_trans_log(interval_low = cut_logyaxis, interval_high = 1, reducer = cut_logyaxis, reducer2 = 8)
           , sec.axis = sec_axis(
             trans = ~.*(1/2)
-            , name = expression(paste(italic("P"), "-value (one-sided) / Significance level"~alpha, sep = ""))
+            , name = ylab_sec
             , breaks = breaks_one
             , labels = lab_onesided
           )
@@ -867,7 +885,7 @@ conf_dist <- function(
           breaks = seq(0, 1, 0.1)
           , sec.axis = sec_axis(
             ~.*(1/2)
-            , name = expression(paste(italic("P"), "-value (one-sided) / Significance level"~alpha, sep = ""))
+            , name = ylab_sec
             , breaks = seq(0, 1, 0.1)/2
           )
         )
@@ -883,7 +901,7 @@ conf_dist <- function(
       , breaks = scales::pretty_breaks(n = 10)(c(0, max(res$res_frame$s_val, na.rm = TRUE)))
       , sec.axis = sec_axis(
         trans = ~. + log2(2)
-        , name = expression(paste("Surprisal in bits (one-sided ",~italic("P"), "-value)", sep = ""))
+        , name = ylab_sec
         , breaks = scales::pretty_breaks(n = 10)(c(1, -log2(min(res$res_frame$p_two, na.rm = TRUE)/2)))
       )
     )
@@ -1060,7 +1078,7 @@ conf_dist <- function(
   # Make the plot prettier by increasing font size
   #-----------------------------------------------------------------------------
 
-  p <- p  + theme(
+  p <- p + theme(
     axis.title.y.left=element_text(colour = "black", size = 17, hjust = 0.5, margin = margin(0, 10, 0, 0)),
     axis.title.y.right=element_text(colour = "black", size = 17, hjust = 0.5, margin = margin(0, 0, 0, 10)),
     axis.title.x=element_text(colour = "black", size = 17),
@@ -1074,6 +1092,14 @@ conf_dist <- function(
     # strip.background=element_rect(fill="white")
     strip.text.x=element_text(size=15)
   )
+
+  #-----------------------------------------------------------------------------
+  # Add title and labels if specified
+  #-----------------------------------------------------------------------------
+
+  if (!is.null(title)) {
+    p <- p + ggtitle(title)
+  }
 
   res$plot <- p
 
