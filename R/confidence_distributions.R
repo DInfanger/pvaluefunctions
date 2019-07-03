@@ -18,7 +18,7 @@ if (getRversion() >= "2.15.1") {
 #' @param n Numerical vector containing the sample size(s). Required for correlations, variances, proportions and differences between proportions. Must be equal the number of estimates.
 #' @param df Numerical vector containing the degrees of freedom. Required for statistics based on the \emph{t}-distribution (e.g. linear regression) and \emph{t}-tests. Must be equal the number of estimates.
 #' @param stderr Numerical vector containing the standard error(s) of the estimate(s). Required for statistics based on the \emph{t}-distribution (e.g. linear regression) and the normal distribution (e.g. logistic regression). Must be equal the number of estimate(s).
-#' @param tstat Numerical vector containing the \emph{t}-statistic(s). Required for \emph{t}-tests (means and mean differences). Must be equal the number of estimates.
+#' @param tstat Numerical vector contaiqning the \emph{t}-statistic(s). Required for \emph{t}-tests (means and mean differences). Must be equal the number of estimates.
 #' @param type String indicating the type of the estimate. Must be one of the following: \code{ttest}, \code{linreg}, \code{gammareg}, \code{general_t}, \code{logreg}, \code{poisreg}, \code{coxreg}, \code{general_z}, \code{pearson}, \code{spearman}, \code{kendall}, \code{var}, \code{prop}, \code{propdiff}.
 #' @param plot_type String indicating the type of plot. Must be one of the following: \code{cdf} (confidence distribution), \code{pdf} (confidence density), \code{p_val} (\emph{p}-value function), \code{s_val} (Surprisal value functions). For differences between independent proportions, only \emph{p}-value functions and Surprisal values are available.
 #' @param n_values (optional) Integer indicating the number of points that are used to generate the graphics. The higher this number, the higher the computation time and resolution.
@@ -239,7 +239,7 @@ conf_dist <- function(
 
   if (!alternative %in% c("one_sided", "two_sided")) {stop("Alternative must be either \"two_sided\" or \"one_sided\".")}
 
-  if (plot_p_limit == 0 & log_yaxis == TRUE) {stop("Cannot plot 0 on logarithmic axis.")}
+  if (plot_p_limit == 0 & isTRUE(log_yaxis)) {stop("Cannot plot 0 on logarithmic axis.")}
 
   if (plot_p_limit > 0.5 & alternative %in% "one_sided") {stop("Plot limit must be below 0.5 for one-sided hypotheses.")}
 
@@ -579,7 +579,7 @@ conf_dist <- function(
   #-----------------------------------------------------------------------------
 
   if (!is.null(conf_level)) {
-    if ((together == TRUE & (length(estimate) >= 2)) | plot_type %in% "cdf") {
+    if ((isTRUE(together) & (length(estimate) >= 2)) | plot_type %in% "cdf") {
 
       min_theor_values <- min(tapply(res$res_frame$values, res$res_frame$variable, min, na.rm = TRUE), na.rm = TRUE)
       max_theor_values <- max(tapply(res$res_frame$values, res$res_frame$variable, max, na.rm = TRUE), na.rm = TRUE)
@@ -608,7 +608,7 @@ conf_dist <- function(
       #   text_frame$theor_values <- ifelse(alternative %in% "two_sided", min(xlim), max(xlim))
       # }
 
-    } else if (together == FALSE | (together == TRUE & (length(estimate) < 2))) {
+    } else if (isFALSE(together) | (isTRUE(together) & (length(estimate) < 2))) {
 
       min_theor_values <- tapply(res$res_frame$values, res$res_frame$variable, min, na.rm = TRUE)
       max_theor_values <- tapply(res$res_frame$values, res$res_frame$variable, max, na.rm = TRUE)
@@ -694,7 +694,7 @@ conf_dist <- function(
   # Add counternull values to the result frame for plotting
   #-----------------------------------------------------------------------------
 
-  if (!is.null(null_values) && plot_counternull == TRUE && plot_type %in% c("p_val", "s_val")) {
+  if (!is.null(null_values) && isTRUE(plot_counternull) && plot_type %in% c("p_val", "s_val")) {
 
     res$res_frame$counternull <- NA
 
@@ -800,13 +800,13 @@ conf_dist <- function(
 
   # If 2 or more estimates are plotted together, differentiate them by color
 
-  if ((length(estimate) >= 2) & together == TRUE) {
+  if ((length(estimate) >= 2) & isTRUE(together)) {
     p <- p + aes(colour = variable)
   }
 
   # For only one one-sided p-value curve, set the colors to black and blue
 
-  if (alternative %in% "one_sided" & (together == FALSE | (together == TRUE & length(estimate) < 2))) {
+  if (alternative %in% "one_sided" & (isFALSE(together) | (isTRUE(together) & length(estimate) < 2))) {
     p <- p + geom_line(aes(colour = hypothesis), size = 1.5) +
       scale_colour_manual(values = c("black", "#08A9CF"))  +
       theme(
@@ -815,12 +815,12 @@ conf_dist <- function(
 
     # For only one two-sided p-value curve, set the color to black
 
-  } else if (alternative %in% "two_sided" & (together == FALSE | (together == TRUE & length(estimate) < 2))) {
+  } else if (alternative %in% "two_sided" & (isFALSE(together) | (isTRUE(together) & length(estimate) < 2))) {
     p <- p + geom_line(size = 1.5, colour = "black")
 
     # For 2 or more estimates plotted together: set the colors according to "Set1" palette
 
-  } else if (together == TRUE & (length(estimate) >= 2)) {
+  } else if (isTRUE(together) & (length(estimate) >= 2)) {
     p <- p + geom_line(size = 1.5) +
       scale_colour_brewer(palette = "Set1", name = "") +
       theme(
@@ -842,7 +842,7 @@ conf_dist <- function(
   # For p-value curves: Set the left and right y-axes, possibly with a logarithmic part
 
   if (plot_type %in% "p_val") {
-    if (log_yaxis == TRUE & (p_cutoff < cut_logyaxis)) {
+    if (isTRUE(log_yaxis) & (p_cutoff < cut_logyaxis)) {
 
       lower_ylim_two <- round(10^(ceiling(round(log10(ifelse(alternative %in% "two_sided", plot_p_limit, plot_p_limit*2)), 5))), 10)
       lower_ylim_one <- round(10^(ceiling(round(log10(ifelse(alternative %in% "two_sided", plot_p_limit/2, plot_p_limit)), 5))), 10)
@@ -918,7 +918,7 @@ conf_dist <- function(
     p <- p + scale_x_continuous(trans = "log", breaks = scales::pretty_breaks(n = 10))
 
     # If y-axis is plotted on a log-scale, re-add the gray rectangle
-    if (log_yaxis == TRUE) {
+    if (isTRUE(log_yaxis)) {
       p <- p + annotate("rect", xmin=0, xmax=100, ymin=ifelse(alternative %in% "two_sided", plot_p_limit, plot_p_limit*2), ymax=cut_logyaxis, alpha=0.1, colour = grey(0.9))
     }
 
@@ -1060,14 +1060,14 @@ conf_dist <- function(
   # Add points for the counternull if specified
   #-----------------------------------------------------------------------------
 
-  if (!is.null(null_values) && plot_counternull == TRUE && plot_type %in% c("p_val", "s_val") && !all(is.na(res$res_frame$counternull))) {
+  if (!is.null(null_values) && isTRUE(plot_counternull) && plot_type %in% c("p_val", "s_val") && !all(is.na(res$res_frame$counternull))) {
 
-    if (together == TRUE & (length(estimate) >= 2)) {
+    if (isTRUE(together) & (length(estimate) >= 2)) {
 
       p <- p + geom_point(aes(x = values, y = counternull, colour = variable), size = 4, pch = 21, fill = "white", stroke = 1.7) +
         guides(colour = guide_legend(override.aes = list(pch = NA)))
 
-    } else if (together == FALSE | (together == TRUE & (length(estimate) < 2))) {
+    } else if (isFALSE(together) | (isTRUE(together) & (length(estimate) < 2))) {
 
       p <- p + geom_point(aes(x = values, y = counternull), colour = "black", size = 4, pch = 21, fill = "white", stroke = 1.7)
 
