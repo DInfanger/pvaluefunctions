@@ -235,13 +235,13 @@ conf_dist <- function(
 
   if (is.null(estimate)) {stop("Please provide an estimate.")}
 
-  if (length(type) == 0) {stop("Please provide the type of the estimate(s).")}
+  # if (length(type) == 0L) {stop("Please provide the type of the estimate(s).")}
 
   if (!alternative %in% c("one_sided", "two_sided")) {stop("Alternative must be either \"two_sided\" or \"one_sided\".")}
 
   if (plot_p_limit == 0 && isTRUE(log_yaxis)) {stop("Cannot plot 0 on logarithmic axis.")}
 
-  if (plot_p_limit > 0.5 && alternative %in% "one_sided") {stop("Plot limit must be below 0.5 for one-sided hypotheses.")}
+  if (plot_p_limit >= 0.5 && alternative %in% "one_sided") {stop("Plot limit must be below 0.5 for one-sided hypotheses.")}
 
   if (any((1 - conf_level) >= 1) && alternative %in% "two_sided") {
     conf_level <- conf_level[-which((1 - conf_level) >= 1)]
@@ -268,8 +268,8 @@ conf_dist <- function(
     stop("Please provide proportion estimates as decimals between 0 and 1.")
   }
 
-  if (type %in% "propdiff" && ((length(estimate) != 2) || (length(n) != 2))) {
-    stop("Please provide exactly two estimates and to sample sizes (n) for a difference in proportions.")
+  if (type %in% "propdiff" && ((length(estimate) != 2L) || (length(n) != 2L))) {
+    stop("Please provide exactly two estimates and two sample sizes (n) for a difference in proportions.")
   }
 
   if (type %in% "propdiff" && !plot_type %in% c("p_val", "s_val")) {
@@ -281,15 +281,19 @@ conf_dist <- function(
   }
 
   if (!is.null(conf_level) && (any(conf_level <= 0) || any(conf_level >= 1))) {
-    stop("Confidence levels must lie between 0 and 1.")
+    stop("All confidence levels must lie between 0 and 1.")
+  }
+
+  if (type %in% c("pearson", "spearman", "kendall") && !is.null(estimate) && any(abs(estimate) > 1)) {
+    stop("Correlation coefficients must lie between -1 and 1.")
   }
 
   if (type %in% c("pearson", "spearman", "kendall") && !is.null(null_values) && any(abs(null_values) > 1)) {
-    stop("Null values for correlations  must lie between -1 and 1.")
+    stop("Null values for correlations must lie between -1 and 1.")
   }
 
   if (type %in% c("prop") && !is.null(null_values) && (any(null_values <= 0) || any(null_values >= 1))) {
-    stop("Null values for proportions  must lie between 0 and 1 (excluding).")
+    stop("Null values for proportions must lie between 0 and 1 (excluding).")
   }
 
   if (!is.null(xlab) & (length(xlab) != 1L)) {
@@ -300,8 +304,8 @@ conf_dist <- function(
     stop("Length of estimates does not match length of estimate names.")
   }
 
-  if (type %in% "propdiff" && !is.null(est_names) && (length(est_names) > 1)) {
-    stop("Only one estimate name for a proportion difference.")
+  if (type %in% "propdiff" && !is.null(est_names) && (length(est_names) > 1L)) {
+    stop("Provide only one estimate name for a proportion difference.")
   }
 
   if (!is.null(xlim) && (length(xlim) != 2L)) {
@@ -312,7 +316,7 @@ conf_dist <- function(
     xlim <- sort(xlim, decreasing = FALSE)
   }
 
-  if (is.null(type) || (!type %in% c("ttest", "linreg", "gammareg", "general_t", "logreg", "poisreg", "coxreg", "general_z", "pearson", "spearman", "kendall", "var", "prop", "propdiff"))) {
+  if ((length(type) == 0L) || (!type %in% c("ttest", "linreg", "gammareg", "general_t", "logreg", "poisreg", "coxreg", "general_z", "pearson", "spearman", "kendall", "var", "prop", "propdiff"))) {
     stop("\"type\" must be one of: ttest, linreg, gammareg, general_t, logreg, poisreg, coxreg, general_z, pearson, spearman, kendall, var, prop and propdiff.")
   }
 
@@ -332,20 +336,20 @@ conf_dist <- function(
     stop("Please provide the (residual) degrees of freedom and the standard error of the estimates.")
   }
 
-  if (type %in% c("logreg", "poisreg", "coxreg", "general_z") && (is.null(stderr))){
+  if (type %in% c("logreg", "poisreg", "coxreg", "general_z") && is.null(stderr)){
     stop("Please provide the standard error of the estimates.")
   }
 
-  if (type %in% c("pearson", "spearman", "kendall", "prop") && (is.null(n))){
+  if (type %in% c("pearson", "spearman", "kendall", "prop") && is.null(n)){
     stop("Please provide the sample size for correlations and proportions.")
   }
 
-  if ((type %in% c("pearson", "spearman") && any(n <= 3)) || (type %in% c("kendall") && any(n <= 4))){
+  if ((type %in% c("pearson", "spearman") && any(n < 4)) || (type %in% c("kendall") && any(n < 5))){
     stop("Sample size must be at least 4 for Pearson and Spearman and at least 5 for Kendall's correlation.")
   }
 
   if (type %in% c("var") && is.null(n)){
-    stop("Sample size must be given for variance.")
+    stop("Sample size must be given for variance estimates.")
   }
 
   if (type %in% "ttest" && all(!is.null(df), !is.null(estimate), !is.null(tstat)) && !identical(length(df), length(estimate), length(tstat))) {
