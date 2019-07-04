@@ -3,38 +3,41 @@ pvaluefunctions
 
   - [*P*-value functions
     <img src="man/figures/logo2.svg" align="right" width="120" />](#p-value-functions)
-  - [Overview](#overview)
-  - [Installation](#installation)
-  - [Dependencies](#dependencies)
-      - [Important information\!](#important-information)
-  - [Usage](#usage)
-      - [Required arguments for different estimate
-        types](#required-arguments-for-different-estimate-types)
-      - [Returned values](#returned-values)
-  - [Examples](#examples)
-      - [Two-sample *t*-test with unequal variances
-        (Welch-Test)](#two-sample-t-test-with-unequal-variances-welch-test)
-      - [Single coefficient from a linear regression
-        model](#single-coefficient-from-a-linear-regression-model)
-      - [Multiple coefficients from a linear regression
-        model](#multiple-coefficients-from-a-linear-regression-model)
-      - [Pearson correlation coefficient
-        (one-sided)](#pearson-correlation-coefficient-one-sided)
-      - [Odds ratio from logistic
-        regression](#odds-ratio-from-logistic-regression)
-      - [Proportion](#proportion)
-      - [Difference between two independent proportions: Wilson’s score
-        by Newcombe with continuity
-        correction](#difference-between-two-independent-proportions-wilsons-score-by-newcombe-with-continuity-correction)
-      - [Difference between two independent proportions: Agresti-Caffo
-        adjusted Wald
-        interval](#difference-between-two-independent-proportions-agresti-caffo-adjusted-wald-interval)
-      - [Confidence density of a variance estimate from a normal
-        distribution](#confidence-density-of-a-variance-estimate-from-a-normal-distribution)
-  - [References](#references)
-  - [Contact](#contact)
-  - [Session info](#session-info)
-  - [License](#license)
+  - [Accompanying paper](#accompanying-paper)
+  - [Recreation of the graphics in the
+    paper](#recreation-of-the-graphics-in-the-paper)
+      - [Overview](#overview)
+      - [Installation](#installation)
+      - [Dependencies](#dependencies)
+          - [Important information\!](#important-information)
+      - [Usage](#usage)
+          - [Required arguments for different estimate
+            types](#required-arguments-for-different-estimate-types)
+          - [Returned values](#returned-values)
+      - [Examples](#examples)
+          - [Two-sample *t*-test with unequal variances
+            (Welch-Test)](#two-sample-t-test-with-unequal-variances-welch-test)
+          - [Single coefficient from a linear regression
+            model](#single-coefficient-from-a-linear-regression-model)
+          - [Multiple coefficients from a linear regression
+            model](#multiple-coefficients-from-a-linear-regression-model)
+          - [Pearson correlation coefficient
+            (one-sided)](#pearson-correlation-coefficient-one-sided)
+          - [Odds ratio from logistic
+            regression](#odds-ratio-from-logistic-regression)
+          - [Proportion](#proportion)
+          - [Difference between two independent proportions: Wilson’s
+            score by Newcombe with continuity
+            correction](#difference-between-two-independent-proportions-wilsons-score-by-newcombe-with-continuity-correction)
+          - [Difference between two independent proportions:
+            Agresti-Caffo adjusted Wald
+            interval](#difference-between-two-independent-proportions-agresti-caffo-adjusted-wald-interval)
+          - [Confidence density of a variance estimate from a normal
+            distribution](#confidence-density-of-a-variance-estimate-from-a-normal-distribution)
+      - [References](#references)
+      - [Contact](#contact)
+      - [Session info](#session-info)
+      - [License](#license)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -45,6 +48,21 @@ pvaluefunctions
 [![total
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/pvaluefunctions)](http://cranlogs.r-pkg.org/badges/grand-total/pvaluefunctions)
 [![Rdoc](http://www.rdocumentation.org/badges/version/pvaluefunctions)](http://www.rdocumentation.org/packages/pvaluefunctions)
+
+## Accompanying paper
+
+We published an [accompanying paper](https://doi.org/10.1002/sim.8293)
+to illustrate the use of *p*-value functions:
+
+Infanger D, Schmidt-Trucksäss A. (2019): *P* value functions: An
+underused method to present research results and to promote quantitative
+reasoning. *Statistics in Medicine,* 1-9. doi: 10.1002/sim.8293.
+
+# Recreation of the graphics in the paper
+
+The code and instructions to reproduce all graphics in our paper can be
+found in the following GitHub repository:
+<https://github.com/DInfanger/pvalue_functions>
 
 ## Overview
 
@@ -150,7 +168,6 @@ The function has the following arguments:
   - `cut_logyaxis`: Numerical value indicating the threshold below which
     the y-axis will be displayed logarithmically. Must lie between 0 and
     1.
-  - `xlab` (optional): String indicating the label of the x-axis.
   - `xlim` (optional): Numerical vector of length 2 indicating the
     limits of the x-axis on the *untransformed* scale. For example: If
     you want to plot *p*-value functions for odds ratios from logistic
@@ -165,6 +182,12 @@ The function has the following arguments:
     plotted as a point. Only available for -value functions and s-value
     functions. Counternull values that are outside of the plotted
     functions are not shown.
+  - `title` (optional): String containing a title for the plot.
+  - `xlab` (optional): String indicating the label of the x-axis.
+  - `ylab` (optional): String containing a title for the primary (left)
+    y-axis.
+  - `ylab_sec` (optional): String containing a title for the secondary
+    (right) y-axis.
 
 ### Required arguments for different estimate types
 
@@ -694,6 +717,10 @@ Greenland S (2019): Valid *P*-Values Behave Exactly as They Should: Some
 Misleading Criticisms of *P*-Values and Their Resolution with
 *S*-Values. *The American Statistician,* 73sup1, 106-114.
 
+Infanger D, Schmidt-Trucksäss A. (2019): *P* value functions: An
+underused method to present research results and to promote quantitative
+reasoning. *Statistics in Medicine,* 1-9. doi: 10.1002/sim.8293.
+
 Poole C. (1987a): Beyond the confidence interval. *Am J Public Health.*
 77(2): 195-9.
 
@@ -736,21 +763,21 @@ distribution estimator of a parameter: A review. *Internat Statist Rev.*
     #> [1] stats     graphics  grDevices utils     datasets  methods   base     
     #> 
     #> other attached packages:
-    #> [1] pvaluefunctions_1.2.0
+    #> [1] pvaluefunctions_1.3.0
     #> 
     #> loaded via a namespace (and not attached):
-    #>  [1] Rcpp_1.0.1         RColorBrewer_1.1-2 pillar_1.4.1      
+    #>  [1] Rcpp_1.0.1         RColorBrewer_1.1-2 pillar_1.4.2      
     #>  [4] compiler_3.6.0     prettyunits_1.0.2  remotes_2.1.0     
     #>  [7] tools_3.6.0        testthat_2.1.1     digest_0.6.19     
     #> [10] pkgbuild_1.0.3     pkgload_1.0.2      tibble_2.1.3      
     #> [13] gtable_0.3.0       evaluate_0.14      memoise_1.1.0     
     #> [16] pkgconfig_2.0.2    rlang_0.4.0        cli_1.1.0         
     #> [19] curl_3.3           yaml_2.2.0         xfun_0.8          
-    #> [22] dplyr_0.8.1        withr_2.1.2        stringr_1.4.0     
+    #> [22] dplyr_0.8.2        withr_2.1.2        stringr_1.4.0     
     #> [25] knitr_1.23         desc_1.2.0         fs_1.3.1          
     #> [28] devtools_2.0.2     tidyselect_0.2.5   rprojroot_1.3-2   
     #> [31] grid_3.6.0         glue_1.3.1         R6_2.4.0          
-    #> [34] processx_3.3.1     rmarkdown_1.13     sessioninfo_1.1.1 
+    #> [34] processx_3.4.0     rmarkdown_1.13     sessioninfo_1.1.1 
     #> [37] zipfR_0.6-10       purrr_0.3.2        callr_3.2.0       
     #> [40] ggplot2_3.2.0.9000 magrittr_1.5       scales_1.0.0      
     #> [43] backports_1.1.4    ps_1.3.0           htmltools_0.3.6   
