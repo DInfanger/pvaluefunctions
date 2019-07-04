@@ -4,40 +4,40 @@ pvaluefunctions
   - [*P*-value functions
     <img src="man/figures/logo2.svg" align="right" width="120" />](#p-value-functions)
   - [Accompanying paper](#accompanying-paper)
-  - [Recreation of the graphics in the
-    paper](#recreation-of-the-graphics-in-the-paper)
-      - [Overview](#overview)
-      - [Installation](#installation)
-      - [Dependencies](#dependencies)
-          - [Important information\!](#important-information)
-      - [Usage](#usage)
-          - [Required arguments for different estimate
-            types](#required-arguments-for-different-estimate-types)
-          - [Returned values](#returned-values)
-      - [Examples](#examples)
-          - [Two-sample *t*-test with unequal variances
-            (Welch-Test)](#two-sample-t-test-with-unequal-variances-welch-test)
-          - [Single coefficient from a linear regression
-            model](#single-coefficient-from-a-linear-regression-model)
-          - [Multiple coefficients from a linear regression
-            model](#multiple-coefficients-from-a-linear-regression-model)
-          - [Pearson correlation coefficient
-            (one-sided)](#pearson-correlation-coefficient-one-sided)
-          - [Odds ratio from logistic
-            regression](#odds-ratio-from-logistic-regression)
-          - [Proportion](#proportion)
-          - [Difference between two independent proportions: Wilson’s
-            score by Newcombe with continuity
-            correction](#difference-between-two-independent-proportions-wilsons-score-by-newcombe-with-continuity-correction)
-          - [Difference between two independent proportions:
-            Agresti-Caffo adjusted Wald
-            interval](#difference-between-two-independent-proportions-agresti-caffo-adjusted-wald-interval)
-          - [Confidence density of a variance estimate from a normal
-            distribution](#confidence-density-of-a-variance-estimate-from-a-normal-distribution)
-      - [References](#references)
-      - [Contact](#contact)
-      - [Session info](#session-info)
-      - [License](#license)
+      - [Recreation of the graphics in the
+        paper](#recreation-of-the-graphics-in-the-paper)
+  - [Overview](#overview)
+  - [Installation](#installation)
+  - [Dependencies](#dependencies)
+      - [Important information\!](#important-information)
+  - [Usage](#usage)
+      - [Required arguments for different estimate
+        types](#required-arguments-for-different-estimate-types)
+      - [Returned values](#returned-values)
+  - [Examples](#examples)
+      - [Two-sample *t*-test with unequal variances
+        (Welch-Test)](#two-sample-t-test-with-unequal-variances-welch-test)
+      - [Single coefficient from a linear regression
+        model](#single-coefficient-from-a-linear-regression-model)
+      - [Multiple coefficients from a linear regression
+        model](#multiple-coefficients-from-a-linear-regression-model)
+      - [Pearson correlation coefficient
+        (one-sided)](#pearson-correlation-coefficient-one-sided)
+      - [Odds ratio from logistic
+        regression](#odds-ratio-from-logistic-regression)
+      - [Proportion](#proportion)
+      - [Difference between two independent proportions: Wilson’s score
+        by Newcombe with continuity
+        correction](#difference-between-two-independent-proportions-wilsons-score-by-newcombe-with-continuity-correction)
+      - [Difference between two independent proportions: Agresti-Caffo
+        adjusted Wald
+        interval](#difference-between-two-independent-proportions-agresti-caffo-adjusted-wald-interval)
+      - [Confidence density of a variance estimate from a normal
+        distribution](#confidence-density-of-a-variance-estimate-from-a-normal-distribution)
+  - [References](#references)
+  - [Contact](#contact)
+  - [Session info](#session-info)
+  - [License](#license)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -58,7 +58,7 @@ Infanger D, Schmidt-Trucksäss A. (2019): *P* value functions: An
 underused method to present research results and to promote quantitative
 reasoning. *Statistics in Medicine,* 1-9. doi: 10.1002/sim.8293.
 
-# Recreation of the graphics in the paper
+### Recreation of the graphics in the paper
 
 The code and instructions to reproduce all graphics in our paper can be
 found in the following GitHub repository:
@@ -229,6 +229,44 @@ The main function `conf_dist()` returns five objects in a list:
 #-----------------------------------------------------------------------------
 
 devtools::install_github("DInfanger/pvaluefunctions")
+#> 
+#>   
+  
+  
+   checking for file 'C:\Users\denis\AppData\Local\Temp\RtmpkV6Thi\remotes1f1c21795f00\DInfanger-pvaluefunctions-f609957/DESCRIPTION' ...
+  
+   checking for file 'C:\Users\denis\AppData\Local\Temp\RtmpkV6Thi\remotes1f1c21795f00\DInfanger-pvaluefunctions-f609957/DESCRIPTION' ... 
+  
+v  checking for file 'C:\Users\denis\AppData\Local\Temp\RtmpkV6Thi\remotes1f1c21795f00\DInfanger-pvaluefunctions-f609957/DESCRIPTION'
+#> 
+  
+  
+  
+-  preparing 'pvaluefunctions':
+#>    checking DESCRIPTION meta-information ...
+  
+   checking DESCRIPTION meta-information ... 
+  
+v  checking DESCRIPTION meta-information
+#> 
+  
+  
+  
+-  checking for LF line-endings in source and make files and shell scripts
+#> 
+  
+  
+  
+-  checking for empty or unneeded directories
+#> 
+  
+  
+  
+-  building 'pvaluefunctions_1.3.0.tar.gz'
+#> 
+  
+   
+#> 
 
 library(pvaluefunctions)
 

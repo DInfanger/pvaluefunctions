@@ -22,7 +22,7 @@ We published an [accompanying paper](https://doi.org/10.1002/sim.8293) to illust
 
 Infanger D, Schmidt-Trucksäss A. (2019): *P* value functions: An underused method to present research results and to promote quantitative reasoning. *Statistics in Medicine,* 1-9. doi: 10.1002/sim.8293.
 
-# Recreation of the graphics in the paper
+### Recreation of the graphics in the paper
 
 The code and instructions to reproduce all graphics in our paper can be found in the following GitHub repository: https://github.com/DInfanger/pvalue_functions
 
