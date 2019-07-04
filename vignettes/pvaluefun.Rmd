@@ -16,6 +16,16 @@ knitr::opts_chunk$set(
 )
 ```
 
+## Accompanying paper
+
+We published an [accompanying paper](https://doi.org/10.1002/sim.8293) to illustrate the use of *p*-value functions:
+
+Infanger D, Schmidt-Trucksäss A. (2019): *P* value functions: An underused method to present research results and to promote quantitative reasoning. *Statistics in Medicine,* 1-9. doi: 10.1002/sim.8293.
+
+# Recreation of the graphics in the paper
+
+The code and instructions to reproduce all graphics in our paper can be found in the following GitHub repository: https://github.com/DInfanger/pvalue_functions
+
 ## Overview
 
 This vignette shows how to use the `pvaluefunctions` package wich contains an R function to create graphics of *p*-value functions, confidence distributions, confidence densities, or the [Surprisal value (S-value)](http://www.umsl.edu/~fraundorfp/egsurpri.html) (Greenland 2019).
@@ -478,6 +488,8 @@ Bender R, Berg G, Zeeb H. (2005): Tutorial: using confidence curves in medical r
 Fraser  D. A. S. (2019): The *p*-value function and statistical inference. *The American Statistician,* 73:sup1, 135-147.
 
 Greenland S (2019): Valid *P*-Values Behave Exactly as They Should: Some Misleading Criticisms of *P*-Values and Their Resolution with *S*-Values. *The American Statistician,* 73sup1, 106-114.
+
+Infanger D, Schmidt-Trucksäss A. (2019): *P* value functions: An underused method to present research results and to promote quantitative reasoning. *Statistics in Medicine,* 1-9. doi: 10.1002/sim.8293.
 
 Poole C. (1987a): Beyond the confidence interval. *Am J Public Health.* 77(2): 195-9.
 
