@@ -10,7 +10,7 @@ if (getRversion() >= "2.15.1") {
 
 #' Create and Plot \emph{P}-Value Functions, S-Value Functions, Confidence Distributions and Confidence Densities
 #'
-#' The function \code{conf_dist} generates confidence distributions (cdf), confidence densities (pdf), shannon suprisal (s-value) functions and \emph{p}-value functions for several commonly used estimates. In addition, counternulls (see Rosenthal et al. 1994) and point estimates are calculated.
+#' The function \code{conf_dist} generates confidence distributions (cdf), confidence densities (pdf), Shannon suprisal (s-value) functions and \emph{p}-value functions for several commonly used estimates. In addition, counternulls (see Rosenthal et al. 1994) and point estimates are calculated.
 #'
 #' \emph{P}-value functions and confidence intervals are calculated based on the \emph{t}-distribution for \emph{t}-tests, linear regression coefficients, and gamma regression models (GLM). The normal distribution is used for logistic regression, poisson regression and cox regression models. For correlation coefficients, Fisher's transform is used using the corresponding variances (see Bonett et al. 2000). \emph{P}-value functions and confidence intervals for variances are constructed using the Chi2 distribution. Finally, Wilson's score intervals are used for one proportion. For differences of proportions, the Wilson score interval with continuity correction is used (Newcombe 1998).
 #'
@@ -31,6 +31,8 @@ if (getRversion() >= "2.15.1") {
 #' @param cut_logyaxis Numerical value indicating the threshold below which the y-axis will be displayed logarithmically. Must lie between 0 and 1.
 #' @param xlim (optional) Optional numerical vector of length 2 indicating the limits of the x-axis on the \emph{untransformed} scale. For example: If you want to plot \emph{p}-value functions for odds ratios from logistic regressions, the limits have to be given on the log-odds scale. Get's overriden if null values are outside of this range.
 #' @param together Logical. Indicating if graphics for multiple estimates should be displayed together or on separate plots.
+#' @param nrow (optional) Integer greater than 0 indicating the number of rows when \code{together = FALSE} is specified for multiple estimates. Used in \code{facet_wrap} in ggplot2.
+#' @param ncol (optional) Integer greater than 0 indicating the number of columns when \code{together = FALSE} is specified for multiple estimates. Used in \code{facet_wrap} in ggplot2.
 #' @param plot_p_limit Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale (i.e. \code{log_yaxis = TRUE}).
 #' @param plot_counternull Logical. Indicating if the counternull should be plotted as a point. Only available for \emph{p}-value functions and s-value functions. Counternull values that are outside of the plotted functions are not shown.
 #' @param title (optional) String containing a title of the plot.
@@ -39,25 +41,28 @@ if (getRversion() >= "2.15.1") {
 #' @param ylab_sec (optional) String indicating the title for the secondary (right) y-axis.
 #'
 #' @return \code{conf_dist} returns four data frames and a ggplot2-plot object: \code{res_frame} (contains parameter values, \emph{p}-values, s-values, confidence distribution and density, variable names and type of hypothesis), \code{conf_frame} (contains the used confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull for the corresponding null values), \code{point_est} (contains the mean, median and mode point estimates) and \code{plot} (a ggplot2-plot).
-#' @references Bender R, Berg G, Zeeb H. Tutorial: using confidence curves in medical research. Biom J. 2005;47(2):237-247.
+#' @references Bender R, Berg G, Zeeb H. Tutorial: using confidence curves in medical research. \emph{Biom J.} 2005;47(2):237-247.
 #'
-#' Bonett DG, Wright TA. Sample size requirements for estimating Pearson, Kendall and Spearman correlations. 2000;65(1):23-28.
+#' Bonett DG, Wright TA. Sample size requirements for estimating Pearson, Kendall and Spearman correlations. \emph{Psychometrika.} 2000;65(1):23-28.
 #'
-#' Newcombe RG. Interval estimation for the difference between independent proportions: comparison of eleven methods. Statist. Med. 1998;17:873-890.
+#' Infanger D, Schmidt-Trucksäss A. \emph{P} value functions: An underused method to present research results and to promote quantitative reasoning. \emph{Stat Med.} 2019;1-9.
 #'
-#' Poole C. Confidence intervals exclude nothing. Am J Public Health. 1987;77(4):492-493.
+#' Newcombe RG. Interval estimation for the difference between independent proportions: comparison of eleven methods. \emph{Stat Med.} 1998;17:873-890.
 #'
-#' Poole C. Beyond the confidence interval. Am J Public Health. 1987;77(2):195-199.
+#' Poole C. Confidence intervals exclude nothing. \emph{Am J Public Health.} 1987;77(4):492-493.
 #'
-#' Rosenthal R, Rubin D. The counternull value of an effect size: a new statistic. 1994;5(6):329-334.
+#' Poole C. Beyond the confidence interval. \emph{Am J Public Health.} 1987;77(2):195-199.
+#'
+#' Rosenthal R, Rubin D. The counternull value of an effect size: a new statistic. \emph{Psychological Science.} 1994;5(6):329-334.
 #'
 #' Rothman KJ, Greenland S, Lash TL. Modern epidemiology. 3rd ed. Philadelphia, PA: Wolters Kluwer; 2008.
 #'
 #' Schweder T, Hjort NL. Confidence, likelihood, probability: statistical inference with confidence distributions. New York, NY: Cambridge University Press; 2016.
 #'
-#' Sullivan KM, Foster DA. Use of the confidence interval function. Epidemiology. 1990;1(1):39-42.
+#' Sullivan KM, Foster DA. Use of the confidence interval function. \emph{Epidemiology.} 1990;1(1):39-42.
 #'
-#' Xie Mg, Singh K. Confidence distribution, the frequentist distribution estimator of a parameter: A review. Internat Statist Rev. 2013;81(1):3-39.
+#' Xie Mg, Singh K. Confidence distribution, the frequentist distribution estimator of a parameter: A review. \emph{Internat Statist Rev.} 2013;81(1):3-39.
+#'
 #' @examples
 #'
 #' #======================================================================================
@@ -202,6 +207,8 @@ conf_dist <- function(
   , xlab = NULL
   , xlim = NULL
   , together = FALSE
+  , nrow = NULL
+  , ncol = NULL
   , plot_p_limit = (1 - 0.999)
   , plot_counternull = FALSE
   , title = NULL
@@ -1034,9 +1041,9 @@ conf_dist <- function(
 
   if (length(estimate) >= 2 & together == FALSE) {
     if (plot_type %in% "pdf"){
-      p <- p + facet_wrap(~variable, scales = "free")
+      p <- p + facet_wrap(vars(variable), nrow = nrow, ncol = ncol, scales = "free")
     } else {
-      p <- p + facet_wrap(~variable, scales = "free_x")
+      p <- p + facet_wrap(vars(variable), nrow = nrow, ncol = ncol, scales = "free_x")
     }
   }
 
