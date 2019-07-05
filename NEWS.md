@@ -6,6 +6,7 @@
   * NEWS file was converted to an .md file.
   * Users can now provide a title for the plot (option `title`).
   * Users can now provide titles for the primary and secondary y-axis (options `ylab` and `ylab_sec`).
+  * Users can now specify the number of rows `nrow` and columns `ncol` to be used in `facet_wrap` (ggplot2) when multiple estimates are plotted separately (option `together = FALSE`).
   * Changed some of the examples: Changed option `log_yaxis = TRUE` to `log_yaxis = FALSE`.
   * Code: Changed logical checks `x == TRUE` and `x == FALSE` to `isTRUE(x)` and to `isFALSE(x)`.
   * Code: Checked and improved/fixed some of the initial consistency/input checks that are performed at the beginning of the function.
