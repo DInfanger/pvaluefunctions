@@ -175,6 +175,12 @@ The function has the following arguments:
     overriden if null values are outside of this range.
   - `together`: Logical. Indicating if graphics for multiple estimates
     should be displayed together or on separate plots.
+  - `nrow`: (optional) Integer greater than 0 indicating the number of
+    rows when `together = FALSE` is specified for multiple estimates.
+    Used in `facet_wrap` in ggplot2.
+  - `ncol`: (optional) Integer greater than 0 indicating the number of
+    columns when `together = FALSE` is specified for multiple estimates.
+    Used in `facet_wrap` in ggplot2.
   - `plot_p_limit`: Numerical value indicating the lower limit of the
     y-axis. Must be greater than 0 for a logarithmic scale
     (i.e. `log_yaxis = TRUE`).
@@ -229,44 +235,6 @@ The main function `conf_dist()` returns five objects in a list:
 #-----------------------------------------------------------------------------
 
 devtools::install_github("DInfanger/pvaluefunctions")
-#> 
-#>   
-  
-  
-   checking for file 'C:\Users\denis\AppData\Local\Temp\RtmpkV6Thi\remotes1f1c21795f00\DInfanger-pvaluefunctions-f609957/DESCRIPTION' ...
-  
-   checking for file 'C:\Users\denis\AppData\Local\Temp\RtmpkV6Thi\remotes1f1c21795f00\DInfanger-pvaluefunctions-f609957/DESCRIPTION' ... 
-  
-v  checking for file 'C:\Users\denis\AppData\Local\Temp\RtmpkV6Thi\remotes1f1c21795f00\DInfanger-pvaluefunctions-f609957/DESCRIPTION'
-#> 
-  
-  
-  
--  preparing 'pvaluefunctions':
-#>    checking DESCRIPTION meta-information ...
-  
-   checking DESCRIPTION meta-information ... 
-  
-v  checking DESCRIPTION meta-information
-#> 
-  
-  
-  
--  checking for LF line-endings in source and make files and shell scripts
-#> 
-  
-  
-  
--  checking for empty or unneeded directories
-#> 
-  
-  
-  
--  building 'pvaluefunctions_1.3.0.tar.gz'
-#> 
-  
-   
-#> 
 
 library(pvaluefunctions)
 
@@ -749,15 +717,15 @@ Bender R, Berg G, Zeeb H. (2005): Tutorial: using confidence curves in
 medical research. *Biom J.* 47(2): 237-47.
 
 Fraser D. A. S. (2019): The *p*-value function and statistical
-inference. *The American Statistician,* 73:sup1, 135-147.
+inference. *Am Stat,* 73:sup1, 135-147.
 
 Greenland S (2019): Valid *P*-Values Behave Exactly as They Should: Some
 Misleading Criticisms of *P*-Values and Their Resolution with
-*S*-Values. *The American Statistician,* 73sup1, 106-114.
+*S*-Values. *Am Stat,* 73sup1, 106-114.
 
 Infanger D, Schmidt-Trucksäss A. (2019): *P* value functions: An
 underused method to present research results and to promote quantitative
-reasoning. *Statistics in Medicine,* 1-9. doi: 10.1002/sim.8293.
+reasoning. *Stat Med,* 1-9. doi: 10.1002/sim.8293.
 
 Poole C. (1987a): Beyond the confidence interval. *Am J Public Health.*
 77(2): 195-9.
@@ -806,20 +774,20 @@ distribution estimator of a parameter: A review. *Internat Statist Rev.*
     #> loaded via a namespace (and not attached):
     #>  [1] Rcpp_1.0.1         RColorBrewer_1.1-2 pillar_1.4.2      
     #>  [4] compiler_3.6.0     prettyunits_1.0.2  remotes_2.1.0     
-    #>  [7] tools_3.6.0        testthat_2.1.1     digest_0.6.19     
+    #>  [7] tools_3.6.0        testthat_2.1.1     digest_0.6.20     
     #> [10] pkgbuild_1.0.3     pkgload_1.0.2      tibble_2.1.3      
     #> [13] gtable_0.3.0       evaluate_0.14      memoise_1.1.0     
     #> [16] pkgconfig_2.0.2    rlang_0.4.0        cli_1.1.0         
     #> [19] curl_3.3           yaml_2.2.0         xfun_0.8          
-    #> [22] dplyr_0.8.2        withr_2.1.2        stringr_1.4.0     
+    #> [22] dplyr_0.8.3        withr_2.1.2        stringr_1.4.0     
     #> [25] knitr_1.23         desc_1.2.0         fs_1.3.1          
     #> [28] devtools_2.0.2     tidyselect_0.2.5   rprojroot_1.3-2   
     #> [31] grid_3.6.0         glue_1.3.1         R6_2.4.0          
     #> [34] processx_3.4.0     rmarkdown_1.13     sessioninfo_1.1.1 
-    #> [37] zipfR_0.6-10       purrr_0.3.2        callr_3.2.0       
+    #> [37] zipfR_0.6-10       purrr_0.3.2        callr_3.3.0       
     #> [40] ggplot2_3.2.0.9000 magrittr_1.5       scales_1.0.0      
     #> [43] backports_1.1.4    ps_1.3.0           htmltools_0.3.6   
-    #> [46] usethis_1.5.0      assertthat_0.2.1   colorspace_1.4-1  
+    #> [46] usethis_1.5.1      assertthat_0.2.1   colorspace_1.4-1  
     #> [49] labeling_0.3       stringi_1.4.3      lazyeval_0.2.2    
     #> [52] munsell_0.5.0      crayon_1.3.4
 

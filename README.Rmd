@@ -96,6 +96,8 @@ There is only one function needed to create the plots: `conf_dist()`. The functi
 * `cut_logyaxis`: Numerical value indicating the threshold below which the y-axis will be displayed logarithmically. Must lie between 0 and 1.
 * `xlim` (optional): Numerical vector of length 2 indicating the limits of the x-axis on the *untransformed* scale. For example: If you want to plot *p*-value functions for odds ratios from logistic regressions, the limits have to be given on the log-odds scale. Gets overriden if null values are outside of this range.
 * `together`: Logical. Indicating if graphics for multiple estimates should be displayed together or on separate plots.
+* `nrow`: (optional) Integer greater than 0 indicating the number of rows when `together = FALSE` is specified for multiple estimates. Used in `facet_wrap` in ggplot2.
+* `ncol`: (optional) Integer greater than 0 indicating the number of columns when `together = FALSE` is specified for multiple estimates. Used in `facet_wrap` in ggplot2.
 * `plot_p_limit`: Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale (i.e. `log_yaxis = TRUE`).
 * `plot_counternull`: Logical. Indicating if the counternull should be plotted as a point. Only available for \emph{p}-value functions and s-value functions. Counternull values that are outside of the plotted functions are not shown.
 * `title` (optional): String containing a title for the plot.

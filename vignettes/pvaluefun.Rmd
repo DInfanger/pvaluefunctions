@@ -89,6 +89,8 @@ There is only one function needed to create the plots: `conf_dist()`. The functi
 * `cut_logyaxis`: Numerical value indicating the threshold below which the y-axis will be displayed logarithmically. Must lie between 0 and 1.
 * `xlim` (optional): Optional numerical vector of length 2 indicating the limits of the x-axis on the *untransformed* scale. For example: If you want to plot *p*-value functions for odds ratios from logistic regressions, the limits have to be given on the log-odds scale. Null values outside the limits will not be plotted.
 * `together`: Logical. Indicating if graphics for multiple estimates should be displayed together or on separate plots.
+* `nrow`: (optional) Integer greater than 0 indicating the number of rows when `together = FALSE` is specified for multiple estimates. Used in `facet_wrap` in ggplot2.
+* `ncol`: (optional) Integer greater than 0 indicating the number of columns when `together = FALSE` is specified for multiple estimates. Used in `facet_wrap` in ggplot2.
 * `plot_p_limit`: Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale (i.e. `log_yaxis = TRUE`).
 * `plot_counternull`: Logical. Indicating if the counternull should be plotted as a point. Only available for \emph{p}-value functions and s-value functions. Counternull values that are outside of the plotted functions are not shown.
 * `title` (optional): String containing a title for the plot.
@@ -485,11 +487,11 @@ res$plot + ggplot2::geom_vline(xintercept = as.numeric(res$point_est[1, 1:3]), l
 
 Bender R, Berg G, Zeeb H. (2005): Tutorial: using confidence curves in medical research. *Biom J.* 47(2): 237-47.
 
-Fraser  D. A. S. (2019): The *p*-value function and statistical inference. *The American Statistician,* 73:sup1, 135-147.
+Fraser  D. A. S. (2019): The *p*-value function and statistical inference. *Am Stat,* 73:sup1, 135-147.
 
-Greenland S (2019): Valid *P*-Values Behave Exactly as They Should: Some Misleading Criticisms of *P*-Values and Their Resolution with *S*-Values. *The American Statistician,* 73sup1, 106-114.
+Greenland S (2019): Valid *P*-Values Behave Exactly as They Should: Some Misleading Criticisms of *P*-Values and Their Resolution with *S*-Values. *Am Stat,* 73sup1, 106-114.
 
-Infanger D, Schmidt-Trucksäss A. (2019): *P* value functions: An underused method to present research results and to promote quantitative reasoning. *Statistics in Medicine,* 1-9. doi: 10.1002/sim.8293.
+Infanger D, Schmidt-Trucksäss A. (2019): *P* value functions: An underused method to present research results and to promote quantitative reasoning. *Stat Med,* 1-9. doi: 10.1002/sim.8293.
 
 Poole C. (1987a): Beyond the confidence interval. *Am J Public Health.* 77(2): 195-9.
 
