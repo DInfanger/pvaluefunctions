@@ -383,6 +383,10 @@ conf_dist <- function(
     warning("Approximations for Kendall's correlation are only valid for r < 0.8. Interpret with caution.")
   }
 
+  if (!type %in% "propdiff" && isFALSE(together) && (length(estimate) > 1L) && !is.null(nrow) && !is.null(ncol) && (nrow*ncol < length(estimate))) {
+    stop("nrow * ncol must be greater than or equal the number of estimates to be plotted if together = FALSE.")
+  }
+
   #-----------------------------------------------------------------------------
   # Calculate the confidence distributions/densities and p-value curves
   #-----------------------------------------------------------------------------
