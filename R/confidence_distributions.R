@@ -182,7 +182,7 @@ if (getRversion() >= "2.15.1") {
 #'   , title = "P-value function for the difference of two independent proportions"
 #' )
 #'
-#' @seealso \code{\link[concurve]{plotpint}}
+#' @seealso \code{\link[concurve]{ggconcurve}}
 #'
 #' @import stats ggplot2 scales
 #' @importFrom grDevices grey
