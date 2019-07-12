@@ -1,5 +1,11 @@
 ## NEWS and changes for the pvaluefunctions package
 
+1.4.0
+-------------
+  
+  * Added option `inverted` which allows users to plot p-value functions, s-value functions and confidence distributions with the y-axis inverted.
+  * Added a new example.
+
 1.3.0
 -------------
 

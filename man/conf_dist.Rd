@@ -11,7 +11,7 @@ conf_dist(estimate = NULL, n = NULL, df = NULL, stderr = NULL,
   log_yaxis = FALSE, cut_logyaxis = 0.05, xlab = NULL, xlim = NULL,
   together = FALSE, nrow = NULL, ncol = NULL, plot_p_limit = (1 -
   0.999), plot_counternull = FALSE, title = NULL, ylab = NULL,
-  ylab_sec = NULL)
+  ylab_sec = NULL, inverted = FALSE)
 }
 \arguments{
 \item{estimate}{Numerical vector containing the estimate(s).}
@@ -63,6 +63,8 @@ conf_dist(estimate = NULL, n = NULL, df = NULL, stderr = NULL,
 \item{ylab}{(optional) String indicating the title for the primary (left) y-axis.}
 
 \item{ylab_sec}{(optional) String indicating the title for the secondary (right) y-axis.}
+
+\item{inverted}{Logical. Indicating the orientation of the \emph{P}-value function (\code{p_val}), S-value function (\code{s_val}) and confidence distribution (\code{cdf}). By default (i.e. \code{inverted = FALSE}) small \emph{P}-values are plotted at the bottom and large ones at the top. By setting \code{inverted = TRUE}, the y-axis is invertedd. Ignored for confidence densities.}
 }
 \value{
 \code{conf_dist} returns four data frames and a ggplot2-plot object: \code{res_frame} (contains parameter values, \emph{p}-values, s-values, confidence distribution and density, variable names and type of hypothesis), \code{conf_frame} (contains the used confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull for the corresponding null values), \code{point_est} (contains the mean, median and mode point estimates) and \code{plot} (a ggplot2-plot).
@@ -123,6 +125,31 @@ res <- conf_dist(
   , together = FALSE
   , plot_p_limit = 1 - 0.999
   , plot_counternull = FALSE
+)
+
+#=======================================================================================
+# P-value function for an odds ratio (logistic regression), plotted with inverted y-axis
+#=======================================================================================
+
+res <- conf_dist(
+  estimate = c(0.804037549)
+  , stderr = c(0.331819298)
+  , type = "logreg"
+  , plot_type = "p_val"
+  , n_values = 1e4L
+  , est_names = c("GPA")
+  , conf_level = c(0.95, 0.90, 0.80)
+  , null_values = c(log(1)) # null value on the log-odds scale
+  , trans = "exp"
+  , alternative = "two_sided"
+  , log_yaxis = FALSE
+  , cut_logyaxis = 0.05
+  , xlab = "Odds Ratio (GPA)"
+  , xlim = log(c(0.7, 5.2)) # axis limits on the log-odds scale
+  , together = FALSE
+  , plot_p_limit = 1 - 0.999
+  , plot_counternull = TRUE
+  , inverted = TRUE
 )
 
 #======================================================================================
@@ -217,5 +244,5 @@ Sullivan KM, Foster DA. Use of the confidence interval function. \emph{Epidemiol
 Xie Mg, Singh K. Confidence distribution, the frequentist distribution estimator of a parameter: A review. \emph{Internat Statist Rev.} 2013;81(1):3-39.
 }
 \seealso{
-\code{\link[concurve]{plotpint}}
+\code{\link[concurve]{ggconcurve}}
 }

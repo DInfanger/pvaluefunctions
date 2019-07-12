@@ -97,6 +97,7 @@ There is only one function needed to create the plots: `conf_dist()`. The functi
 * `xlab` (optional): String indicating the label of the x-axis.
 * `ylab` (optional): String containing a title for the primary (left) y-axis.
 * `ylab_sec` (optional): String containing a title for the secondary (right) y-axis.
+* `inverted` Logical. Indicating the orientation of the *P*-value function (`p_val`), S-value function (`s_val`) and confidence distribution (`cdf`). By default (i.e. `inverted = FALSE`) small *P*-values are plotted at the bottom and large ones at the top. By setting `inverted = TRUE`, the y-axis is invertedd. Ignored for confidence densities.
 
 ### Required arguments for different estimate types
 
