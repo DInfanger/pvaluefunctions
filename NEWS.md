@@ -5,6 +5,7 @@
   
   * Added option `inverted` which allows users to plot p-value functions, s-value functions and confidence distributions with the y-axis inverted.
   * Added a new example.
+  * Various bug fixes.
 
 1.3.0
 -------------
