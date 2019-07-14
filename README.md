@@ -3,22 +3,22 @@ pvaluefunctions
 
   - [*P*-value functions
     <img src="man/figures/logo2.svg" align="right" width="120" />](#p-value-functions)
-  - [Accompanying paper](#accompanying-paper)
-      - [Recreation of the figures in the
-        paper](#recreation-of-the-figures-in-the-paper)
-  - [Overview](#overview)
-  - [Installation](#installation)
-  - [Dependencies](#dependencies)
-      - [Important information\!](#important-information)
-  - [Examples](#examples)
-  - [References](#references)
-  - [Contact](#contact)
-  - [Session info](#session-info)
-  - [License](#license)
+      - [Accompanying paper](#accompanying-paper)
+          - [Recreation of the figures in the
+            paper](#recreation-of-the-figures-in-the-paper)
+      - [Overview](#overview)
+      - [Installation](#installation)
+      - [Dependencies](#dependencies)
+          - [Important information\!](#important-information)
+      - [Examples](#examples)
+      - [References](#references)
+      - [Contact](#contact)
+      - [Session info](#session-info)
+      - [License](#license)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-## *P*-value functions <img src="man/figures/logo2.svg" align="right" width="120" />
+# *P*-value functions <img src="man/figures/logo2.svg" align="right" width="120" />
 
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/pvaluefunctions)](https://cran.r-project.org/package=pvaluefunctions)
 [![downloads](https://cranlogs.r-pkg.org/badges/pvaluefunctions)](https://cran.r-project.org/package=pvaluefunctions)
