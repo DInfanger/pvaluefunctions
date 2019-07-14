@@ -4,7 +4,9 @@
 -------------
   
   * Added option `inverted` which allows users to plot p-value functions, s-value functions and confidence distributions with the y-axis inverted.
-  * Added a new example.
+  * Added a new example showing a *p*-value function for an odds ratio with an inverted y-axis (cf. Bender et al. 2005).
+  * The option `xlim` is now strictly enforced: Any null values that are outside of the specified x-axis-limits are not plotted and a corresponding message is printed out as information.
+  * Added two more examples in the vignette replicating Figure 1 and Figure 2 from Bender et al. (2005).
   * Various smaller bug fixes and improvements: Fixed some checks, fixed plotting vertical lines for null values.
 
 1.3.0
