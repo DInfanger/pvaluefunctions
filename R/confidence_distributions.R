@@ -24,12 +24,12 @@ if (getRversion() >= "2.15.1") {
 #' @param n_values (optional) Integer indicating the number of points that are used to generate the graphics. The higher this number, the higher the computation time and resolution.
 #' @param est_names (optional) String vector indicating the names of the estimate(s). Must be equal the number of estimates.
 #' @param conf_level (optional) Numerical vector indicating the confidence level(s). Bust be between 0 and 1.
-#' @param null_values (optional) Numerical vector indicating the null value(s) in the plot on the \emph{untransformed (original)} scale. For example: The null values for an odds ratio of 1 is 0 on the log-odds scale.
+#' @param null_values (optional) Numerical vector indicating the null value(s) in the plot on the \emph{untransformed (original)} scale. For example: The null values for an odds ratio of 1 is 0 on the log-odds scale. If x limits are specified with \code{xlim}, all null values outside of the specified x limits are ignored for plotting.
 #' @param trans (optional) String indicating the transformation function that will be applied to the estimates and confidence curves. For example: \code{"exp"} for an exponential transformation of the log-odds in logistic regression. Can be a custom function.
 #' @param alternative String indicating if the confidence level(s) are two-sided or one-sided. Must be one of the following: \code{two_sided}, \code{one_sided}.
 #' @param log_yaxis Logical. Indicating if a portion of the y-axis should be displayed on the logarithmic scale.
 #' @param cut_logyaxis Numerical value indicating the threshold below which the y-axis will be displayed logarithmically. Must lie between 0 and 1.
-#' @param xlim (optional) Optional numerical vector of length 2 indicating the limits of the x-axis on the \emph{untransformed} scale. For example: If you want to plot \emph{p}-value functions for odds ratios from logistic regressions, the limits have to be given on the log-odds scale. Null values that are outside of the specified limits are ignored.
+#' @param xlim (optional) Optional numerical vector of length 2 (x1, x2) indicating the limits of the x-axis on the \emph{untransformed} scale. For example: If you want to plot \emph{p}-value functions for odds ratios from logistic regressions, the limits have to be given on the log-odds scale. Note that x1 > x2 is allowed but then x2 will be the left limit and x1 the right limit (i.e. the limits are sorted before plotting). Null values (specified in \code{null_values}) that are outside of the specified limits are ignored.
 #' @param together Logical. Indicating if graphics for multiple estimates should be displayed together or on separate plots.
 #' @param nrow (optional) Integer greater than 0 indicating the number of rows when \code{together = FALSE} is specified for multiple estimates. Used in \code{facet_wrap} in ggplot2.
 #' @param ncol (optional) Integer greater than 0 indicating the number of columns when \code{together = FALSE} is specified for multiple estimates. Used in \code{facet_wrap} in ggplot2.
@@ -1063,8 +1063,13 @@ conf_dist <- function(
 
   if (!is.null(null_values)) {
 
-    # plot_limits <- do.call(trans, list(x = ggplot_build(p)$layout$panel_params[[1]]$x.range))
-    plot_limits <- ggplot_build(p)$layout$panel_params[[1]]$x.range
+    if (trans %in% "exp") { # If the x-axis was log-transformed, we need to backtransforme the plotting limits because they are given on the log-scale
+      plot_limits <- do.call(trans, list(x = ggplot_build(p)$layout$panel_params[[1]]$x.range))
+    } else {
+      plot_limits <- ggplot_build(p)$layout$panel_params[[1]]$x.range
+    }
+
+    # plot_limits <- xlim
 
     # Which null_values are outside of the plotting limits
 
@@ -1072,8 +1077,12 @@ conf_dist <- function(
 
     # Only add lines for those null values that are inside the plotting limits
 
-
     if (length(null_outside_plot) > 0) {
+
+      # Print a message that shows which null values were outside of the x-axis limits.
+
+      message(paste0("The following null values are outside of the specified x-axis range (xlim) and are not shown: ", paste(res$counternull_frame$null_value[null_outside_plot], collapse = ", ")))
+
       if ((length(null_outside_plot) < length(null_values))) { # There are some null-values to plot
 
         p <- p + geom_vline(data = res$counternull_frame, aes(xintercept = null_value), linetype = 1, size = 0.5)
