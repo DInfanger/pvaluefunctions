@@ -82,12 +82,12 @@ There is only one function needed to create the plots: `conf_dist()`. The functi
 * `n_values` (optional): Integer indicating the number of points that are used to generate the graphics. The higher this number, the higher the computation time and resolution.
 * `est_names` (optional): String vector indicating the names of the estimate(s). Must be equal the number of estimates.
 * `conf_level` (optional): Numerical vector indicating the confidence level(s). Bust be between 0 and 1.
-* `null_values` (optional): Numerical vector indicating the null value(s) in the plot on the *untransformed* scale. For example: If you want to plot odds ratios from logistic regressions, the `null_values` have to be given on the log-odds scale.
+* `null_values` (optional): Numerical vector indicating the null value(s) in the plot on the *untransformed* scale. For example: If you want to plot odds ratios from logistic regressions, the `null_values` have to be given on the log-odds scale. If x limits are specified with `xlim`, all null values outside of the specified x limits are ignored for plotting and a message is printed.
 * `trans` (optional): String indicating the transformation function that will be applied to the estimates and confidence curves. For example: `"exp"` for an exponential transformation of the log-odds in logistic regression. 
 * `alternative`: String indicating if the confidence level(s) are two-sided or one-sided. Must be one of the following: `two_sided`, `one_sided`.
 * `log_yaxis`: Logical. Indicating if a portion of the y-axis should be displayed on the logarithmic scale.
 * `cut_logyaxis`: Numerical value indicating the threshold below which the y-axis will be displayed logarithmically. Must lie between 0 and 1.
-* `xlim` (optional): Optional numerical vector of length 2 indicating the limits of the x-axis on the *untransformed* scale. For example: If you want to plot *p*-value functions for odds ratios from logistic regressions, the limits have to be given on the log-odds scale. Null values outside the limits will not be plotted.
+* `xlim` (optional) Optional numerical vector of length 2 (x1, x2) indicating the limits of the x-axis on the *untransformed* scale. For example: If you want to plot *p*-value functions for odds ratios from logistic regressions, the limits have to be given on the log-odds scale. Note that x1 > x2 is allowed but then x2 will be the left limit and x1 the right limit (i.e. the limits are sorted before plotting). Null values (specified in `null_values`) that are outside of the specified limits are ignored and a message is printed.
 * `together`: Logical. Indicating if graphics for multiple estimates should be displayed together or on separate plots.
 * `nrow`: (optional) Integer greater than 0 indicating the number of rows when `together = FALSE` is specified for multiple estimates. Used in `facet_wrap` in ggplot2.
 * `ncol`: (optional) Integer greater than 0 indicating the number of columns when `together = FALSE` is specified for multiple estimates. Used in `facet_wrap` in ggplot2.
@@ -531,7 +531,7 @@ rse_fun <- function(x){
 }
 
 rse_fun_inv <- function(x){
-  log(-(100)/(-100 + x))
+  log(-(100)/(x - 100))
 }
 
 res <- conf_dist(
@@ -542,7 +542,7 @@ res <- conf_dist(
   , n_values = 1e4L
   , est_names = c("RSE")
   , conf_level = c(0.95, 0.883, 0.5)
-  , null_values = rse_fun_inv(0)
+  , null_values = rse_fun_inv(c(0))
   , trans = "rse_fun"
   , alternative = "two_sided"
   , log_yaxis = FALSE
