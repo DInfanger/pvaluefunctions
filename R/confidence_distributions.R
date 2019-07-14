@@ -342,16 +342,17 @@ conf_dist <- function(
     stop("Provide only one estimate name for a proportion difference.")
   }
 
-  if (!is.null(xlim) && (length(xlim) != 2L)) {
-    stop("Please provide two limits for the x-axis.")
-  }
-
-  if (!is.null(xlim) && (any(is.na(xlim)) || any(!is.finite(xlim)))) {
-    stop("Missing or infinite values are not allowed for x-axis limits (xlim).")
-  }
-
   if (!is.null(xlim)) {
+    if ((length(xlim) != 2L)) {
+      stop("Please provide two limits for the x-axis.")
+    }
+
+    if (any(is.na(xlim)) || any(!is.finite(xlim))) {
+      stop("Missing or infinite values are not allowed for x-axis limits (xlim). Please provide exactly two finite x-axis limits.")
+    }
+
     xlim <- sort(xlim, decreasing = FALSE)
+
   }
 
   if ((length(type) == 0L) || (!type %in% c("ttest", "linreg", "gammareg", "general_t", "logreg", "poisreg", "coxreg", "general_z", "pearson", "spearman", "kendall", "var", "prop", "propdiff"))) {
