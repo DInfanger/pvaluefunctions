@@ -705,7 +705,7 @@ conf_dist <- function(
       res$counternull_frame$null_value <- do.call(trans, list(x = res$counternull_frame$null_value))
     }
 
-    xlim <- do.call(trans, list(x = xlim))
+    xlim <- sort(do.call(trans, list(x = xlim)), decreasing = FALSE)
 
   }
 
@@ -997,7 +997,6 @@ conf_dist <- function(
         )
       )
     }
-
   }
 
 
@@ -1059,16 +1058,29 @@ conf_dist <- function(
 
   if (!is.null(null_values)) {
 
-    plot_limits <- do.call(trans, list(x = ggplot_build(p)$layout$panel_params[[1]]$x.range))
+    # plot_limits <- do.call(trans, list(x = ggplot_build(p)$layout$panel_params[[1]]$x.range))
+    plot_limits <- ggplot_build(p)$layout$panel_params[[1]]$x.range
 
     # Which null_values are outside of the plotting limits
 
     null_outside_plot <- which((res$counternull_frame$null_value <= plot_limits[1]) | (res$counternull_frame$null_value >= plot_limits[2]))
 
     # Only add lines for those null values that are inside the plotting limits
-    if (length(null_outside_plot) > 0 && length(null_outside_plot) < length(null_values)) {
-      p <- p + geom_vline(data = res$counternull_frame, aes(xintercept = null_value), linetype = 1, size = 0.5)
-    } else if (length(null_outside_plot) == 0) {
+
+
+    if (length(null_outside_plot) > 0) {
+      if ((length(null_outside_plot) < length(null_values))) { # There are some null-values to plot
+
+        p <- p + geom_vline(data = res$counternull_frame, aes(xintercept = null_value), linetype = 1, size = 0.5)
+
+      } else if ((length(null_outside_plot) == length(null_values))) { # All null-values outside of plotting area
+
+        p <- p + geom_vline(data = res$counternull_frame[-null_outside_plot, ], aes(xintercept = null_value), linetype = 1, size = 0.5)
+
+      }
+
+    } else if (length(null_outside_plot) == 0) { # No null-values outside of plot
+
       p <- p + geom_vline(data = res$counternull_frame, aes(xintercept = null_value), linetype = 1, size = 0.5)
 
     }
@@ -1169,7 +1181,7 @@ conf_dist <- function(
   # Add points for the counternull if specified
   #-----------------------------------------------------------------------------
 
-  if (!is.null(null_values) && isTRUE(plot_counternull) && plot_type %in% c("p_val", "s_val") && !all(is.na(res$res_frame$counternull))) {
+  if (!is.null(null_values) && isTRUE(plot_counternull) && (plot_type %in% c("p_val", "s_val")) && !all(is.na(res$res_frame$counternull))) {
 
     if (isTRUE(together) & (length(estimate) >= 2)) {
 
