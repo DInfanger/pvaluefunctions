@@ -490,11 +490,11 @@ Here, I'm going to replicate **Figure 1** and **Figure 2** in Bender et al. (200
 # Define the transformation function for the relative survival effect
 
 rse_fun <- function(x){
-  100*(1 - exp(-x))
+  100*(1 - exp(x))
 }
 
 res <- conf_dist(
-  estimate = c(-log(0.72))
+  estimate = c(log(0.72))
   , stderr = (0.187618)
   , type = "coxreg"
   , plot_type = "p_val"
@@ -507,6 +507,7 @@ res <- conf_dist(
   , log_yaxis = FALSE
   , cut_logyaxis = 0.05
   , xlab = "Relative survival effect (1 - HR%)"
+  , xlim = c(0.2623643, -0.9162907)
   , together = FALSE
   , plot_p_limit = 1 - 0.999
   , plot_counternull = TRUE
