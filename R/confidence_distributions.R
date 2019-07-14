@@ -346,6 +346,10 @@ conf_dist <- function(
     stop("Please provide two limits for the x-axis.")
   }
 
+  if (!is.null(xlim) && (any(is.na(xlim)) || any(!is.finite(xlim)))) {
+    stop("Missing or infinite values are not allowed for x-axis limits (xlim).")
+  }
+
   if (!is.null(xlim)) {
     xlim <- sort(xlim, decreasing = FALSE)
   }
@@ -1007,16 +1011,25 @@ conf_dist <- function(
 
     # If y-axis is plotted on a log-scale, re-add the gray rectangle
     if (plot_type %in% c("p_val") && isTRUE(log_yaxis)) {
-      p <- p + annotate("rect", xmin=0, xmax=100, ymin=ifelse(alternative %in% "two_sided", plot_p_limit, plot_p_limit*2), ymax=cut_logyaxis, alpha=0.1, colour = grey(0.9))
+      p <- p + annotate(
+        "rect"
+        , xmin = 0
+        , xmax = 100
+        , ymin = ifelse(alternative %in% "two_sided", plot_p_limit, plot_p_limit*2)
+        , ymax = cut_logyaxis
+        , alpha = 0.1
+        , colour = grey(0.9)
+      )
     }
-
+  } else {
+    p <- p + scale_x_continuous(breaks = scales::pretty_breaks(n = 10))
   }
 
 
   # For the confidence distributions (plot_type == "cdf"), inverted y-axis if specified
 
   if (plot_type %in% "cdf" && isTRUE(inverted)) {
-    p <- p + scale_y_continuous(trans = "inverted")
+    p <- p + scale_y_continuous(trans = "reverse")
   }
 
   # Set x-limits now
