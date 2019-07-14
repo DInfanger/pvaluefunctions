@@ -531,7 +531,7 @@ res <- conf_dist(
   , plot_type = "cdf"
   , n_values = 1e4L
   , est_names = c("RSE")
-  , conf_level = c(0.95, 0.89, 0.5)
+  , conf_level = c(0.95, 0.883, 0.5)
   , null_values = c(0)
   , trans = "rse_fun"
   , alternative = "two_sided"
@@ -539,7 +539,7 @@ res <- conf_dist(
   , cut_logyaxis = 0.05
   , xlab = "Relative survival effect (1 - HR%)"
   , together = FALSE
-  , xlim = c(0, 0.9162907)
+  , xlim = c(-0.04879016, 0.9162907)
   , plot_p_limit = 1 - 0.999
   , plot_counternull = TRUE
   , inverted = TRUE
