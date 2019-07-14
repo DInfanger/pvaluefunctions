@@ -482,7 +482,70 @@ res <- conf_dist(
 res$plot + ggplot2::geom_vline(xintercept = as.numeric(res$point_est[1, 1:3]), linetype = 2, size = 1)
 ```
 
+### *P*-value function and confidence distribution for the relative survival effect (1 - HR%)
 
+Here, I'm going to replicate **Figure 1** and **Figure 2** in Bender et al. (2005). To do this, we first need to define the transformation that transforms the log-HR into the relative survival effect. By specifying `trans = rse_fun`, the values are automatically transformed and plotted. In addition, we will plot the *p*-value function inverted so that the cusp is located at the bottom. First the *p*-value function:
+
+```{r rse_pval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
+# Define the transformation function for the relative survival effect
+
+rse_fun <- function(x){
+  100*(1 - exp(-x))
+}
+
+res <- conf_dist(
+  estimate = c(-log(0.72))
+  , stderr = (0.187618)
+  , type = "coxreg"
+  , plot_type = "p_val"
+  , n_values = 1e4L
+  , est_names = c("RSE")
+  , conf_level = c(0.95, 0.8, 0.5)
+  , null_values = c(0)
+  , trans = "rse_fun"
+  , alternative = "two_sided"
+  , log_yaxis = FALSE
+  , cut_logyaxis = 0.05
+  , xlab = "Relative survival effect (1 - HR%)"
+  , together = FALSE
+  , plot_p_limit = 1 - 0.999
+  , plot_counternull = TRUE
+  , inverted = TRUE
+  , title = "Figure 1 in Bender et al. (2005)"
+)
+
+```
+Now the confidence distribution (Figure 2):
+```{r rse_cdf, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
+# Define the transformation function for the relative survival effect
+
+rse_fun <- function(x){
+  100*(1 - exp(-x))
+}
+
+res <- conf_dist(
+  estimate = c(-log(0.72))
+  , stderr = (0.187618)
+  , type = "coxreg"
+  , plot_type = "cdf"
+  , n_values = 1e4L
+  , est_names = c("RSE")
+  , conf_level = c(0.95, 0.89, 0.5)
+  , null_values = c(0)
+  , trans = "rse_fun"
+  , alternative = "two_sided"
+  , log_yaxis = FALSE
+  , cut_logyaxis = 0.05
+  , xlab = "Relative survival effect (1 - HR%)"
+  , together = FALSE
+  , xlim = c(0, 0.9162907)
+  , plot_p_limit = 1 - 0.999
+  , plot_counternull = TRUE
+  , inverted = TRUE
+  , title = "Figure 2 in Bender et al. (2005)"
+)
+
+```
 
 ## References
 
