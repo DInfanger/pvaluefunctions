@@ -999,6 +999,18 @@ conf_dist <- function(
     }
   }
 
+  # Y-axis formatting For confidence distributions and densities
+
+  if (plot_type %in% c("cdf", "pdf")) {
+
+    # For the confidence distributions (plot_type == "cdf"), inverted y-axis if specified
+
+    if (plot_type %in% c("cdf") && isTRUE(inverted)) {
+      p <- p + scale_y_continuous(trans = "reverse", breaks = scales::pretty_breaks(n = 10))
+    } else {
+      p <- p + scale_y_continuous(breaks = scales::pretty_breaks(n = 10))
+    }
+  }
 
   #-----------------------------------------------------------------------------
   # x-axis
@@ -1023,13 +1035,6 @@ conf_dist <- function(
     }
   } else {
     p <- p + scale_x_continuous(breaks = scales::pretty_breaks(n = 10))
-  }
-
-
-  # For the confidence distributions (plot_type == "cdf"), inverted y-axis if specified
-
-  if (plot_type %in% "cdf" && isTRUE(inverted)) {
-    p <- p + scale_y_continuous(trans = "reverse")
   }
 
   # Set x-limits now
