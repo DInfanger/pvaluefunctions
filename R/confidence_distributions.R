@@ -29,7 +29,7 @@ if (getRversion() >= "2.15.1") {
 #' @param alternative String indicating if the confidence level(s) are two-sided or one-sided. Must be one of the following: \code{two_sided}, \code{one_sided}.
 #' @param log_yaxis Logical. Indicating if a portion of the y-axis should be displayed on the logarithmic scale.
 #' @param cut_logyaxis Numerical value indicating the threshold below which the y-axis will be displayed logarithmically. Must lie between 0 and 1.
-#' @param xlim (optional) Optional numerical vector of length 2 (x1, x2) indicating the limits of the x-axis on the \emph{untransformed} scale. For example: If you want to plot \emph{p}-value functions for odds ratios from logistic regressions, the limits have to be given on the log-odds scale. Note that x1 > x2 is allowed but then x2 will be the left limit and x1 the right limit (i.e. the limits are sorted before plotting). Null values (specified in \code{null_values}) that are outside of the specified limits are ignored and a message is printed.
+#' @param xlim (optional) Optional numerical vector of length 2 (x1, x2) indicating the limits of the x-axis on the \emph{untransformed} scale if \code{trans} is not \code{identity}. The scale of the x-axis set by \code{x_scale} does not affect the x limits. For example: If you want to plot \emph{p}-value functions for odds ratios from logistic regressions, the limits have to be given on the log-odds scale if \code{trans = "exp"}. Note that x1 > x2 is allowed but then x2 will be the left limit and x1 the right limit (i.e. the limits are sorted before plotting). Null values (specified in \code{null_values}) that are outside of the specified limits are ignored and a message is printed.
 #' @param together Logical. Indicating if graphics for multiple estimates should be displayed together or on separate plots.
 #' @param nrow (optional) Integer greater than 0 indicating the number of rows when \code{together = FALSE} is specified for multiple estimates. Used in \code{facet_wrap} in ggplot2.
 #' @param ncol (optional) Integer greater than 0 indicating the number of columns when \code{together = FALSE} is specified for multiple estimates. Used in \code{facet_wrap} in ggplot2.
@@ -40,9 +40,9 @@ if (getRversion() >= "2.15.1") {
 #' @param ylab (optional) String indicating the title for the primary (left) y-axis.
 #' @param ylab_sec (optional) String indicating the title for the secondary (right) y-axis.
 #' @param inverted Logical. Indicating the orientation of the y-axis for the \emph{P}-value function (\code{p_val}), S-value function (\code{s_val}) and the confidence distribution (\code{cdf}). By default (i.e. \code{inverted = FALSE}) small \emph{P}-values are plotted at the bottom and large ones at the top so that the cusp of the \emph{P}-value function is a the top. By setting \code{inverted = TRUE}, the y-axis is inverted. Ignored for confidence densities.
-#' @param x_scale String indicating the scaling of the x-axis. The default is to scale the x-axis logarithmically if the transformation specified in \code{trans} is "exp" (exponential) and linearly otherwise. The option \code{linear} (can be abbreviated to \code{lin}) forces a linear scaling and the option \code{logarithm} (can be abbreviated to \code{log}) forces a logarithmic scaling.
+#' @param x_scale String indicating the scaling of the x-axis. The default is to scale the x-axis logarithmically if the transformation specified in \code{trans} is "exp" (exponential) and linearly otherwise. The option \code{linear} (can be abbreviated to \code{lin}) forces a linear scaling and the option \code{logarithm} (can be abbreviated to \code{log}) forces a logarithmic scaling, regardless what has been specified in \code{trans}.
 #'
-#' @return \code{conf_dist} returns four data frames and a ggplot2-plot object: \code{res_frame} (contains parameter values, \emph{p}-values, s-values, confidence distribution and density, variable names and type of hypothesis), \code{conf_frame} (contains the used confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull for the corresponding null values), \code{point_est} (contains the mean, median and mode point estimates) and \code{plot} (a ggplot2-plot).
+#' @return \code{conf_dist} returns four data frames and a ggplot2-plot object: \code{res_frame} (contains parameter values, \emph{p}-values (one- and two-sided), s-values, confidence distribution and density, variable names and type of hypothesis), \code{conf_frame} (contains the specified confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull and the corresponding null values), \code{point_est} (contains the mean, median and mode point estimates) and \code{plot} (a ggplot2-plot object).
 #' @references Bender R, Berg G, Zeeb H. Tutorial: using confidence curves in medical research. \emph{Biom J.} 2005;47(2):237-247.
 #'
 #' Bonett DG, Wright TA. Sample size requirements for estimating Pearson, Kendall and Spearman correlations. \emph{Psychometrika.} 2000;65(1):23-28.
@@ -89,6 +89,11 @@ if (getRversion() >= "2.15.1") {
 #'   , together = TRUE
 #'   , plot_p_limit = 1 - 0.9999
 #'   , plot_counternull = TRUE
+#'   , title = NULL
+#'   , ylab = NULL
+#'   , ylab_sec = NULL
+#'   , inverted = FALSE
+#'   , x_scale = "default"
 #' )
 #'
 #' #======================================================================================
@@ -115,6 +120,11 @@ if (getRversion() >= "2.15.1") {
 #'   , together = FALSE
 #'   , plot_p_limit = 1 - 0.999
 #'   , plot_counternull = FALSE
+#'   , title = NULL
+#'   , ylab = NULL
+#'   , ylab_sec = NULL
+#'   , inverted = FALSE
+#'   , x_scale = "default"
 #' )
 #'
 #' #=======================================================================================
@@ -140,6 +150,11 @@ if (getRversion() >= "2.15.1") {
 #'   , plot_p_limit = 1 - 0.999
 #'   , plot_counternull = TRUE
 #'   , inverted = TRUE
+#'   , title = NULL
+#'   , ylab = NULL
+#'   , ylab_sec = NULL
+#'   , inverted = FALSE
+#'   , x_scale = "default" # "default" means that x-axis is scaled logarithmically because the transformation is "exp"
 #' )
 #'
 #' #======================================================================================
@@ -162,6 +177,11 @@ if (getRversion() >= "2.15.1") {
 #'   , together = FALSE
 #'   , plot_p_limit = 1 - 0.9999
 #'   , plot_counternull = FALSE
+#'   , title = NULL
+#'   , ylab = NULL
+#'   , ylab_sec = NULL
+#'   , inverted = FALSE
+#'   , x_scale = "default"
 #' )
 #'
 #' #======================================================================================
@@ -194,7 +214,6 @@ if (getRversion() >= "2.15.1") {
 #'   , type = "general_z"
 #'   , plot_type = "p_val"
 #'   , n_values = 1e4L
-#'   # , est_names = c("Estimate")
 #'   , log_yaxis = FALSE
 #'   , cut_logyaxis = 0.05
 #'   , conf_level = c(0.95, 0.99)
@@ -202,11 +221,53 @@ if (getRversion() >= "2.15.1") {
 #'   , trans = "identity"
 #'   , alternative = "two_sided"
 #'   , xlab = "Difference of proportions"
-#'   # , xlim = c(-0.75, 0.5)
 #'   , together = FALSE
 #'   , plot_p_limit = 1 - 0.9999
 #'   , plot_counternull = FALSE
 #'   , title = "P-value function for the difference of two independent proportions"
+#'   , title = NULL
+#'   , ylab = NULL
+#'   , ylab_sec = NULL
+#'   , inverted = FALSE
+#'   , x_scale = "default"
+#' )
+#'
+#' #========================================================================================
+#' # P-value function and confidence distribution for the relative survival effect (1 - HR%)
+#' # Replicating Figure 1 in Bender et al. (2005)
+#' #========================================================================================
+#'
+#' # Define the transformation function and its inverse for the relative survival effect
+#'
+#' rse_fun <- function(x){ # x is the log-hazard ratio
+#'   100*(1 - exp(x))
+#' }
+#'
+#' rse_fun_inv <- function(x){
+#'   log(1 - (x/100))
+#' }
+#'
+#' res <- conf_dist(
+#'   estimate = log(0.72)
+#'   , stderr = 0.187618
+#'   , type = "coxreg"
+#'   , plot_type = "p_val"
+#'   , n_values = 1e4L
+#'   , est_names = c("RSE")
+#'   , conf_level = c(0.95, 0.8, 0.5)
+#'   , null_values = rse_fun_inv(0)
+#'   , trans = "rse_fun"
+#'   , alternative = "two_sided"
+#'   , log_yaxis = FALSE
+#'   , cut_logyaxis = 0.05
+#'   , xlab = "Relative survival effect (1 - HR%)"
+#'   , xlim = rse_fun_inv(c(-30, 60))
+#'   , together = FALSE
+#'   , plot_p_limit = 1 - 0.999
+#'   , plot_counternull = TRUE
+#'   , inverted = TRUE
+#'   , title = "Figure 1 in Bender et al. (2005)"
+#'   , x_scale = "default"
 #' )
 #'
 #' @seealso \code{\link[concurve]{ggconcurve}}

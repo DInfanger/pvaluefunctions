@@ -106,7 +106,6 @@ res <- conf_dist(
 )
 ```
 
-
 ```{r ttest_sval, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "70%", fig.align='left', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
 
 #-----------------------------------------------------------------------------
