@@ -1002,7 +1002,7 @@ conf_dist <- function(
       )
     } else {
       p <- p + scale_y_reverse(
-        limits = c(max(res$res_frame$s_val, na.rm = TRUE), .01)
+        limits = c(max(res$res_frame$s_val, na.rm = TRUE), 0)
         , breaks = scales::pretty_breaks(n = 10)(c(0, max(res$res_frame$s_val, na.rm = TRUE)))
         , sec.axis = sec_axis(
           trans = ~. + log2(2)
