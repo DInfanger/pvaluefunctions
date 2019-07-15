@@ -98,6 +98,7 @@ There is only one function needed to create the plots: `conf_dist()`. The functi
 * `ylab` (optional): String containing a title for the primary (left) y-axis.
 * `ylab_sec` (optional): String containing a title for the secondary (right) y-axis.
 * `inverted` Logical. Indicating the orientation of the *P*-value function (`p_val`), S-value function (`s_val`) and confidence distribution (`cdf`). By default (i.e. `inverted = FALSE`) small *P*-values are plotted at the bottom and large ones at the top. By setting `inverted = TRUE`, the y-axis is invertedd. Ignored for confidence densities.
+* `x_scale` String indicating the scaling of the x-axis. The default is to scale the x-axis logarithmically if the transformation specified in `trans` is "exp" (exponential) and linearly otherwise. The option `linear` (can be abbreviated to `lin`) forces a linear scaling and the option `logarithm` (can be abbreviated to `log`) forces a logarithmic scaling.
 
 ### Required arguments for different estimate types
 
@@ -195,6 +196,7 @@ res <- conf_dist(
 ```
 
 #### Confidence distribution
+
 ```{r linreg_single_cdf, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
 res <- conf_dist(
   estimate = c(-0.02143)
@@ -242,6 +244,7 @@ res <- conf_dist(
   , together = TRUE
   , plot_p_limit = 1 - 0.999
   , plot_counternull = FALSE
+  , inverted = FALSE
 )
 ```
 
@@ -340,6 +343,7 @@ res <- conf_dist(
   , together = FALSE
   , plot_p_limit = 1 - 0.999
   , plot_counternull = TRUE
+  , x_scale = "default"
 )
 ```
 
@@ -357,15 +361,16 @@ res <- conf_dist(
   # , est_names = c("")
   , conf_level = c(0.95, 0.90, 0.80)
   , null_values = c(0.5)
-  , trans = "identity"
+  , trans = "exp"
   , alternative = "two_sided"
   , log_yaxis = FALSE
   , cut_logyaxis = 0.05
   , xlab = "Proportion"
-  # , xlim = log(c(0.95, 1.2))
+  # , xlim = c(0.25, 0.65)
   , together = FALSE
   , plot_p_limit = 1 - 0.999
-  , plot_counternull = FALSE
+  , plot_counternull = TRUE
+  , x_scale = "default"
 )
 ```
 
@@ -448,7 +453,6 @@ res <- conf_dist(
 The confidence density of a variance estimate is skewed. This means that the mean, mode and median of the confidence density will not be identical, in general.
 
 ```{r variance_calcs, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', eval = TRUE, echo = TRUE, fig.show = "hide", dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
-
 # Simulate some data from a normal distribution
 
 set.seed(142857)
@@ -517,6 +521,7 @@ res <- conf_dist(
   , plot_counternull = TRUE
   , inverted = TRUE
   , title = "Figure 1 in Bender et al. (2005)"
+  , x_scale = "default"
 )
 
 rm(rse_fun, rse_fun_inv)

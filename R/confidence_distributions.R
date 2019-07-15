@@ -40,6 +40,7 @@ if (getRversion() >= "2.15.1") {
 #' @param ylab (optional) String indicating the title for the primary (left) y-axis.
 #' @param ylab_sec (optional) String indicating the title for the secondary (right) y-axis.
 #' @param inverted Logical. Indicating the orientation of the y-axis for the \emph{P}-value function (\code{p_val}), S-value function (\code{s_val}) and the confidence distribution (\code{cdf}). By default (i.e. \code{inverted = FALSE}) small \emph{P}-values are plotted at the bottom and large ones at the top so that the cusp of the \emph{P}-value function is a the top. By setting \code{inverted = TRUE}, the y-axis is inverted. Ignored for confidence densities.
+#' @param x_scale String indicating the scaling of the x-axis. The default is to scale the x-axis logarithmically if the transformation specified in \code{trans} is "exp" (exponential) and linearly otherwise. The option \code{linear} (can be abbreviated to \code{lin}) forces a linear scaling and the option \code{logarithm} (can be abbreviated to \code{log}) forces a logarithmic scaling.
 #'
 #' @return \code{conf_dist} returns four data frames and a ggplot2-plot object: \code{res_frame} (contains parameter values, \emph{p}-values, s-values, confidence distribution and density, variable names and type of hypothesis), \code{conf_frame} (contains the used confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull for the corresponding null values), \code{point_est} (contains the mean, median and mode point estimates) and \code{plot} (a ggplot2-plot).
 #' @references Bender R, Berg G, Zeeb H. Tutorial: using confidence curves in medical research. \emph{Biom J.} 2005;47(2):237-247.
@@ -241,6 +242,7 @@ conf_dist <- function(
   , ylab = NULL
   , ylab_sec = NULL
   , inverted = FALSE
+  , x_scale = "default"
 ) {
 
   #-----------------------------------------------------------------------------
@@ -266,6 +268,11 @@ conf_dist <- function(
   plot_type <- tolower(plot_type)
   plot_p_limit <- round(plot_p_limit, 10)
   cut_logyaxis <- round(cut_logyaxis, 10)
+  x_scale <- tolower(x_scale)
+
+  if (!x_scale %in% "default") {
+    x_scale <- substr(x_scale, 1, 3) # abbreviate the string to the first 3 letters if not "default"
+  }
 
   if (is.null(estimate)) {stop("Please provide an estimate.")}
 
@@ -290,13 +297,13 @@ conf_dist <- function(
     cat("\nTransformation changed to identity.\n")
   }
 
+  if (!trans %in% "identity" && length(find(trans)) == 0) {
+    stop(paste0("Function ", trans, " was not found."))
+  }
+
   if (!plot_type %in% c("p_val", "cdf", "pdf", "s_val")) {
     stop("plot_type must be one of: p_val, cdf, pdf or s_val.")
   }
-
-  # if (!trans %in% c("identity", "exp", "log", "sqrt")) {
-  #   stop("Only exponential, logarithmic and square root transformations are supported.")
-  # }
 
   if (type %in% c("prop", "propdiff") && (any(estimate < 0) || any(estimate > 1))) {
     stop("Please provide proportion estimates as decimals between 0 and 1.")
@@ -352,7 +359,6 @@ conf_dist <- function(
     }
 
     xlim <- sort(xlim, decreasing = FALSE)
-
   }
 
   if ((length(type) == 0L) || (!type %in% c("ttest", "linreg", "gammareg", "general_t", "logreg", "poisreg", "coxreg", "general_z", "pearson", "spearman", "kendall", "var", "prop", "propdiff"))) {
@@ -417,6 +423,14 @@ conf_dist <- function(
 
   if (!type %in% "propdiff" && isFALSE(together) && (length(estimate) > 1L) && !is.null(nrow) && !is.null(ncol) && (nrow*ncol < length(estimate))) {
     stop("nrow * ncol must be greater than or equal the number of estimates to be plotted if together = FALSE.")
+  }
+
+  if (!x_scale %in% c("default", "lin", "log")) {
+    stop("x_scale must be: default, linear (lin), logarithm (log).")
+  }
+
+  if ((trans %in% "exp") && (x_scale %in% "default")) {
+    x_scale <- "log"
   }
 
   #-----------------------------------------------------------------------------
@@ -1016,7 +1030,8 @@ conf_dist <- function(
   # x-axis
   #-----------------------------------------------------------------------------
 
-  if (trans %in% "exp") {
+  # if (trans %in% "exp") {
+  if (x_scale %in% "log") {
 
     # Plot x-axis on a log-scale (can't set "xlim" here, because then the gray area cannot be added!)
     p <- p + scale_x_continuous(trans = "log", breaks = scales::pretty_breaks(n = 10))
@@ -1063,13 +1078,13 @@ conf_dist <- function(
 
   if (!is.null(null_values)) {
 
-    if (trans %in% "exp") { # If the x-axis was log-transformed, we need to backtransforme the plotting limits because they are given on the log-scale
+    if (trans %in% "exp" && x_scale %in% "log") { # If the x-axis was log-transformed, we need to backtransforme the plotting limits because they are given on the log-scale
       plot_limits <- do.call(trans, list(x = ggplot_build(p)$layout$panel_params[[1]]$x.range))
+    } else if (!trans %in% "exp" && x_scale %in% "log") {
+      plot_limits <- exp(ggplot_build(p)$layout$panel_params[[1]]$x.range)
     } else {
       plot_limits <- ggplot_build(p)$layout$panel_params[[1]]$x.range
     }
-
-    # plot_limits <- xlim
 
     # Which null_values are outside of the plotting limits
 
@@ -1214,18 +1229,18 @@ conf_dist <- function(
   #-----------------------------------------------------------------------------
 
   p <- p + theme(
-    axis.title.y.left=element_text(colour = "black", size = 17, hjust = 0.5, margin = margin(0, 10, 0, 0)),
-    axis.title.y.right=element_text(colour = "black", size = 17, hjust = 0.5, margin = margin(0, 0, 0, 10)),
-    axis.title.x=element_text(colour = "black", size = 17),
-    # axis.title.y=element_text(size=15,hjust=0.5, vjust=1),
-    axis.text.x=element_text(colour = "black", size=15),
-    axis.text.y=element_text(colour = "black", size=15),
-    # plot.margin=unit(c(2,2,2,2,2),"line"),
-    panel.grid.minor.y = element_blank(),
-    # panel.grid.major = element_line(colour=grey(0.8), size=0.5),
-    plot.title = element_text(face = "bold"),
-    # strip.background=element_rect(fill="white")
-    strip.text.x=element_text(size=15)
+    axis.title.y.left=element_text(colour = "black", size = 17, hjust = 0.5, margin = margin(0, 10, 0, 0))
+    , axis.title.y.right=element_text(colour = "black", size = 17, hjust = 0.5, margin = margin(0, 0, 0, 10))
+    , axis.title.x=element_text(colour = "black", size = 17)
+    # , axis.title.y=element_text(size=15,hjust=0.5, vjust=1)
+    , axis.text.x=element_text(colour = "black", size=15)
+    , axis.text.y=element_text(colour = "black", size=15)
+    # , plot.margin=unit(c(2,2,2,2,2),"line")
+    , panel.grid.minor.y = element_blank()
+    # , panel.grid.major = element_line(colour=grey(0.8), size=0.5)
+    , plot.title = element_text(face = "bold")
+    # , strip.background=element_rect(fill="white")
+    , strip.text.x=element_text(size=15)
   )
 
   #-----------------------------------------------------------------------------
