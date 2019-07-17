@@ -46,7 +46,7 @@ conf_dist(estimate = NULL, n = NULL, df = NULL, stderr = NULL,
 
 \item{xlab}{(optional) String indicating the label of the x-axis.}
 
-\item{xlim}{(optional) Optional numerical vector of length 2 (x1, x2) indicating the limits of the x-axis on the \emph{untransformed} scale. For example: If you want to plot \emph{p}-value functions for odds ratios from logistic regressions, the limits have to be given on the log-odds scale. Note that x1 > x2 is allowed but then x2 will be the left limit and x1 the right limit (i.e. the limits are sorted before plotting). Null values (specified in \code{null_values}) that are outside of the specified limits are ignored and a message is printed.}
+\item{xlim}{(optional) Optional numerical vector of length 2 (x1, x2) indicating the limits of the x-axis on the \emph{untransformed} scale if \code{trans} is not \code{identity}. The scale of the x-axis set by \code{x_scale} does not affect the x limits. For example: If you want to plot \emph{p}-value functions for odds ratios from logistic regressions, the limits have to be given on the log-odds scale if \code{trans = "exp"}. Note that x1 > x2 is allowed but then x2 will be the left limit and x1 the right limit (i.e. the limits are sorted before plotting). Null values (specified in \code{null_values}) that are outside of the specified limits are ignored and a message is printed.}
 
 \item{together}{Logical. Indicating if graphics for multiple estimates should be displayed together or on separate plots.}
 
@@ -66,10 +66,10 @@ conf_dist(estimate = NULL, n = NULL, df = NULL, stderr = NULL,
 
 \item{inverted}{Logical. Indicating the orientation of the y-axis for the \emph{P}-value function (\code{p_val}), S-value function (\code{s_val}) and the confidence distribution (\code{cdf}). By default (i.e. \code{inverted = FALSE}) small \emph{P}-values are plotted at the bottom and large ones at the top so that the cusp of the \emph{P}-value function is a the top. By setting \code{inverted = TRUE}, the y-axis is inverted. Ignored for confidence densities.}
 
-\item{x_scale}{String indicating the scaling of the x-axis. The default is to scale the x-axis logarithmically if the transformation specified in \code{trans} is "exp" (exponential) and linearly otherwise. The option \code{linear} (can be abbreviated to \code{lin}) forces a linear scaling and the option \code{logarithm} (can be abbreviated to \code{log}) forces a logarithmic scaling.}
+\item{x_scale}{String indicating the scaling of the x-axis. The default is to scale the x-axis logarithmically if the transformation specified in \code{trans} is "exp" (exponential) and linearly otherwise. The option \code{linear} (can be abbreviated to \code{lin}) forces a linear scaling and the option \code{logarithm} (can be abbreviated to \code{log}) forces a logarithmic scaling, regardless what has been specified in \code{trans}.}
 }
 \value{
-\code{conf_dist} returns four data frames and a ggplot2-plot object: \code{res_frame} (contains parameter values, \emph{p}-values, s-values, confidence distribution and density, variable names and type of hypothesis), \code{conf_frame} (contains the used confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull for the corresponding null values), \code{point_est} (contains the mean, median and mode point estimates) and \code{plot} (a ggplot2-plot).
+\code{conf_dist} returns four data frames and a ggplot2-plot object: \code{res_frame} (contains parameter values, \emph{p}-values (one- and two-sided), s-values, confidence distribution and density, variable names and type of hypothesis), \code{conf_frame} (contains the specified confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull and the corresponding null values), \code{point_est} (contains the mean, median and mode point estimates) and \code{plot} (a ggplot2-plot object).
 }
 \description{
 The function \code{conf_dist} generates confidence distributions (cdf), confidence densities (pdf), Shannon suprisal (s-value) functions and \emph{p}-value functions for several commonly used estimates. In addition, counternulls (see Rosenthal et al. 1994) and point estimates are calculated.
@@ -101,6 +101,11 @@ res <- conf_dist(
   , together = TRUE
   , plot_p_limit = 1 - 0.9999
   , plot_counternull = TRUE
+  , title = NULL
+  , ylab = NULL
+  , ylab_sec = NULL
+  , inverted = FALSE
+  , x_scale = "default"
 )
 
 #======================================================================================
@@ -127,6 +132,11 @@ res <- conf_dist(
   , together = FALSE
   , plot_p_limit = 1 - 0.999
   , plot_counternull = FALSE
+  , title = NULL
+  , ylab = NULL
+  , ylab_sec = NULL
+  , inverted = FALSE
+  , x_scale = "default"
 )
 
 #=======================================================================================
@@ -152,6 +162,11 @@ res <- conf_dist(
   , plot_p_limit = 1 - 0.999
   , plot_counternull = TRUE
   , inverted = TRUE
+  , title = NULL
+  , ylab = NULL
+  , ylab_sec = NULL
+  , inverted = FALSE
+  , x_scale = "default" # "default" means that x-axis is scaled logarithmically because the transformation is "exp"
 )
 
 #======================================================================================
@@ -174,6 +189,11 @@ res <- conf_dist(
   , together = FALSE
   , plot_p_limit = 1 - 0.9999
   , plot_counternull = FALSE
+  , title = NULL
+  , ylab = NULL
+  , ylab_sec = NULL
+  , inverted = FALSE
+  , x_scale = "default"
 )
 
 #======================================================================================
@@ -206,7 +226,6 @@ res <- conf_dist(
   , type = "general_z"
   , plot_type = "p_val"
   , n_values = 1e4L
-  # , est_names = c("Estimate")
   , log_yaxis = FALSE
   , cut_logyaxis = 0.05
   , conf_level = c(0.95, 0.99)
@@ -214,11 +233,53 @@ res <- conf_dist(
   , trans = "identity"
   , alternative = "two_sided"
   , xlab = "Difference of proportions"
-  # , xlim = c(-0.75, 0.5)
   , together = FALSE
   , plot_p_limit = 1 - 0.9999
   , plot_counternull = FALSE
   , title = "P-value function for the difference of two independent proportions"
+  , title = NULL
+  , ylab = NULL
+  , ylab_sec = NULL
+  , inverted = FALSE
+  , x_scale = "default"
+)
+
+#========================================================================================
+# P-value function and confidence distribution for the relative survival effect (1 - HR\%)
+# Replicating Figure 1 in Bender et al. (2005)
+#========================================================================================
+
+# Define the transformation function and its inverse for the relative survival effect
+
+rse_fun <- function(x){ # x is the log-hazard ratio
+  100*(1 - exp(x))
+}
+
+rse_fun_inv <- function(x){
+  log(1 - (x/100))
+}
+
+res <- conf_dist(
+  estimate = log(0.72)
+  , stderr = 0.187618
+  , type = "coxreg"
+  , plot_type = "p_val"
+  , n_values = 1e4L
+  , est_names = c("RSE")
+  , conf_level = c(0.95, 0.8, 0.5)
+  , null_values = rse_fun_inv(0)
+  , trans = "rse_fun"
+  , alternative = "two_sided"
+  , log_yaxis = FALSE
+  , cut_logyaxis = 0.05
+  , xlab = "Relative survival effect (1 - HR\%)"
+  , xlim = rse_fun_inv(c(-30, 60))
+  , together = FALSE
+  , plot_p_limit = 1 - 0.999
+  , plot_counternull = TRUE
+  , inverted = TRUE
+  , title = "Figure 1 in Bender et al. (2005)"
+  , x_scale = "default"
 )
 
 }
