@@ -1019,7 +1019,7 @@ conf_dist <- function(
           annotate("rect", xmin=-Inf, xmax=Inf, ymin=ifelse(alternative %in% "two_sided", plot_p_limit, plot_p_limit*2), ymax=cut_logyaxis, alpha=0.1, colour = grey(0.9))
       }
 
-    } else if (log_yaxis == FALSE | (p_cutoff >= cut_logyaxis)) {
+    } else if (isFALSE(log_yaxis) | (p_cutoff >= cut_logyaxis)) {
 
       if (isTRUE(inverted)) {
         p <- p +
@@ -1239,7 +1239,7 @@ conf_dist <- function(
   # Facets for multiple estimates not plotted together
   #-----------------------------------------------------------------------------
 
-  if (length(estimate) >= 2 & together == FALSE) {
+  if (length(estimate) >= 2 & isFALSE(together)) {
     if (plot_type %in% "pdf"){
       p <- p + facet_wrap(vars(variable), nrow = nrow, ncol = ncol, scales = "free")
     } else {
