@@ -20,7 +20,7 @@ if (getRversion() >= "2.15.1") {
 #' @param stderr Numerical vector containing the standard error(s) of the estimate(s). Required for statistics based on the \emph{t}-distribution (e.g. linear regression) and the normal distribution (e.g. logistic regression). Must be equal the number of estimate(s).
 #' @param tstat Numerical vector contaiqning the \emph{t}-statistic(s). Required for \emph{t}-tests (means and mean differences). Must be equal the number of estimates.
 #' @param type String indicating the type of the estimate. Must be one of the following: \code{ttest}, \code{linreg}, \code{gammareg}, \code{general_t}, \code{logreg}, \code{poisreg}, \code{coxreg}, \code{general_z}, \code{pearson}, \code{spearman}, \code{kendall}, \code{var}, \code{prop}, \code{propdiff}.
-#' @param plot_type String indicating the type of plot. Must be one of the following: \code{cdf} (confidence distribution), \code{pdf} (confidence density), \code{p_val} (\emph{p}-value function), \code{s_val} (Surprisal value functions). For differences between independent proportions, only \emph{p}-value functions and Surprisal values are available.
+#' @param plot_type String indicating the type of plot. Must be one of the following: \code{cdf} (confidence distribution), \code{pdf} (confidence density), \code{p_val} (\emph{p}-value function, the default), \code{s_val} (Surprisal value functions). For differences between independent proportions, only \emph{p}-value functions and Surprisal values are available.
 #' @param n_values (optional) Integer indicating the number of points that are used to generate the graphics. The higher this number, the higher the computation time and resolution.
 #' @param est_names (optional) String vector indicating the names of the estimate(s). Must be equal the number of estimates.
 #' @param conf_level (optional) Numerical vector indicating the confidence level(s). Bust be between 0 and 1.
@@ -33,14 +33,14 @@ if (getRversion() >= "2.15.1") {
 #' @param together Logical. Indicating if graphics for multiple estimates should be displayed together or on separate plots.
 #' @param nrow (optional) Integer greater than 0 indicating the number of rows when \code{together = FALSE} is specified for multiple estimates. Used in \code{facet_wrap} in ggplot2.
 #' @param ncol (optional) Integer greater than 0 indicating the number of columns when \code{together = FALSE} is specified for multiple estimates. Used in \code{facet_wrap} in ggplot2.
-#' @param plot_p_limit Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale (i.e. \code{log_yaxis = TRUE}).
+#' @param plot_p_limit Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale (i.e. \code{log_yaxis = TRUE}). The default is to omit plotting \emph{p}-values smaller than 1 - 0.999 = 0.001.
 #' @param plot_counternull Logical. Indicating if the counternull should be plotted as a point. Only available for \emph{p}-value functions and s-value functions. Counternull values that are outside of the plotted functions are not shown.
 #' @param title (optional) String containing a title of the plot.
 #' @param xlab (optional) String indicating the label of the x-axis.
 #' @param ylab (optional) String indicating the title for the primary (left) y-axis.
 #' @param ylab_sec (optional) String indicating the title for the secondary (right) y-axis.
 #' @param inverted Logical. Indicating the orientation of the y-axis for the \emph{P}-value function (\code{p_val}), S-value function (\code{s_val}) and the confidence distribution (\code{cdf}). By default (i.e. \code{inverted = FALSE}) small \emph{P}-values are plotted at the bottom and large ones at the top so that the cusp of the \emph{P}-value function is a the top. By setting \code{inverted = TRUE}, the y-axis is inverted. Ignored for confidence densities.
-#' @param x_scale String indicating the scaling of the x-axis. The default is to scale the x-axis logarithmically if the transformation specified in \code{trans} is "exp" (exponential) and linearly otherwise. The option \code{linear} (can be abbreviated to \code{lin}) forces a linear scaling and the option \code{logarithm} (can be abbreviated to \code{log}) forces a logarithmic scaling, regardless what has been specified in \code{trans}.
+#' @param x_scale String indicating the scaling of the x-axis. The default is to scale the x-axis logarithmically if the transformation specified in \code{trans} is "exp" (exponential) and linearly otherwise. The option \code{linear} (can be abbreviated) forces a linear scaling and the option \code{logarithm} (can be abbreviated) forces a logarithmic scaling, regardless what has been specified in \code{trans}.
 #'
 #' @return \code{conf_dist} returns four data frames and a ggplot2-plot object: \code{res_frame} (contains parameter values, \emph{p}-values (one- and two-sided), s-values, confidence distribution and density, variable names and type of hypothesis), \code{conf_frame} (contains the specified confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull and the corresponding null values), \code{point_est} (contains the mean, median and mode point estimates) and \code{plot} (a ggplot2-plot object).
 #' @references Bender R, Berg G, Zeeb H. Tutorial: using confidence curves in medical research. \emph{Biom J.} 2005;47(2):237-247.
@@ -283,13 +283,13 @@ conf_dist <- function(
   , stderr= NULL
   , tstat = NULL
   , type = NULL
-  , plot_type = "p_val"
+  , plot_type = c("p_val", "s_val", "cdf", "pdf")
   , n_values = 1e4L
   , est_names = NULL
   , conf_level = NULL
   , null_values = NULL
   , trans = "identity"
-  , alternative = "two_sided"
+  , alternative = c("two_sided", "one_sided")
   , log_yaxis = FALSE
   , cut_logyaxis = 0.05
   , xlab = NULL
@@ -303,7 +303,7 @@ conf_dist <- function(
   , ylab = NULL
   , ylab_sec = NULL
   , inverted = FALSE
-  , x_scale = "default"
+  , x_scale = c("default", "linear", "logarithm")
 ) {
 
   #-----------------------------------------------------------------------------
@@ -321,19 +321,22 @@ conf_dist <- function(
   # Safety checks and clean ups
   #-----------------------------------------------------------------------------
 
-  alternative <- gsub("[-|.]", "_", alternative)
-  alternative <- tolower(alternative)
+  # alternative <- gsub("[-|.]", "_", alternative)
+  # alternative <- tolower(alternative)
+  alternative <- match.arg(alternative)
   trans <- tolower(trans)
   type <- tolower(type)
-  plot_type <- gsub("[-|.]", "_", plot_type)
-  plot_type <- tolower(plot_type)
+  # plot_type <- gsub("[-|.]", "_", plot_type)
+  # plot_type <- tolower(plot_type)
+  plot_type <- match.arg(plot_type)
   plot_p_limit <- round(plot_p_limit, 10)
   cut_logyaxis <- round(cut_logyaxis, 10)
-  x_scale <- tolower(x_scale)
+  # x_scale <- tolower(x_scale)
+  x_scale <- match.arg(x_scale)
 
-  if (!x_scale %in% "default") {
-    x_scale <- substr(x_scale, 1, 3) # abbreviate the string to the first 3 letters if not "default"
-  }
+  # if (!x_scale %in% "default") {
+  #   x_scale <- substr(x_scale, 1, 3) # abbreviate the string to the first 3 letters if not "default"
+  # }
 
   if (is.null(estimate)) {stop("Please provide an estimate.")}
 
@@ -362,9 +365,9 @@ conf_dist <- function(
     stop(paste0("Function ", trans, " was not found."))
   }
 
-  if (!plot_type %in% c("p_val", "cdf", "pdf", "s_val")) {
-    stop("plot_type must be one of: p_val, cdf, pdf or s_val.")
-  }
+  # if (!plot_type %in% c("p_val", "cdf", "pdf", "s_val")) {
+  #   stop("plot_type must be one of: p_val, cdf, pdf or s_val.")
+  # }
 
   if (type %in% c("prop", "propdiff") && (any(estimate < 0) || any(estimate > 1))) {
     stop("Please provide proportion estimates as decimals between 0 and 1.")
@@ -422,9 +425,9 @@ conf_dist <- function(
     xlim <- sort(xlim, decreasing = FALSE)
   }
 
-  if ((length(type) == 0L) || (!type %in% c("ttest", "linreg", "gammareg", "general_t", "logreg", "poisreg", "coxreg", "general_z", "pearson", "spearman", "kendall", "var", "prop", "propdiff"))) {
-    stop("\"type\" must be one of: ttest, linreg, gammareg, general_t, logreg, poisreg, coxreg, general_z, pearson, spearman, kendall, var, prop and propdiff.")
-  }
+  # if ((length(type) == 0L) || (!type %in% c("ttest", "linreg", "gammareg", "general_t", "logreg", "poisreg", "coxreg", "general_z", "pearson", "spearman", "kendall", "var", "prop", "propdiff"))) {
+  #   stop("\"type\" must be one of: ttest, linreg, gammareg, general_t, logreg, poisreg, coxreg, general_z, pearson, spearman, kendall, var, prop and propdiff.")
+  # }
 
   if (is.null(est_names)) {
     if (type %in% "propdiff") {
@@ -486,9 +489,9 @@ conf_dist <- function(
     stop("nrow * ncol must be greater than or equal the number of estimates to be plotted if together = FALSE.")
   }
 
-  if (!x_scale %in% c("default", "lin", "log")) {
-    stop("x_scale must be: default, linear (lin), logarithm (log).")
-  }
+  # if (!x_scale %in% c("default", "lin", "log")) {
+  #   stop("x_scale must be: default, linear (lin), logarithm (log).")
+  # }
 
   if ((trans %in% "exp") && (x_scale %in% "default")) {
     x_scale <- "log"

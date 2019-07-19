@@ -5,13 +5,15 @@
 \title{Create and Plot \emph{P}-Value Functions, S-Value Functions, Confidence Distributions and Confidence Densities}
 \usage{
 conf_dist(estimate = NULL, n = NULL, df = NULL, stderr = NULL,
-  tstat = NULL, type = NULL, plot_type = "p_val",
-  n_values = 10000L, est_names = NULL, conf_level = NULL,
-  null_values = NULL, trans = "identity", alternative = "two_sided",
-  log_yaxis = FALSE, cut_logyaxis = 0.05, xlab = NULL, xlim = NULL,
-  together = FALSE, nrow = NULL, ncol = NULL, plot_p_limit = (1 -
-  0.999), plot_counternull = FALSE, title = NULL, ylab = NULL,
-  ylab_sec = NULL, inverted = FALSE, x_scale = "default")
+  tstat = NULL, type = NULL, plot_type = c("p_val", "s_val", "cdf",
+  "pdf"), n_values = 10000L, est_names = NULL, conf_level = NULL,
+  null_values = NULL, trans = "identity",
+  alternative = c("two_sided", "one_sided"), log_yaxis = FALSE,
+  cut_logyaxis = 0.05, xlab = NULL, xlim = NULL, together = FALSE,
+  nrow = NULL, ncol = NULL, plot_p_limit = (1 - 0.999),
+  plot_counternull = FALSE, title = NULL, ylab = NULL,
+  ylab_sec = NULL, inverted = FALSE, x_scale = c("default", "linear",
+  "lin", "logarithm", "log"))
 }
 \arguments{
 \item{estimate}{Numerical vector containing the estimate(s).}

@@ -78,7 +78,7 @@ There is only one function needed to create the plots: `conf_dist()`. The functi
 * `stderr`: Numerical vector containing the standard error(s) of the estimate(s). Required for statistics based on the *t*-distribution (e.g. linear regression) and the normal distribution (e.g. logistic regression). Must be equal the number of estimate(s).
 * `tstat`: Numerical vector containing the *t*-statistic(s). Required for *t*-tests (means and mean differences). Must be equal the number of estimates. 
 * `type`: String indicating the type of the estimate. Must be one of the following: `ttest`, `linreg`, `gammareg`, `general_t`, `logreg`, `poisreg`, `coxreg`, `general_z`, `pearson`, `spearman`, `kendall`, `var`, `prop`, `propdiff`.
-* `plot_type`: String indicating the type of plot. Must be one of the following: `cdf` (confidence distribution), `pdf` (confidence density), `p_val` (*p*-value function), `s_val` (Surprisal). For differences between independent proportions, only *p*-value functions and Surprisal value functions are available.
+* `plot_type`: String indicating the type of plot. Must be one of the following: `cdf` (confidence distribution), `pdf` (confidence density), `p_val` (*p*-value function, the default), `s_val` (Surprisal). For differences between independent proportions, only *p*-value functions and Surprisal value functions are available.
 * `n_values` (optional): Integer indicating the number of points that are used to generate the graphics. The higher this number, the higher the computation time and resolution.
 * `est_names` (optional): String vector indicating the names of the estimate(s). Must be equal the number of estimates.
 * `conf_level` (optional): Numerical vector indicating the confidence level(s). Bust be between 0 and 1.
@@ -91,14 +91,14 @@ There is only one function needed to create the plots: `conf_dist()`. The functi
 * `together`: Logical. Indicating if graphics for multiple estimates should be displayed together or on separate plots.
 * `nrow`: (optional) Integer greater than 0 indicating the number of rows when `together = FALSE` is specified for multiple estimates. Used in `facet_wrap` in ggplot2.
 * `ncol`: (optional) Integer greater than 0 indicating the number of columns when `together = FALSE` is specified for multiple estimates. Used in `facet_wrap` in ggplot2.
-* `plot_p_limit`: Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale (i.e. `log_yaxis = TRUE`).
+* `plot_p_limit`: Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale (i.e. `log_yaxis = TRUE`). The default is to omit plotting *p*-values smaller than 1 - 0.999 = 0.001.
 * `plot_counternull`: Logical. Indicating if the counternull should be plotted as a point. Only available for \emph{p}-value functions and s-value functions. Counternull values that are outside of the plotted functions are not shown.
 * `title` (optional): String containing a title for the plot.
 * `xlab` (optional): String indicating the label of the x-axis.
 * `ylab` (optional): String containing a title for the primary (left) y-axis.
 * `ylab_sec` (optional): String containing a title for the secondary (right) y-axis.
 * `inverted` Logical. Indicating the orientation of the *P*-value function (`p_val`), S-value function (`s_val`) and confidence distribution (`cdf`). By default (i.e. `inverted = FALSE`) small *P*-values are plotted at the bottom and large ones at the top. By setting `inverted = TRUE`, the y-axis is invertedd. Ignored for confidence densities.
-* `x_scale` String indicating the scaling of the x-axis. The default is to scale the x-axis logarithmically if the transformation specified in `trans` is "exp" (exponential) and linearly otherwise. The option `linear` (can be abbreviated to `lin`) forces a linear scaling and the option `logarithm` (can be abbreviated to `log`) forces a logarithmic scaling.
+* `x_scale` String indicating the scaling of the x-axis. The default is to scale the x-axis logarithmically if the transformation specified in `trans` is "exp" (exponential) and linearly otherwise. The option `linear` (can be abbreviated) forces a linear scaling and the option `logarithm` (can be abbreviated) forces a logarithmic scaling.
 
 ### Required arguments for different estimate types
 
@@ -151,6 +151,7 @@ res <- conf_dist(
   , together = FALSE
   , plot_p_limit = 1 - 0.999
   , plot_counternull = TRUE
+  , x_scale = "line"
 )
 ```
 
