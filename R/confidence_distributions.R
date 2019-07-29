@@ -149,12 +149,11 @@ if (getRversion() >= "2.15.1") {
 #'   , together = FALSE
 #'   , plot_p_limit = 1 - 0.999
 #'   , plot_counternull = TRUE
-#'   , inverted = TRUE
 #'   , title = NULL
 #'   , ylab = NULL
 #'   , ylab_sec = NULL
-#'   , inverted = FALSE
-#'   , x_scale = "default" # "default" means that x-axis is scaled logarithmically because the transformation is "exp"
+#'   , inverted = TRUE
+#'   , x_scale = "default"
 #' )
 #'
 #' #======================================================================================
@@ -225,7 +224,6 @@ if (getRversion() >= "2.15.1") {
 #'   , plot_p_limit = 1 - 0.9999
 #'   , plot_counternull = FALSE
 #'   , title = "P-value function for the difference of two independent proportions"
-#'   , title = NULL
 #'   , ylab = NULL
 #'   , ylab_sec = NULL
 #'   , inverted = FALSE
@@ -274,6 +272,7 @@ if (getRversion() >= "2.15.1") {
 #'
 #' @import stats ggplot2 scales
 #' @importFrom grDevices grey
+#' @importFrom utils find
 #' @export
 
 conf_dist <- function(

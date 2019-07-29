@@ -13,7 +13,7 @@ conf_dist(estimate = NULL, n = NULL, df = NULL, stderr = NULL,
   nrow = NULL, ncol = NULL, plot_p_limit = (1 - 0.999),
   plot_counternull = FALSE, title = NULL, ylab = NULL,
   ylab_sec = NULL, inverted = FALSE, x_scale = c("default", "linear",
-  "lin", "logarithm", "log"))
+  "logarithm"))
 }
 \arguments{
 \item{estimate}{Numerical vector containing the estimate(s).}
@@ -28,7 +28,7 @@ conf_dist(estimate = NULL, n = NULL, df = NULL, stderr = NULL,
 
 \item{type}{String indicating the type of the estimate. Must be one of the following: \code{ttest}, \code{linreg}, \code{gammareg}, \code{general_t}, \code{logreg}, \code{poisreg}, \code{coxreg}, \code{general_z}, \code{pearson}, \code{spearman}, \code{kendall}, \code{var}, \code{prop}, \code{propdiff}.}
 
-\item{plot_type}{String indicating the type of plot. Must be one of the following: \code{cdf} (confidence distribution), \code{pdf} (confidence density), \code{p_val} (\emph{p}-value function), \code{s_val} (Surprisal value functions). For differences between independent proportions, only \emph{p}-value functions and Surprisal values are available.}
+\item{plot_type}{String indicating the type of plot. Must be one of the following: \code{cdf} (confidence distribution), \code{pdf} (confidence density), \code{p_val} (\emph{p}-value function, the default), \code{s_val} (Surprisal value functions). For differences between independent proportions, only \emph{p}-value functions and Surprisal values are available.}
 
 \item{n_values}{(optional) Integer indicating the number of points that are used to generate the graphics. The higher this number, the higher the computation time and resolution.}
 
@@ -56,7 +56,7 @@ conf_dist(estimate = NULL, n = NULL, df = NULL, stderr = NULL,
 
 \item{ncol}{(optional) Integer greater than 0 indicating the number of columns when \code{together = FALSE} is specified for multiple estimates. Used in \code{facet_wrap} in ggplot2.}
 
-\item{plot_p_limit}{Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale (i.e. \code{log_yaxis = TRUE}).}
+\item{plot_p_limit}{Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale (i.e. \code{log_yaxis = TRUE}). The default is to omit plotting \emph{p}-values smaller than 1 - 0.999 = 0.001.}
 
 \item{plot_counternull}{Logical. Indicating if the counternull should be plotted as a point. Only available for \emph{p}-value functions and s-value functions. Counternull values that are outside of the plotted functions are not shown.}
 
@@ -68,7 +68,7 @@ conf_dist(estimate = NULL, n = NULL, df = NULL, stderr = NULL,
 
 \item{inverted}{Logical. Indicating the orientation of the y-axis for the \emph{P}-value function (\code{p_val}), S-value function (\code{s_val}) and the confidence distribution (\code{cdf}). By default (i.e. \code{inverted = FALSE}) small \emph{P}-values are plotted at the bottom and large ones at the top so that the cusp of the \emph{P}-value function is a the top. By setting \code{inverted = TRUE}, the y-axis is inverted. Ignored for confidence densities.}
 
-\item{x_scale}{String indicating the scaling of the x-axis. The default is to scale the x-axis logarithmically if the transformation specified in \code{trans} is "exp" (exponential) and linearly otherwise. The option \code{linear} (can be abbreviated to \code{lin}) forces a linear scaling and the option \code{logarithm} (can be abbreviated to \code{log}) forces a logarithmic scaling, regardless what has been specified in \code{trans}.}
+\item{x_scale}{String indicating the scaling of the x-axis. The default is to scale the x-axis logarithmically if the transformation specified in \code{trans} is "exp" (exponential) and linearly otherwise. The option \code{linear} (can be abbreviated) forces a linear scaling and the option \code{logarithm} (can be abbreviated) forces a logarithmic scaling, regardless what has been specified in \code{trans}.}
 }
 \value{
 \code{conf_dist} returns four data frames and a ggplot2-plot object: \code{res_frame} (contains parameter values, \emph{p}-values (one- and two-sided), s-values, confidence distribution and density, variable names and type of hypothesis), \code{conf_frame} (contains the specified confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull and the corresponding null values), \code{point_est} (contains the mean, median and mode point estimates) and \code{plot} (a ggplot2-plot object).
@@ -163,12 +163,11 @@ res <- conf_dist(
   , together = FALSE
   , plot_p_limit = 1 - 0.999
   , plot_counternull = TRUE
-  , inverted = TRUE
   , title = NULL
   , ylab = NULL
   , ylab_sec = NULL
-  , inverted = FALSE
-  , x_scale = "default" # "default" means that x-axis is scaled logarithmically because the transformation is "exp"
+  , inverted = TRUE
+  , x_scale = "default"
 )
 
 #======================================================================================
@@ -239,7 +238,6 @@ res <- conf_dist(
   , plot_p_limit = 1 - 0.9999
   , plot_counternull = FALSE
   , title = "P-value function for the difference of two independent proportions"
-  , title = NULL
   , ylab = NULL
   , ylab_sec = NULL
   , inverted = FALSE
