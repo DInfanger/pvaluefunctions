@@ -1,5 +1,7 @@
 ## Resubmission
-This is an updated version of the package (version 1.4.0).
+This is a resubmission. In this version I have:
+
+* Converted CRAN URL in README to canonical form.
 
 ## Test environments
 * Local Windows 10 install, R 3.6.1

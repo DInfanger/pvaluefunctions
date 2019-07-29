@@ -71,7 +71,7 @@ This warning will be deleted upon the release of a new version of ggplot2 that f
 
 ## Examples
 
-For more examples and code, see the [vignette](https://cran.r-project.org/web/packages/pvaluefunctions/vignettes/pvaluefun.html).
+For more examples and code, see the [vignette](https://CRAN.R-project.org/package=pvaluefunctions/vignettes/pvaluefun.html).
 
 ```{r ttest_pval, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "70%", fig.align='left', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
 
