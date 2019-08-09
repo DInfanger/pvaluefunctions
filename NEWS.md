@@ -1,5 +1,12 @@
 ## NEWS and changes for the pvaluefunctions package
 
+
+1.5.0
+-------------
+
+  * TBA
+  
+
 1.4.0
 -------------
   
