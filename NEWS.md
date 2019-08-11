@@ -4,7 +4,8 @@
 1.5.0
 -------------
 
-  * TBA
+  * Vignette, README and DESCRIPTION updated to reflect that the newest version of ggplot2 (3.2.1) fixes the bug with `sec_axis`.
+  * 
   
 
 1.4.0

@@ -9,7 +9,6 @@ pvaluefunctions
       - [Overview](#overview)
       - [Installation](#installation)
       - [Dependencies](#dependencies)
-          - [Important information\!](#important-information)
       - [Examples](#examples)
       - [References](#references)
       - [Contact](#contact)
@@ -62,31 +61,22 @@ using `library(pvaluefunctions)`.
 The function depends on the following R packages, which need to be
 installed beforehand:
 
-  - ggplot2
+  - ggplot2 (at least version 3.2.1)
   - scales
   - zipfR
 
 Use the command `install.packages(c("ggplot2", "scales", "zipfR"))` in R
 to install those packages.
 
-### Important information\!
+<!-- ### Important information! -->
 
-The newest version of [ggplot2
-(3.1.1)](https://CRAN.R-project.org/package=ggplot2) has a
-[bug](https://github.com/tidyverse/ggplot2/issues/2978) in `sec_axis`
-that will lead to the secondary y-axis being labelled wrongly.
+<!-- The newest version of [ggplot2 (3.1.1)](https://CRAN.R-project.org/package=ggplot2) has a [bug](https://github.com/tidyverse/ggplot2/issues/2978) in `sec_axis` that will lead to the secondary y-axis being labelled wrongly. -->
 
-It is therefore recommended that you install the developmental version
-of ggplot2 until the bug has been fixed. You can install the
-developmental version using the following command (after installing the
-[`devtools`](https://CRAN.R-project.org/package=devtools) package):
-`devtools::install_github("tidyverse/ggplot2")`
+<!-- It is therefore recommended that you install the developmental version of ggplot2 until the bug has been fixed. You can install the developmental version using the following command (after installing the [`devtools`](https://CRAN.R-project.org/package=devtools) package): `devtools::install_github("tidyverse/ggplot2")` -->
 
-To see what version of ggplot2 has been used to create the plots on this
-page, see the [Session info](#session-info).
+<!-- To see what version of ggplot2 has been used to create the plots on this page, see the [Session info]. -->
 
-This warning will be deleted upon the release of a new version of
-ggplot2 that fixes the bug.
+<!-- This warning will be deleted upon the release of a new version of ggplot2 that fixes the bug. -->
 
 ## Examples
 
@@ -113,7 +103,7 @@ Misleading Criticisms of *P*-Values and Their Resolution with
 
 Infanger D, Schmidt-Trucksäss A. (2019): *P* value functions: An
 underused method to present research results and to promote quantitative
-reasoning. *Stat Med,* 1-9. doi: 10.1002/sim.8293.
+reasoning. *Stat Med,* 38, 4189-4197. doi: 10.1002/sim.8293.
 
 Poole C. (1987a): Beyond the confidence interval. *Am J Public Health.*
 77(2): 195-9.
@@ -160,23 +150,23 @@ distribution estimator of a parameter: A review. *Internat Statist Rev.*
     #> [1] pvaluefunctions_1.4.0
     #> 
     #> loaded via a namespace (and not attached):
-    #>  [1] Rcpp_1.0.2         pillar_1.4.2       compiler_3.6.1    
-    #>  [4] prettyunits_1.0.2  remotes_2.1.0      tools_3.6.1       
-    #>  [7] testthat_2.2.1     digest_0.6.20      pkgbuild_1.0.3    
-    #> [10] pkgload_1.0.2      tibble_2.1.3       gtable_0.3.0      
-    #> [13] evaluate_0.14      memoise_1.1.0      pkgconfig_2.0.2   
-    #> [16] rlang_0.4.0        cli_1.1.0          curl_4.0          
-    #> [19] yaml_2.2.0         xfun_0.8           dplyr_0.8.3       
-    #> [22] withr_2.1.2        stringr_1.4.0      knitr_1.23        
-    #> [25] desc_1.2.0         fs_1.3.1           devtools_2.1.0    
-    #> [28] tidyselect_0.2.5   rprojroot_1.3-2    grid_3.6.1        
-    #> [31] glue_1.3.1         R6_2.4.0           processx_3.4.1    
-    #> [34] rmarkdown_1.14     sessioninfo_1.1.1  purrr_0.3.2       
-    #> [37] callr_3.3.1        ggplot2_3.2.0.9000 magrittr_1.5      
-    #> [40] scales_1.0.0       backports_1.1.4    ps_1.3.0          
-    #> [43] htmltools_0.3.6    usethis_1.5.1      assertthat_0.2.1  
-    #> [46] colorspace_1.4-1   stringi_1.4.3      lazyeval_0.2.2    
-    #> [49] munsell_0.5.0      crayon_1.3.4
+    #>  [1] Rcpp_1.0.2        pillar_1.4.2      compiler_3.6.1   
+    #>  [4] prettyunits_1.0.2 remotes_2.1.0     tools_3.6.1      
+    #>  [7] testthat_2.2.1    digest_0.6.20     pkgbuild_1.0.4   
+    #> [10] pkgload_1.0.2     tibble_2.1.3      gtable_0.3.0     
+    #> [13] evaluate_0.14     memoise_1.1.0     pkgconfig_2.0.2  
+    #> [16] rlang_0.4.0       cli_1.1.0         curl_4.0         
+    #> [19] yaml_2.2.0        xfun_0.8          dplyr_0.8.3      
+    #> [22] withr_2.1.2       stringr_1.4.0     knitr_1.24       
+    #> [25] desc_1.2.0        fs_1.3.1          devtools_2.1.0   
+    #> [28] tidyselect_0.2.5  rprojroot_1.3-2   grid_3.6.1       
+    #> [31] glue_1.3.1        R6_2.4.0          processx_3.4.1   
+    #> [34] rmarkdown_1.14    sessioninfo_1.1.1 purrr_0.3.2      
+    #> [37] callr_3.3.1       ggplot2_3.2.1     magrittr_1.5     
+    #> [40] scales_1.0.0      backports_1.1.4   ps_1.3.0         
+    #> [43] htmltools_0.3.6   usethis_1.5.1     assertthat_0.2.1 
+    #> [46] colorspace_1.4-1  stringi_1.4.3     lazyeval_0.2.2   
+    #> [49] munsell_0.5.0     crayon_1.3.4
 
 ## License
 
