@@ -27,7 +27,7 @@ knitr::opts_chunk$set(
 
 We published an [accompanying paper](https://doi.org/10.1002/sim.8293) to illustrate the use of *p*-value functions:
 
-Infanger D, Schmidt-Trucksäss A. (2019): *P* value functions: An underused method to present research results and to promote quantitative reasoning. *Statistics in Medicine,* 1-9. doi: 10.1002/sim.8293.
+Infanger D, Schmidt-Trucksäss A. (2019): *P* value functions: An underused method to present research results and to promote quantitative reasoning. *Statistics in Medicine.* **38**: 4189-4197. doi: 10.1002/sim.8293.
 
 ### Recreation of the figures in the paper
 

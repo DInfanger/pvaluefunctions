@@ -32,7 +32,8 @@ to illustrate the use of *p*-value functions:
 
 Infanger D, Schmidt-Trucksäss A. (2019): *P* value functions: An
 underused method to present research results and to promote quantitative
-reasoning. *Statistics in Medicine,* 1-9. doi: 10.1002/sim.8293.
+reasoning. *Statistics in Medicine.* **38**: 4189-4197. doi:
+10.1002/sim.8293.
 
 ### Recreation of the figures in the paper
 
@@ -82,6 +83,41 @@ to install those packages.
 
 For more examples and code, see the
 [vignette](https://CRAN.R-project.org/package=pvaluefunctions/vignettes/pvaluefun.html).
+
+    #> 
+    #>   
+      
+      
+       checking for file 'C:\Users\denis\AppData\Local\Temp\RtmpqwHvfR\remotes1070276c521\DInfanger-pvaluefunctions-e963001/DESCRIPTION' ...
+      
+    v  checking for file 'C:\Users\denis\AppData\Local\Temp\RtmpqwHvfR\remotes1070276c521\DInfanger-pvaluefunctions-e963001/DESCRIPTION' (491ms)
+    #> 
+      
+      
+      
+    -  preparing 'pvaluefunctions':
+    #>    checking DESCRIPTION meta-information ...
+      
+       checking DESCRIPTION meta-information ... 
+      
+    v  checking DESCRIPTION meta-information
+    #> 
+      
+      
+      
+    -  checking for LF line-endings in source and make files and shell scripts
+    #> 
+      
+    -  checking for empty or unneeded directories
+    #> 
+      
+      
+      
+    -  building 'pvaluefunctions_1.5.0.tar.gz'
+    #> 
+      
+       
+    #> 
 
 <img src="man/figures/README-ttest_pval-1.png" width="70%" style="display: block; margin: auto auto auto 0;" />
 
@@ -147,7 +183,7 @@ distribution estimator of a parameter: A review. *Internat Statist Rev.*
     #> [1] stats     graphics  grDevices utils     datasets  methods   base     
     #> 
     #> other attached packages:
-    #> [1] pvaluefunctions_1.4.0
+    #> [1] pvaluefunctions_1.5.0
     #> 
     #> loaded via a namespace (and not attached):
     #>  [1] Rcpp_1.0.2        pillar_1.4.2      compiler_3.6.1   
