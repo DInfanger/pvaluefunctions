@@ -84,41 +84,6 @@ to install those packages.
 For more examples and code, see the
 [vignette](https://CRAN.R-project.org/package=pvaluefunctions/vignettes/pvaluefun.html).
 
-    #> 
-    #>   
-      
-      
-       checking for file 'C:\Users\denis\AppData\Local\Temp\RtmpqwHvfR\remotes1070276c521\DInfanger-pvaluefunctions-e963001/DESCRIPTION' ...
-      
-    v  checking for file 'C:\Users\denis\AppData\Local\Temp\RtmpqwHvfR\remotes1070276c521\DInfanger-pvaluefunctions-e963001/DESCRIPTION' (491ms)
-    #> 
-      
-      
-      
-    -  preparing 'pvaluefunctions':
-    #>    checking DESCRIPTION meta-information ...
-      
-       checking DESCRIPTION meta-information ... 
-      
-    v  checking DESCRIPTION meta-information
-    #> 
-      
-      
-      
-    -  checking for LF line-endings in source and make files and shell scripts
-    #> 
-      
-    -  checking for empty or unneeded directories
-    #> 
-      
-      
-      
-    -  building 'pvaluefunctions_1.5.0.tar.gz'
-    #> 
-      
-       
-    #> 
-
 <img src="man/figures/README-ttest_pval-1.png" width="70%" style="display: block; margin: auto auto auto 0;" />
 
 <img src="man/figures/README-ttest_sval-1.png" width="70%" style="display: block; margin: auto auto auto 0;" />
