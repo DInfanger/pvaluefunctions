@@ -41,8 +41,9 @@ if (getRversion() >= "2.15.1") {
 #' @param ylab_sec (optional) String indicating the title for the secondary (right) y-axis.
 #' @param inverted Logical. Indicating the orientation of the y-axis for the \emph{P}-value function (\code{p_val}), S-value function (\code{s_val}) and the confidence distribution (\code{cdf}). By default (i.e. \code{inverted = FALSE}) small \emph{P}-values are plotted at the bottom and large ones at the top so that the cusp of the \emph{P}-value function is a the top. By setting \code{inverted = TRUE}, the y-axis is inverted. Ignored for confidence densities.
 #' @param x_scale String indicating the scaling of the x-axis. The default is to scale the x-axis logarithmically if the transformation specified in \code{trans} is "exp" (exponential) and linearly otherwise. The option \code{linear} (can be abbreviated) forces a linear scaling and the option \code{logarithm} (can be abbreviated) forces a logarithmic scaling, regardless what has been specified in \code{trans}.
-#'
-#' @return \code{conf_dist} returns four data frames and a ggplot2-plot object: \code{res_frame} (contains parameter values, \emph{p}-values (one- and two-sided), s-values, confidence distribution and density, variable names and type of hypothesis), \code{conf_frame} (contains the specified confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull and the corresponding null values), \code{point_est} (contains the mean, median and mode point estimates) and \code{plot} (a ggplot2-plot object).
+#' @param plot Logical. Should a plot be created (\code{TRUE}, the default) or not (\code{FALSE}). \code{FALSE} can be useful if users want to create their own plots using the returned data from the function. If \code{FALSE}, no ggplot2 object is returned.
+
+#' @return \code{conf_dist} returns four data frames and if \code{plot = TRUE} was specified, a ggplot2-plot object: \code{res_frame} (contains parameter values (e.g. mean differences, odds ratios etc.), \emph{p}-values (one- and two-sided), s-values, confidence distributions and densities, variable names and type of hypothesis), \code{conf_frame} (contains the specified confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull and the corresponding null values), \code{point_est} (contains the mean, median and mode point estimates) and if \code{plot = TRUE} was specified, \code{plot} (a ggplot2 object).
 #' @references Bender R, Berg G, Zeeb H. Tutorial: using confidence curves in medical research. \emph{Biom J.} 2005;47(2):237-247.
 #'
 #' Bonett DG, Wright TA. Sample size requirements for estimating Pearson, Kendall and Spearman correlations. \emph{Psychometrika.} 2000;65(1):23-28.
@@ -94,6 +95,7 @@ if (getRversion() >= "2.15.1") {
 #'   , ylab_sec = NULL
 #'   , inverted = FALSE
 #'   , x_scale = "default"
+#'   , plot = TRUE
 #' )
 #'
 #' #======================================================================================
@@ -125,6 +127,7 @@ if (getRversion() >= "2.15.1") {
 #'   , ylab_sec = NULL
 #'   , inverted = FALSE
 #'   , x_scale = "default"
+#'   , plot = TRUE
 #' )
 #'
 #' #=======================================================================================
@@ -154,6 +157,7 @@ if (getRversion() >= "2.15.1") {
 #'   , ylab_sec = NULL
 #'   , inverted = TRUE
 #'   , x_scale = "default"
+#'   , plot = TRUE
 #' )
 #'
 #' #======================================================================================
@@ -181,6 +185,7 @@ if (getRversion() >= "2.15.1") {
 #'   , ylab_sec = NULL
 #'   , inverted = FALSE
 #'   , x_scale = "default"
+#'   , plot = TRUE
 #' )
 #'
 #' #======================================================================================
@@ -228,6 +233,7 @@ if (getRversion() >= "2.15.1") {
 #'   , ylab_sec = NULL
 #'   , inverted = FALSE
 #'   , x_scale = "default"
+#'   , plot = TRUE
 #' )
 #'
 #' #========================================================================================
@@ -266,6 +272,7 @@ if (getRversion() >= "2.15.1") {
 #'   , inverted = TRUE
 #'   , title = "Figure 1 in Bender et al. (2005)"
 #'   , x_scale = "default"
+#'   , plot = TRUE
 #' )
 #'
 #' @seealso \code{\link[concurve]{ggconcurve}}
@@ -303,6 +310,7 @@ conf_dist <- function(
   , ylab_sec = NULL
   , inverted = FALSE
   , x_scale = c("default", "linear", "logarithm")
+  , plot = TRUE
 ) {
 
   #-----------------------------------------------------------------------------
@@ -851,6 +859,8 @@ conf_dist <- function(
   # Plot using ggplot2
   #-----------------------------------------------------------------------------
 
+
+
   # Create custom y-axis scale (mixed linear and logarithmic)
 
   # Transform cutoff for log-y-axis if applicable
@@ -1314,9 +1324,11 @@ conf_dist <- function(
     p <- p + ggtitle(title)
   }
 
-  res$plot <- p
-
-  suppressWarnings(print(p))
+  # Only print and return the plot object if requested
+  if (isTRUE(plot)) {
+    res$plot <- p
+    suppressWarnings(print(p))
+  }
 
   return(res)
 

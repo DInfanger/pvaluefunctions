@@ -4,16 +4,36 @@
 \alias{conf_dist}
 \title{Create and Plot \emph{P}-Value Functions, S-Value Functions, Confidence Distributions and Confidence Densities}
 \usage{
-conf_dist(estimate = NULL, n = NULL, df = NULL, stderr = NULL,
-  tstat = NULL, type = NULL, plot_type = c("p_val", "s_val", "cdf",
-  "pdf"), n_values = 10000L, est_names = NULL, conf_level = NULL,
-  null_values = NULL, trans = "identity",
-  alternative = c("two_sided", "one_sided"), log_yaxis = FALSE,
-  cut_logyaxis = 0.05, xlab = NULL, xlim = NULL, together = FALSE,
-  nrow = NULL, ncol = NULL, plot_p_limit = (1 - 0.999),
-  plot_counternull = FALSE, title = NULL, ylab = NULL,
-  ylab_sec = NULL, inverted = FALSE, x_scale = c("default", "linear",
-  "logarithm"))
+conf_dist(
+  estimate = NULL,
+  n = NULL,
+  df = NULL,
+  stderr = NULL,
+  tstat = NULL,
+  type = NULL,
+  plot_type = c("p_val", "s_val", "cdf", "pdf"),
+  n_values = 10000L,
+  est_names = NULL,
+  conf_level = NULL,
+  null_values = NULL,
+  trans = "identity",
+  alternative = c("two_sided", "one_sided"),
+  log_yaxis = FALSE,
+  cut_logyaxis = 0.05,
+  xlab = NULL,
+  xlim = NULL,
+  together = FALSE,
+  nrow = NULL,
+  ncol = NULL,
+  plot_p_limit = (1 - 0.999),
+  plot_counternull = FALSE,
+  title = NULL,
+  ylab = NULL,
+  ylab_sec = NULL,
+  inverted = FALSE,
+  x_scale = c("default", "linear", "logarithm"),
+  plot = TRUE
+)
 }
 \arguments{
 \item{estimate}{Numerical vector containing the estimate(s).}
@@ -69,9 +89,11 @@ conf_dist(estimate = NULL, n = NULL, df = NULL, stderr = NULL,
 \item{inverted}{Logical. Indicating the orientation of the y-axis for the \emph{P}-value function (\code{p_val}), S-value function (\code{s_val}) and the confidence distribution (\code{cdf}). By default (i.e. \code{inverted = FALSE}) small \emph{P}-values are plotted at the bottom and large ones at the top so that the cusp of the \emph{P}-value function is a the top. By setting \code{inverted = TRUE}, the y-axis is inverted. Ignored for confidence densities.}
 
 \item{x_scale}{String indicating the scaling of the x-axis. The default is to scale the x-axis logarithmically if the transformation specified in \code{trans} is "exp" (exponential) and linearly otherwise. The option \code{linear} (can be abbreviated) forces a linear scaling and the option \code{logarithm} (can be abbreviated) forces a logarithmic scaling, regardless what has been specified in \code{trans}.}
+
+\item{plot}{Logical. Should a plot be created (\code{TRUE}, the default) or not (\code{FALSE}). \code{FALSE} can be useful if users want to create their own plots using the returned data from the function. If \code{FALSE}, no ggplot2 object is returned.}
 }
 \value{
-\code{conf_dist} returns four data frames and a ggplot2-plot object: \code{res_frame} (contains parameter values, \emph{p}-values (one- and two-sided), s-values, confidence distribution and density, variable names and type of hypothesis), \code{conf_frame} (contains the specified confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull and the corresponding null values), \code{point_est} (contains the mean, median and mode point estimates) and \code{plot} (a ggplot2-plot object).
+\code{conf_dist} returns four data frames and if \code{plot = TRUE} was specified, a ggplot2-plot object: \code{res_frame} (contains parameter values (e.g. mean differences, odds ratios etc.), \emph{p}-values (one- and two-sided), s-values, confidence distributions and densities, variable names and type of hypothesis), \code{conf_frame} (contains the specified confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull and the corresponding null values), \code{point_est} (contains the mean, median and mode point estimates) and if \code{plot = TRUE} was specified, \code{plot} (a ggplot2 object).
 }
 \description{
 The function \code{conf_dist} generates confidence distributions (cdf), confidence densities (pdf), Shannon suprisal (s-value) functions and \emph{p}-value functions for several commonly used estimates. In addition, counternulls (see Rosenthal et al. 1994) and point estimates are calculated.
@@ -108,6 +130,7 @@ res <- conf_dist(
   , ylab_sec = NULL
   , inverted = FALSE
   , x_scale = "default"
+  , plot = TRUE
 )
 
 #======================================================================================
@@ -139,6 +162,7 @@ res <- conf_dist(
   , ylab_sec = NULL
   , inverted = FALSE
   , x_scale = "default"
+  , plot = TRUE
 )
 
 #=======================================================================================
@@ -168,6 +192,7 @@ res <- conf_dist(
   , ylab_sec = NULL
   , inverted = TRUE
   , x_scale = "default"
+  , plot = TRUE
 )
 
 #======================================================================================
@@ -195,6 +220,7 @@ res <- conf_dist(
   , ylab_sec = NULL
   , inverted = FALSE
   , x_scale = "default"
+  , plot = TRUE
 )
 
 #======================================================================================
@@ -242,6 +268,7 @@ res <- conf_dist(
   , ylab_sec = NULL
   , inverted = FALSE
   , x_scale = "default"
+  , plot = TRUE
 )
 
 #========================================================================================
@@ -280,6 +307,7 @@ res <- conf_dist(
   , inverted = TRUE
   , title = "Figure 1 in Bender et al. (2005)"
   , x_scale = "default"
+  , plot = TRUE
 )
 
 }
@@ -288,7 +316,7 @@ Bender R, Berg G, Zeeb H. Tutorial: using confidence curves in medical research.
 
 Bonett DG, Wright TA. Sample size requirements for estimating Pearson, Kendall and Spearman correlations. \emph{Psychometrika.} 2000;65(1):23-28.
 
-Infanger D, Schmidt-Trucksäss A. \emph{P} value functions: An underused method to present research results and to promote quantitative reasoning. \emph{Stat Med.} 2019;1-9.
+Infanger D, Schmidt-Trucksäss A. \emph{P} value functions: An underused method to present research results and to promote quantitative reasoning. \emph{Stat Med.} 2019;38:4189-4197.
 
 Newcombe RG. Interval estimation for the difference between independent proportions: comparison of eleven methods. \emph{Stat Med.} 1998;17:873-890.
 

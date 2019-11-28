@@ -4,8 +4,8 @@
 1.5.0
 -------------
 
-  * Vignette, README and DESCRIPTION updated to reflect that the newest version of ggplot2 (3.2.1) fixes the bug with `sec_axis`.
-  * 
+  * Vignette, README and DESCRIPTION updated to reflect that the newest version of ggplot2 (3.2.1) fixes the former bug with `sec_axis`.
+  * Added an option `plot` to `conf_dist` that controls whether a plot is created or not. If users want to create their own plots, they can set this option to `FALSE` and use the returned data (`res_frame`) which is the basis for the plots to create them.
   
 
 1.4.0

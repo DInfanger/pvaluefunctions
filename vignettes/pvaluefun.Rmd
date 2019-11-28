@@ -99,6 +99,7 @@ There is only one function needed to create the plots: `conf_dist()`. The functi
 * `ylab_sec` (optional): String containing a title for the secondary (right) y-axis.
 * `inverted` Logical. Indicating the orientation of the *P*-value function (`p_val`), S-value function (`s_val`) and confidence distribution (`cdf`). By default (i.e. `inverted = FALSE`) small *P*-values are plotted at the bottom and large ones at the top. By setting `inverted = TRUE`, the y-axis is invertedd. Ignored for confidence densities.
 * `x_scale` String indicating the scaling of the x-axis. The default is to scale the x-axis logarithmically if the transformation specified in `trans` is "exp" (exponential) and linearly otherwise. The option `linear` (can be abbreviated) forces a linear scaling and the option `logarithm` (can be abbreviated) forces a logarithmic scaling.
+* `plot` Logical. Should a plot be created (`TRUE`, the default) or not (`FALSE`). `FALSE` can be useful if users want to create their own plots. If `FALSE`, no ggplot2 object is returned.
 
 ### Required arguments for different estimate types
 
@@ -111,11 +112,11 @@ There is only one function needed to create the plots: `conf_dist()`. The functi
 
 The main function `conf_dist()` returns five objects in a list:
 
-* `res_frame`: A data frame containing the values used to construct the plot.
+* `res_frame`: A data frame containing the values used to construct the plot. It contains the following variables: `values` contain the values of the effect (e.g. mean difference, odds ratio etc.), `conf_dist` the values for the confidence distribution, `conf_dens` the values for the confidence density, `p_two` the values for the two-sided *p*-value function, `p_one` the values for the one-sided *p*-value function, `s_val` the S-value (surprisal) of the two-sided *p*-values, `variable` the name of the estimate, `hypothesis` indicating the alternative hypothesis if one-sided *p*-value functions were specified and `counternull` containing the counternull values.
 * `conf_frame`: A data frame containing the confidence intervals for the specified confidence levels for all estimates.
 * `counternull_frame`: A data frame containing the counternull values for the specified null values (see Rosenthal & Rubin (1994) for more information about the counternull).
 * `point_est`: A data frame containing the point estimates for all estimates. The point estimates correspond to the mean, median or mode of the confidence density (see Xie & Singh (2013) for more information). Estimates are produced using numerical procedures: Increase the number of points `n_values` for higher numerical precision.
-* `plot`: A [ggplot2](https://ggplot2.tidyverse.org/) plot object.
+* `plot`: A [ggplot2](https://ggplot2.tidyverse.org/) plot object (only returned if the option `plot = TRUE` was specified).
 
 ## Examples
 
@@ -152,7 +153,9 @@ res <- conf_dist(
   , plot_p_limit = 1 - 0.999
   , plot_counternull = TRUE
   , x_scale = "line"
+  , plot = TRUE
 )
+
 ```
 
 ### Single coefficient from a linear regression model
@@ -193,6 +196,7 @@ res <- conf_dist(
   , together = FALSE
   , plot_p_limit = 1 - 0.999
   , plot_counternull = FALSE
+  , plot = TRUE
 )
 ```
 

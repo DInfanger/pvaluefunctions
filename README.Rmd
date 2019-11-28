@@ -103,6 +103,7 @@ res <- conf_dist(
   , plot_counternull = TRUE
   , inverted = FALSE
   , title = expression(italic(P)~"-value function for a"~italic(t)~"-test")
+  , plot = TRUE
 )
 ```
 
