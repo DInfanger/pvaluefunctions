@@ -31,6 +31,9 @@ if (getRversion() >= "2.15.1") {
 #' @param cut_logyaxis Numerical value indicating the threshold below which the y-axis will be displayed logarithmically. Must lie between 0 and 1.
 #' @param xlim (optional) Optional numerical vector of length 2 (x1, x2) indicating the limits of the x-axis on the \emph{untransformed} scale if \code{trans} is not \code{identity}. The scale of the x-axis set by \code{x_scale} does not affect the x limits. For example: If you want to plot \emph{p}-value functions for odds ratios from logistic regressions, the limits have to be given on the log-odds scale if \code{trans = "exp"}. Note that x1 > x2 is allowed but then x2 will be the left limit and x1 the right limit (i.e. the limits are sorted before plotting). Null values (specified in \code{null_values}) that are outside of the specified limits are ignored and a message is printed.
 #' @param together Logical. Indicating if graphics for multiple estimates should be displayed together or on separate plots.
+#' @param plot_legend Logical. Indicating if a legend should be plotted if multiple curves are plotted together with different colors (i.e. \code{together = TRUE)} and \code{same_color = FALSE}).
+#' @param same_color Logical. Indicating if curves should be distinguished using colors if they are plotted together (i.e. \code{together = TRUE}).
+#' @param col String indicating the colour of the curves. Only relevant for single curves, multiple curves not plotted together (i.e. \code{together = FALSE}) and multiple curves plotted together but with the option \code{same_color} set to \code{TRUE}.
 #' @param nrow (optional) Integer greater than 0 indicating the number of rows when \code{together = FALSE} is specified for multiple estimates. Used in \code{facet_wrap} in ggplot2.
 #' @param ncol (optional) Integer greater than 0 indicating the number of columns when \code{together = FALSE} is specified for multiple estimates. Used in \code{facet_wrap} in ggplot2.
 #' @param plot_p_limit Numerical value indicating the lower limit of the y-axis. Must be greater than 0 for a logarithmic scale (i.e. \code{log_yaxis = TRUE}). The default is to omit plotting \emph{p}-values smaller than 1 - 0.999 = 0.001.
@@ -301,6 +304,9 @@ conf_dist <- function(
   , xlab = NULL
   , xlim = NULL
   , together = FALSE
+  , plot_legend = TRUE
+  , same_color = FALSE
+  , col = "black"
   , nrow = NULL
   , ncol = NULL
   , plot_p_limit = (1 - 0.999)
@@ -347,7 +353,7 @@ conf_dist <- function(
 
   if (is.null(estimate)) {stop("Please provide an estimate.")}
 
-  # if (length(type) == 0L) {stop("Please provide the type of the estimate(s).")}
+  if (length(type) == 0L) {stop("Please provide the type of the estimate(s).")}
 
   if (!alternative %in% c("one_sided", "two_sided")) {stop("Alternative must be either \"two_sided\" or \"one_sided\".")}
 
@@ -859,8 +865,6 @@ conf_dist <- function(
   # Plot using ggplot2
   #-----------------------------------------------------------------------------
 
-
-
   # Create custom y-axis scale (mixed linear and logarithmic)
 
   # Transform cutoff for log-y-axis if applicable
@@ -932,29 +936,38 @@ conf_dist <- function(
 
   p <- ggplot(res$res_frame, aes(x = values, y = eval(parse(text = y_var)), group = variable))
 
-  # If 2 or more estimates are plotted together, differentiate them by color
+  # If 2 or more estimates are plotted together, differentiate them by color (if user did not specify "same_color = TRUE")
 
-  if ((length(estimate) >= 2) & isTRUE(together)) {
+  if ((length(estimate) >= 2) & isTRUE(together) & isFALSE(same_color)) {
     p <- p + aes(colour = variable)
   }
 
   # For only one one-sided p-value curve, set the colors to black and blue
 
-  if (alternative %in% "one_sided" & (isFALSE(together) | (isTRUE(together) & length(estimate) < 2))) {
+  if (alternative %in% "one_sided" & (isFALSE(together) | (isTRUE(together) & length(estimate) < 2)) & isFALSE(same_color)) {
     p <- p + geom_line(aes(colour = hypothesis), size = 1.5) +
       scale_colour_manual(values = c("black", "#08A9CF"))  +
       theme(
         legend.position="none"
       )
 
+  } else if (alternative %in% "one_sided" & (isFALSE(together) | (isTRUE(together) & length(estimate) < 2)) & isTRUE(same_color)) {
+
+    p <- p + geom_line(aes(colour = hypothesis), size = 1.5) +
+      scale_colour_manual(values = c(col, col))  +
+      theme(
+        legend.position="none"
+      )
+
     # For only one two-sided p-value curve, set the color to black
 
-  } else if (alternative %in% "two_sided" & (isFALSE(together) | (isTRUE(together) & length(estimate) < 2))) {
-    p <- p + geom_line(size = 1.5, colour = "black")
+  } else if (alternative %in% "two_sided" & (isFALSE(together) | (isTRUE(together) & length(estimate) < 2) | (isTRUE(together) & isTRUE(same_color)))) {
+    p <- p + geom_line(size = 1.5, colour = col)
 
     # For 2 or more estimates plotted together: set the colors according to "Set1" palette
 
-  } else if (isTRUE(together) & (length(estimate) >= 2)) {
+  } else if ((alternative %in% "two_sided" & (length(estimate) >= 2) & isTRUE(together) & isFALSE(same_color) & isTRUE(plot_legend)) |
+             (alternative %in% "one_sided" & (length(estimate) >= 2) & isTRUE(together) & isTRUE(plot_legend))) { # Plot legend
     p <- p + geom_line(size = 1.5) +
       scale_colour_brewer(palette = "Set1", name = "") +
       theme(
@@ -962,6 +975,15 @@ conf_dist <- function(
         , legend.text=element_text(size=15)
         , legend.title=element_text(size=15)
       )
+
+  } else if((alternative %in% "two_sided" & (length(estimate) >= 2) & isTRUE(together) & isFALSE(same_color) & isFALSE(plot_legend)) |
+            (alternative %in% "one_sided" & (length(estimate) >= 2) & isTRUE(together) & isFALSE(plot_legend))) { # Plot no legend
+    p <- p + geom_line(size = 1.5) +
+      scale_colour_brewer(palette = "Set1", name = "") +
+      theme(
+        legend.position="none"
+      )
+
   }
 
   # Add the labels for the axes
@@ -1324,11 +1346,20 @@ conf_dist <- function(
     p <- p + ggtitle(title)
   }
 
-  # Only print and return the plot object if requested
+  #-----------------------------------------------------------------------------
+  # Only print and return the ggplot2-object if requested
+  #-----------------------------------------------------------------------------
+
   if (isTRUE(plot)) {
     res$plot <- p
     suppressWarnings(print(p))
   }
+
+  #-----------------------------------------------------------------------------
+  # Sort the data frame for convenience
+  #-----------------------------------------------------------------------------
+
+  res$res_frame <- res$res_frame[order(res$res_frame$values), ]
 
   return(res)
 

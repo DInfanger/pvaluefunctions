@@ -23,6 +23,9 @@ conf_dist(
   xlab = NULL,
   xlim = NULL,
   together = FALSE,
+  plot_legend = TRUE,
+  same_color = FALSE,
+  col = "black",
   nrow = NULL,
   ncol = NULL,
   plot_p_limit = (1 - 0.999),
@@ -71,6 +74,12 @@ conf_dist(
 \item{xlim}{(optional) Optional numerical vector of length 2 (x1, x2) indicating the limits of the x-axis on the \emph{untransformed} scale if \code{trans} is not \code{identity}. The scale of the x-axis set by \code{x_scale} does not affect the x limits. For example: If you want to plot \emph{p}-value functions for odds ratios from logistic regressions, the limits have to be given on the log-odds scale if \code{trans = "exp"}. Note that x1 > x2 is allowed but then x2 will be the left limit and x1 the right limit (i.e. the limits are sorted before plotting). Null values (specified in \code{null_values}) that are outside of the specified limits are ignored and a message is printed.}
 
 \item{together}{Logical. Indicating if graphics for multiple estimates should be displayed together or on separate plots.}
+
+\item{plot_legend}{Logical. Indicating if a legend should be plotted if multiple curves are plotted together with different colors (i.e. \code{together = TRUE)} and \code{same_color = FALSE}).}
+
+\item{same_color}{Logical. Indicating if curves should be distinguished using colors if they are plotted together (i.e. \code{together = TRUE}).}
+
+\item{col}{String indicating the colour of the curves. Only relevant for single curves, multiple curves not plotted together (i.e. \code{together = FALSE}) and multiple curves plotted together but with the option \code{same_color} set to \code{TRUE}.}
 
 \item{nrow}{(optional) Integer greater than 0 indicating the number of rows when \code{together = FALSE} is specified for multiple estimates. Used in \code{facet_wrap} in ggplot2.}
 

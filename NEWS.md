@@ -1,5 +1,13 @@
 ## NEWS and changes for the pvaluefunctions package
 
+1.6.0
+-------------
+
+  * The returned data frame is now sorted for convenience; this is purely cosmetic.
+  * Dependence on R increased to R version 3.5.0
+  * Added an option `same_color` to specify whether curves should be distinguished by colors or not if they are plotted together in the same graph. Can be useful if there are many curves plotted together.
+  * Added an option `plot_legend` to specify whether a legend should be drawn if multiple curves are plotted together and distinguished by color (i.e. `same_color = FALSE` and `together = TRUE`).
+  * Added an option `col` to specify the color of the curves if they are not to be distinguished by color (i.e. `same_color = FALSE`).
 
 1.5.0
 -------------
