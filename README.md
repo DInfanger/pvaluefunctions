@@ -62,7 +62,7 @@ using `library(pvaluefunctions)`.
 The function depends on the following R packages, which need to be
 installed beforehand:
 
-  - ggplot2 (at least version 3.2.1)
+  - ggplot2
   - scales
   - zipfR
 
@@ -85,7 +85,7 @@ For more examples and code, see the
 [vignette](https://CRAN.R-project.org/package=pvaluefunctions/vignettes/pvaluefun.html).
 
     #> 
-    #>          checking for file 'C:\Users\denis\AppData\Local\Temp\RtmpQjnMlH\remotes2cec1c06887\DInfanger-pvaluefunctions-8126196/DESCRIPTION' ...  v  checking for file 'C:\Users\denis\AppData\Local\Temp\RtmpQjnMlH\remotes2cec1c06887\DInfanger-pvaluefunctions-8126196/DESCRIPTION'
+    #>          checking for file 'C:\Users\denis\AppData\Local\Temp\RtmpsHRbnW\remotes21442844ecf\DInfanger-pvaluefunctions-a87336c/DESCRIPTION' ...  v  checking for file 'C:\Users\denis\AppData\Local\Temp\RtmpsHRbnW\remotes21442844ecf\DInfanger-pvaluefunctions-a87336c/DESCRIPTION' (380ms)
     #>       -  preparing 'pvaluefunctions':
     #>    checking DESCRIPTION meta-information ...     checking DESCRIPTION meta-information ...   v  checking DESCRIPTION meta-information
     #>       -  checking for LF line-endings in source and make files and shell scripts

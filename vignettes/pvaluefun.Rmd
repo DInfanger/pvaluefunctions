@@ -56,9 +56,9 @@ source_url("https://raw.githubusercontent.com/DInfanger/pvaluefunctions/master/R
 
 The function depends on the following R packages:
 
-* ggplot2 (at least version 3.2.1)
-* scales
-* zipfR
+* [ggplot2](https://cran.r-project.org/package=ggplot2)
+* [scales](https://cran.r-project.org/package=scales)
+* [zipfR](https://cran.r-project.org/package=zipfR)
 
 <!-- Use the command `install.packages(c("ggplot2", "scales", "zipfR"))` in R to install those packages. -->
 
@@ -223,6 +223,7 @@ res <- conf_dist(
   , xlab = "Coefficient Agriculture"
   , xlim = c(-0.12, 0.065)
   , together = FALSE
+  , col = "#08A9CF"
   # , plot_p_limit = 1 - 0.999
   , plot_counternull = FALSE
 )
@@ -250,6 +251,7 @@ res <- conf_dist(
   , cut_logyaxis = 0.05
   , xlab = "Regression coefficients"
   , together = TRUE
+  , same_color = FALSE
   , plot_p_limit = 1 - 0.999
   , plot_counternull = FALSE
   , inverted = FALSE
@@ -572,6 +574,10 @@ res <- conf_dist(
 rm(rse_fun, rse_fun_inv)
 
 ```
+
+## Similar packages
+
+Check out the [concurve](https://cran.r-project.org/package=concurve) package that offers a similar functionality.
 
 ## References
 

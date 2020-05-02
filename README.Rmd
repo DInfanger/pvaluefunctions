@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# *P*-value functions <img src="man/figures/logo2.svg" align="right" width="120" />
+# *P*-value functions <img src="man/figures/logo3.svg" align="right" width="120" />
 
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/pvaluefunctions)](https://cran.r-project.org/package=pvaluefunctions)
 [![downloads](https://cranlogs.r-pkg.org/badges/pvaluefunctions)](https://cran.r-project.org/package=pvaluefunctions)
@@ -53,7 +53,7 @@ source_url("https://raw.githubusercontent.com/DInfanger/pvaluefunctions/master/R
 
 The function depends on the following R packages, which need to be installed beforehand:
 
-* ggplot2 (at least version 3.2.1)
+* ggplot2
 * scales
 * zipfR
 
