@@ -59,6 +59,7 @@ The function depends on the following R packages:
 * [ggplot2](https://cran.r-project.org/package=ggplot2)
 * [scales](https://cran.r-project.org/package=scales)
 * [zipfR](https://cran.r-project.org/package=zipfR)
+* [pracma](https://cran.r-project.org/package=pracma)
 
 <!-- Use the command `install.packages(c("ggplot2", "scales", "zipfR"))` in R to install those packages. -->
 
@@ -119,6 +120,7 @@ The main function `conf_dist()` returns five objects in a list:
 * `conf_frame`: A data frame containing the confidence intervals for the specified confidence levels for all estimates.
 * `counternull_frame`: A data frame containing the counternull values for the specified null values (see Rosenthal & Rubin (1994) for more information about the counternull).
 * `point_est`: A data frame containing the point estimates for all estimates. The point estimates correspond to the mean, median or mode of the confidence density (see Xie & Singh (2013) for more information). Estimates are produced using numerical procedures: Increase the number of points `n_values` for higher numerical precision.
+* `aucc_frame`: A data frame containing the estimated AUCC (area under the confidence curves). The AUCC is a measures of precision with higher values indicating a poorer precision compared to smaller values (see Berrar (2017)).
 * `plot`: A [ggplot2](https://ggplot2.tidyverse.org/) plot object (only returned if the option `plot = TRUE` was specified).
 
 ## Examples
@@ -575,6 +577,38 @@ rm(rse_fun, rse_fun_inv)
 
 ```
 
+
+### Compare the precision of two estimates using the AUCC (area under the confidence curves)
+The AUCC is a scalar representing the area under the *p*-value function (see Berrar (2017)). Values close to 0 indicate a high precision while larger values indicate poorer precision. Multiple estimates can be compared by their AUCC (in the context of a meta-analysis for example). The AUCC is calculated numerically using trapezoidal integration on the untransformed *p*-value function. The estimate can be quite poor if few x-values are used (i.e. argument `n_values` is low).
+
+```{r aucc_comparison, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
+
+# Lungcancer dataset from the "meta" package
+
+res <- conf_dist(
+  estimate = c(2.512, 2.298, 2.455, 2.255, 2.989, 1.59, 2.674) # Log-incidence rate ratio (IRR)
+  , stderr = c(0.087, 0.127, 0.144, 0.153, 0.265, 0.318, 0.584)
+  , type = "general_z"
+  , plot_type = "p_val"
+  , n_values = 1e4L
+  , est_names = c("U.S. Veterans", "Men in 9 States", "Canadian Veterans", "Men in 25 States", "British Doctors", "California Legion", "California Occupational")
+  , conf_level = c(0.95)
+  , null_values = c(log(1))
+  , trans = "exp"
+  , alternative = "two_sided"
+  , xlab = "Incidence rate ratio (IRR)"
+  , xlim = c(log(0.95), log(50))
+  , together = TRUE
+  , same_color = TRUE
+  , col = "#C977A2"
+  , plot_p_limit = 1 - 0.9999
+  , plot_counternull = FALSE
+  , inverted = FALSE
+)
+
+print(res$aucc_frame, row.names = FALSE)
+```
+
 ## Similar packages
 
 Check out the [concurve](https://cran.r-project.org/package=concurve) package that offers a similar functionality.
@@ -582,6 +616,8 @@ Check out the [concurve](https://cran.r-project.org/package=concurve) package th
 ## References
 
 Bender R, Berg G, Zeeb H. (2005): Tutorial: using confidence curves in medical research. *Biom J.* 47(2): 237-47.
+
+Berrar D (2017): Confidence Curves: an alternative to null hypothesis significance testing for the comparison of classifiers. *Mach Learn* 106:911-949.
 
 Fraser  D. A. S. (2019): The *p*-value function and statistical inference. *Am Stat,* 73:sup1, 135-147.
 

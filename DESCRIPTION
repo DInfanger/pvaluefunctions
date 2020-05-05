@@ -10,6 +10,7 @@ Imports:
 	ggplot2 (>= 3.3.0),
 	scales (>= 1.1.0),
 	zipfR (>= 0.6-66),
+	pracma (>= 2.2.9),
 	stats
 Suggests:
 	knitr,

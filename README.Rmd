@@ -53,21 +53,12 @@ source_url("https://raw.githubusercontent.com/DInfanger/pvaluefunctions/master/R
 
 The function depends on the following R packages, which need to be installed beforehand:
 
-* ggplot2
-* scales
-* zipfR
+* [ggplot2](https://cran.r-project.org/package=ggplot2)
+* [scales](https://cran.r-project.org/package=scales)
+* [zipfR](https://cran.r-project.org/package=zipfR)
+* [pracma](https://cran.r-project.org/package=pracma)
 
-Use the command `install.packages(c("ggplot2", "scales", "zipfR"))` in R to install those packages.
-
-<!-- ### Important information! -->
-
-<!-- The newest version of [ggplot2 (3.1.1)](https://CRAN.R-project.org/package=ggplot2) has a [bug](https://github.com/tidyverse/ggplot2/issues/2978) in `sec_axis` that will lead to the secondary y-axis being labelled wrongly. -->
-
-<!-- It is therefore recommended that you install the developmental version of ggplot2 until the bug has been fixed. You can install the developmental version using the following command (after installing the [`devtools`](https://CRAN.R-project.org/package=devtools) package): `devtools::install_github("tidyverse/ggplot2")` -->
-
-<!-- To see what version of ggplot2 has been used to create the plots on this page, see the [Session info]. -->
-
-<!-- This warning will be deleted upon the release of a new version of ggplot2 that fixes the bug. -->
+Use the command `install.packages(c("ggplot2", "scales", "zipfR", "pracma"))` in R to install those packages.
 
 ## Examples
 
@@ -172,6 +163,8 @@ res <- conf_dist(
 ## References
 
 Bender R, Berg G, Zeeb H. (2005): Tutorial: using confidence curves in medical research. *Biom J.* 47(2): 237-47.
+
+Berrar D (2017): Confidence Curves: an alternative to null hypothesis significance testing for the comparison of classifiers. *Mach Learn* 106:911-949.
 
 Fraser  D. A. S. (2019): The *p*-value function and statistical inference. *Am Stat,* 73:sup1, 135-147.
 

@@ -8,6 +8,8 @@
   * Added an option `same_color` to specify whether curves should be distinguished by colors or not if they are plotted together in the same graph. Can be useful if there are many curves plotted together.
   * Added an option `plot_legend` to specify whether a legend should be drawn if multiple curves are plotted together and distinguished by color (i.e. `same_color = FALSE` and `together = TRUE`).
   * Added an option `col` to specify the color of the curves if they are not to be distinguished by color (i.e. `same_color = FALSE`).
+  * Areas under the confidence curves (AUCC) according to Berrar (2017) are now calculated and returned. They offer a way to compare multiple estimates with respect to their precision. The AUCC is calculated on the untransformed scale using numerical integration (trapezoidal integration) implemented in the `pracma` package which is now imported.
+
 
 1.5.0
 -------------

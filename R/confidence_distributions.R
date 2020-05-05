@@ -10,7 +10,7 @@ if (getRversion() >= "2.15.1") {
 
 #' Create and Plot \emph{P}-Value Functions, S-Value Functions, Confidence Distributions and Confidence Densities
 #'
-#' The function \code{conf_dist} generates confidence distributions (cdf), confidence densities (pdf), Shannon suprisal (s-value) functions and \emph{p}-value functions for several commonly used estimates. In addition, counternulls (see Rosenthal et al. 1994) and point estimates are calculated.
+#' The function \code{conf_dist} generates confidence distributions (cdf), confidence densities (pdf), Shannon suprisal (s-value) functions and \emph{p}-value functions for several commonly used estimates. In addition, counternulls (see Rosenthal et al. 1994), point estimates and the area under the confidence curve (AUCC) are calculated.
 #'
 #' \emph{P}-value functions and confidence intervals are calculated based on the \emph{t}-distribution for \emph{t}-tests, linear regression coefficients, and gamma regression models (GLM). The normal distribution is used for logistic regression, poisson regression and cox regression models. For correlation coefficients, Fisher's transform is used using the corresponding variances (see Bonett et al. 2000). \emph{P}-value functions and confidence intervals for variances are constructed using the Chi2 distribution. Finally, Wilson's score intervals are used for one proportion. For differences of proportions, the Wilson score interval with continuity correction is used (Newcombe 1998).
 #'
@@ -46,8 +46,10 @@ if (getRversion() >= "2.15.1") {
 #' @param x_scale String indicating the scaling of the x-axis. The default is to scale the x-axis logarithmically if the transformation specified in \code{trans} is "exp" (exponential) and linearly otherwise. The option \code{linear} (can be abbreviated) forces a linear scaling and the option \code{logarithm} (can be abbreviated) forces a logarithmic scaling, regardless what has been specified in \code{trans}.
 #' @param plot Logical. Should a plot be created (\code{TRUE}, the default) or not (\code{FALSE}). \code{FALSE} can be useful if users want to create their own plots using the returned data from the function. If \code{FALSE}, no ggplot2 object is returned.
 
-#' @return \code{conf_dist} returns four data frames and if \code{plot = TRUE} was specified, a ggplot2-plot object: \code{res_frame} (contains parameter values (e.g. mean differences, odds ratios etc.), \emph{p}-values (one- and two-sided), s-values, confidence distributions and densities, variable names and type of hypothesis), \code{conf_frame} (contains the specified confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull and the corresponding null values), \code{point_est} (contains the mean, median and mode point estimates) and if \code{plot = TRUE} was specified, \code{plot} (a ggplot2 object).
+#' @return \code{conf_dist} returns four data frames and if \code{plot = TRUE} was specified, a ggplot2-plot object: \code{res_frame} (contains parameter values (e.g. mean differences, odds ratios etc.), \emph{p}-values (one- and two-sided), s-values, confidence distributions and densities, variable names and type of hypothesis), \code{conf_frame} (contains the specified confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull and the corresponding null values), \code{point_est} (contains the mean, median and mode point estimates) and if \code{plot = TRUE} was specified, \code{aucc_frame} contains the estimated AUCC (area under the confidence curves) calculated by trapezoidal integration on the untransformed scale, \code{plot} (a ggplot2 object).
 #' @references Bender R, Berg G, Zeeb H. Tutorial: using confidence curves in medical research. \emph{Biom J.} 2005;47(2):237-247.
+#'
+#' Berrar D. Confidence curves: an alternative to null hypothesis significance testing for the comparison of classifiers. \emph{Mach Learn.} 2017;106:911-949.
 #'
 #' Bonett DG, Wright TA. Sample size requirements for estimating Pearson, Kendall and Spearman correlations. \emph{Psychometrika.} 2000;65(1):23-28.
 #'
@@ -181,6 +183,7 @@ if (getRversion() >= "2.15.1") {
 #'   , cut_logyaxis = 0.05
 #'   , xlab = "Difference between proportions"
 #'   , together = FALSE
+#'   , col = "#A52A2A" # Color curve in auburn
 #'   , plot_p_limit = 1 - 0.9999
 #'   , plot_counternull = FALSE
 #'   , title = NULL
@@ -510,6 +513,11 @@ conf_dist <- function(
     x_scale <- "log"
   }
 
+  if (length(col) > 1) {
+    warning(paste0("Only first color is used: ", col[1]))
+    col <- col[1]
+  }
+
   #-----------------------------------------------------------------------------
   # Calculate the confidence distributions/densities and p-value curves
   #-----------------------------------------------------------------------------
@@ -632,6 +640,33 @@ conf_dist <- function(
     if (!is.null(null_values)) {
       res$counternull_frame$variable <- factor(res$counternull_frame$variable, labels = est_names)
     }
+  }
+
+  #-----------------------------------------------------------------------------
+  # Calculate AUCC (area under the confidence curve), see Berrar (2017) Mach Learn 106:911-494
+  #-----------------------------------------------------------------------------
+
+  res$aucc_frame <- data.frame(
+    variable = est_names
+    , aucc = NA
+  )
+
+  for(i in seq_along(estimate)) {
+
+    x_tmp <- res$res_frame$values[res$res_frame$variable %in% est_names[i]]
+    y_tmp <- res$res_frame$p_two[res$res_frame$variable %in% est_names[i]]
+
+    nona_ind <- which(!is.na(y_tmp) & !is.na(x_tmp))
+
+    order_tmp <- order(res$res_frame$values[res$res_frame$variable %in% est_names[i]][nona_ind], decreasing = FALSE)
+
+    res$aucc_frame$aucc[res$aucc_frame$variable %in% est_names[i]] <- pracma::trapz(
+      x = x_tmp[nona_ind][order_tmp]
+      , y = y_tmp[nona_ind][order_tmp]
+    )
+
+    rm(x_tmp, y_tmp, nona_ind, order_tmp)
+
   }
 
   #-----------------------------------------------------------------------------
@@ -1191,7 +1226,7 @@ conf_dist <- function(
 
       # Print a message that shows which null values were outside of the x-axis limits.
 
-      message(paste0("The following null values are outside of the specified x-axis range (xlim) and are not shown: ", paste(res$counternull_frame$null_value[null_outside_plot], collapse = ", ")))
+      message(paste0("The following null values are outside of the specified x-axis range (xlim) and are not shown: ", paste(unique(res$counternull_frame$null_value[null_outside_plot]), collapse = ", ")))
 
       if ((length(null_outside_plot) < length(null_values))) { # There are some null-values to plot
 
@@ -1307,14 +1342,18 @@ conf_dist <- function(
 
   if (!is.null(null_values) && isTRUE(plot_counternull) && (plot_type %in% c("p_val", "s_val")) && !all(is.na(res$res_frame$counternull))) {
 
-    if (isTRUE(together) & (length(estimate) >= 2)) {
+    if (isTRUE(together) & (length(estimate) >= 2) & isFALSE(same_color)) {
 
       p <- p + geom_point(aes(x = values, y = counternull, colour = variable), size = 4, pch = 21, fill = "white", stroke = 1.7) +
         guides(colour = guide_legend(override.aes = list(pch = NA)))
 
+    } else if (isTRUE(together) & (length(estimate) >= 2) & isTRUE(same_color)) {
+
+      p <- p + geom_point(aes(x = values, y = counternull), colour = col, size = 4, pch = 21, fill = "white", stroke = 1.7)
+
     } else if (isFALSE(together) | (isTRUE(together) & (length(estimate) < 2))) {
 
-      p <- p + geom_point(aes(x = values, y = counternull), colour = "black", size = 4, pch = 21, fill = "white", stroke = 1.7)
+      p <- p + geom_point(aes(x = values, y = counternull), colour = col, size = 4, pch = 21, fill = "white", stroke = 1.7)
 
     }
   }
