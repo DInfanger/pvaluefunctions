@@ -66,7 +66,7 @@ For more examples and code, see the [vignette](https://CRAN.R-project.org/packag
 
 ```{r ttest_pval, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "70%", fig.align='left', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
 
-devtools::install_github("DInfanger/pvaluefunctions")
+# devtools::install_github("DInfanger/pvaluefunctions")
 
 library(pvaluefunctions)
 
@@ -120,6 +120,7 @@ res <- conf_dist(
   , cut_logyaxis = 0.05
   , xlab = "Mean difference (group 1 - group 2)"
   , together = FALSE
+  , col = "#C977A2"
   , plot_p_limit = 1 - 0.999
   , plot_counternull = TRUE
   , inverted = FALSE

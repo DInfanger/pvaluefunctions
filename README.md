@@ -2,7 +2,7 @@ pvaluefunctions
 ================
 
   - [*P*-value functions
-    <img src="man/figures/logo2.svg" align="right" width="120" />](#p-value-functions)
+    <img src="man/figures/logo3.svg" align="right" width="120" />](#p-value-functions)
       - [Accompanying paper](#accompanying-paper)
           - [Recreation of the figures in the
             paper](#recreation-of-the-figures-in-the-paper)
@@ -17,7 +17,7 @@ pvaluefunctions
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# *P*-value functions <img src="man/figures/logo2.svg" align="right" width="120" />
+# *P*-value functions <img src="man/figures/logo3.svg" align="right" width="120" />
 
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/pvaluefunctions)](https://cran.r-project.org/package=pvaluefunctions)
 [![downloads](https://cranlogs.r-pkg.org/badges/pvaluefunctions)](https://cran.r-project.org/package=pvaluefunctions)
@@ -62,37 +62,18 @@ using `library(pvaluefunctions)`.
 The function depends on the following R packages, which need to be
 installed beforehand:
 
-  - ggplot2
-  - scales
-  - zipfR
+  - [ggplot2](https://cran.r-project.org/package=ggplot2)
+  - [scales](https://cran.r-project.org/package=scales)
+  - [zipfR](https://cran.r-project.org/package=zipfR)
+  - [pracma](https://cran.r-project.org/package=pracma)
 
-Use the command `install.packages(c("ggplot2", "scales", "zipfR"))` in R
-to install those packages.
-
-<!-- ### Important information! -->
-
-<!-- The newest version of [ggplot2 (3.1.1)](https://CRAN.R-project.org/package=ggplot2) has a [bug](https://github.com/tidyverse/ggplot2/issues/2978) in `sec_axis` that will lead to the secondary y-axis being labelled wrongly. -->
-
-<!-- It is therefore recommended that you install the developmental version of ggplot2 until the bug has been fixed. You can install the developmental version using the following command (after installing the [`devtools`](https://CRAN.R-project.org/package=devtools) package): `devtools::install_github("tidyverse/ggplot2")` -->
-
-<!-- To see what version of ggplot2 has been used to create the plots on this page, see the [Session info]. -->
-
-<!-- This warning will be deleted upon the release of a new version of ggplot2 that fixes the bug. -->
+Use the command `install.packages(c("ggplot2", "scales", "zipfR",
+"pracma"))` in R to install those packages.
 
 ## Examples
 
 For more examples and code, see the
 [vignette](https://CRAN.R-project.org/package=pvaluefunctions/vignettes/pvaluefun.html).
-
-    #> 
-    #>          checking for file 'C:\Users\denis\AppData\Local\Temp\RtmpsHRbnW\remotes21442844ecf\DInfanger-pvaluefunctions-a87336c/DESCRIPTION' ...  v  checking for file 'C:\Users\denis\AppData\Local\Temp\RtmpsHRbnW\remotes21442844ecf\DInfanger-pvaluefunctions-a87336c/DESCRIPTION' (380ms)
-    #>       -  preparing 'pvaluefunctions':
-    #>    checking DESCRIPTION meta-information ...     checking DESCRIPTION meta-information ...   v  checking DESCRIPTION meta-information
-    #>       -  checking for LF line-endings in source and make files and shell scripts
-    #>   -  checking for empty or unneeded directories
-    #>       -  building 'pvaluefunctions_1.6.0.tar.gz'
-    #>      
-    #> 
 
 <img src="man/figures/README-ttest_pval-1.png" width="70%" style="display: block; margin: auto auto auto 0;" />
 
@@ -104,6 +85,10 @@ For more examples and code, see the
 
 Bender R, Berg G, Zeeb H. (2005): Tutorial: using confidence curves in
 medical research. *Biom J.* 47(2): 237-47.
+
+Berrar D (2017): Confidence Curves: an alternative to null hypothesis
+significance testing for the comparison of classifiers. *Mach Learn*
+106:911-949.
 
 Fraser D. A. S. (2019): The *p*-value function and statistical
 inference. *Am Stat,* 73:sup1, 135-147.
@@ -161,20 +146,15 @@ distribution estimator of a parameter: A review. *Internat Statist Rev.*
     #> [1] pvaluefunctions_1.6.0
     #> 
     #> loaded via a namespace (and not attached):
-    #>  [1] Rcpp_1.0.4.6      pillar_1.4.3      compiler_4.0.0    prettyunits_1.1.1
-    #>  [5] remotes_2.1.1     tools_4.0.0       testthat_2.3.2    digest_0.6.25    
-    #>  [9] pkgbuild_1.0.7    pkgload_1.0.2     tibble_3.0.1      lifecycle_0.2.0  
-    #> [13] gtable_0.3.0      evaluate_0.14     memoise_1.1.0     pkgconfig_2.0.3  
-    #> [17] rlang_0.4.5       cli_2.0.2         curl_4.3          yaml_2.2.1       
-    #> [21] xfun_0.13         dplyr_0.8.5       withr_2.2.0       stringr_1.4.0    
-    #> [25] knitr_1.28        vctrs_0.2.4       desc_1.2.0        fs_1.4.1         
-    #> [29] devtools_2.3.0    tidyselect_1.0.0  grid_4.0.0        rprojroot_1.3-2  
-    #> [33] glue_1.4.0        R6_2.4.1          processx_3.4.2    fansi_0.4.1      
-    #> [37] rmarkdown_2.1     sessioninfo_1.1.1 farver_2.0.3      purrr_0.3.4      
-    #> [41] ggplot2_3.3.0     callr_3.4.3       magrittr_1.5      scales_1.1.0     
-    #> [45] backports_1.1.6   ps_1.3.2          ellipsis_0.3.0    htmltools_0.4.0  
-    #> [49] usethis_1.6.1     assertthat_0.2.1  colorspace_1.4-1  stringi_1.4.6    
-    #> [53] munsell_0.5.0     crayon_1.3.4
+    #>  [1] Rcpp_1.0.4.6     knitr_1.28       magrittr_1.5     tidyselect_1.0.0
+    #>  [5] munsell_0.5.0    colorspace_1.4-1 R6_2.4.1         rlang_0.4.5     
+    #>  [9] dplyr_0.8.5      stringr_1.4.0    tools_4.0.0      grid_4.0.0      
+    #> [13] gtable_0.3.0     xfun_0.13        htmltools_0.4.0  ellipsis_0.3.0  
+    #> [17] assertthat_0.2.1 yaml_2.2.1       digest_0.6.25    tibble_3.0.1    
+    #> [21] lifecycle_0.2.0  crayon_1.3.4     farver_2.0.3     purrr_0.3.4     
+    #> [25] ggplot2_3.3.0    vctrs_0.2.4      glue_1.4.0       evaluate_0.14   
+    #> [29] rmarkdown_2.1    pracma_2.2.9     stringi_1.4.6    compiler_4.0.0  
+    #> [33] pillar_1.4.3     scales_1.1.0     pkgconfig_2.0.3
 
 ## License
 
