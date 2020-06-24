@@ -313,19 +313,6 @@ res <- conf_dist(
 
 ```{r logreg, message = FALSE, warning = FALSE, fig.width = 10.0, fig.height = 7.2, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
 #-----------------------------------------------------------------------------
-# Calculate logistic regression model using a dataset from UCLA
-#-----------------------------------------------------------------------------
-
-dat_tmp <- read.csv("https://stats.idre.ucla.edu/stat/data/binary.csv")
-
-dat_tmp$rank <- factor(dat_tmp$rank)
-logistic_mod <- glm(admit ~ gre + gpa + rank, data = dat_tmp, family = "binomial")
-
-summary(logistic_mod)
-
-rm(dat_tmp)
-
-#-----------------------------------------------------------------------------
 # Create p-value function
 #-----------------------------------------------------------------------------
 

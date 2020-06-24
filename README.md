@@ -128,9 +128,9 @@ distribution estimator of a parameter: A review. *Internat Statist Rev.*
 
 ## Session info
 
-    #> R version 4.0.0 (2020-04-24)
+    #> R version 4.0.2 (2020-06-22)
     #> Platform: x86_64-w64-mingw32/x64 (64-bit)
-    #> Running under: Windows 10 x64 (build 18363)
+    #> Running under: Windows 10 x64 (build 19041)
     #> 
     #> Matrix products: default
     #> 
@@ -146,15 +146,15 @@ distribution estimator of a parameter: A review. *Internat Statist Rev.*
     #> [1] pvaluefunctions_1.6.0
     #> 
     #> loaded via a namespace (and not attached):
-    #>  [1] Rcpp_1.0.4.6     knitr_1.28       magrittr_1.5     tidyselect_1.0.0
-    #>  [5] munsell_0.5.0    colorspace_1.4-1 R6_2.4.1         rlang_0.4.5     
-    #>  [9] dplyr_0.8.5      stringr_1.4.0    tools_4.0.0      grid_4.0.0      
-    #> [13] gtable_0.3.0     xfun_0.13        htmltools_0.4.0  ellipsis_0.3.0  
-    #> [17] assertthat_0.2.1 yaml_2.2.1       digest_0.6.25    tibble_3.0.1    
-    #> [21] lifecycle_0.2.0  crayon_1.3.4     farver_2.0.3     purrr_0.3.4     
-    #> [25] ggplot2_3.3.0    vctrs_0.2.4      glue_1.4.0       evaluate_0.14   
-    #> [29] rmarkdown_2.1    pracma_2.2.9     stringi_1.4.6    compiler_4.0.0  
-    #> [33] pillar_1.4.3     scales_1.1.0     pkgconfig_2.0.3
+    #>  [1] knitr_1.29       magrittr_1.5     tidyselect_1.1.0 munsell_0.5.0   
+    #>  [5] colorspace_1.4-1 R6_2.4.1         rlang_0.4.6      dplyr_1.0.0     
+    #>  [9] stringr_1.4.0    tools_4.0.2      grid_4.0.2       gtable_0.3.0    
+    #> [13] xfun_0.15        htmltools_0.5.0  ellipsis_0.3.1   yaml_2.2.1      
+    #> [17] digest_0.6.25    tibble_3.0.1     lifecycle_0.2.0  crayon_1.3.4    
+    #> [21] farver_2.0.3     purrr_0.3.4      ggplot2_3.3.2    vctrs_0.3.1     
+    #> [25] glue_1.4.1       evaluate_0.14    rmarkdown_2.3    pracma_2.2.9    
+    #> [29] stringi_1.4.6    compiler_4.0.2   pillar_1.4.4     generics_0.0.2  
+    #> [33] scales_1.1.1     pkgconfig_2.0.3
 
 ## License
 
