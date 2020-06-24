@@ -281,8 +281,6 @@ if (getRversion() >= "2.15.1") {
 #'   , plot = TRUE
 #' )
 #'
-#' @seealso \code{\link[concurve]{ggconcurve}}
-#'
 #' @import stats ggplot2 scales
 #' @importFrom grDevices grey
 #' @importFrom utils find

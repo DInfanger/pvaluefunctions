@@ -346,6 +346,3 @@ Sullivan KM, Foster DA. Use of the confidence interval function. \emph{Epidemiol
 
 Xie Mg, Singh K. Confidence distribution, the frequentist distribution estimator of a parameter: A review. \emph{Internat Statist Rev.} 2013;81(1):3-39.
 }
-\seealso{
-\code{\link[concurve]{ggconcurve}}
-}
