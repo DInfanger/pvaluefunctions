@@ -87,35 +87,40 @@ Bender R, Berg G, Zeeb H. (2005): Tutorial: using confidence curves in
 medical research. *Biom J.* 47(2): 237-47.
 
 Berrar D (2017): Confidence Curves: an alternative to null hypothesis
-significance testing for the comparison of classifiers. *Mach Learn*
+significance testing for the comparison of classifiers. *Mach Learn.*
 106:911-949.
 
 Fraser D. A. S. (2019): The *p*-value function and statistical
-inference. *Am Stat,* 73:sup1, 135-147.
+inference. *Am Stat.* 73:sup1, 135-147.
 
 Greenland S (2019): Valid *P*-Values Behave Exactly as They Should: Some
 Misleading Criticisms of *P*-Values and Their Resolution with
-*S*-Values. *Am Stat,* 73sup1, 106-114.
+*S*-Values. *Am Stat.* 73sup1, 106-114.
 
 Infanger D, Schmidt-Trucksäss A. (2019): *P* value functions: An
 underused method to present research results and to promote quantitative
-reasoning. *Stat Med,* 38, 4189-4197. doi: 10.1002/sim.8293.
+reasoning. *Stat Med.* 38, 4189-4197. doi: 10.1002/sim.8293.
 
 Poole C. (1987a): Beyond the confidence interval. *Am J Public Health.*
 77(2): 195-9.
 
-Poole C. (1987b) Confidence intervals exclude nothing. *Am J Public
+Poole C. (1987b): Confidence intervals exclude nothing. *Am J Public
 Health.* 77(4): 492-3.
 
+Rafi Z, Greenland S. (2020): Semantic and cognitive tools to aid
+statistical science: replace confidence and significance by
+compatibility and surprise. *BMC Med Res Methodol.* 20, 244. doi:
+10.1186/s12874-020-01105-9.
+
 Rosenthal R, Rubin DB. (1994): The counternull value of an effect size:
-A new statistic. Psychol Sci. 5(6): 329-34.
+A new statistic. *Psychol Sci.* 5(6): 329-34.
 
 Schweder T, Hjort NL. (2016): Confidence, likelihood, probability:
 statistical inference with confidence distributions. New York, NY:
 Cambridge University Press.
 
 Xie M, Singh K, Strawderman WE. (2011): Confidence Distributions and a
-Unifying Framework for Meta-Analysis. *J Am Stat Assoc* 106(493):
+Unifying Framework for Meta-Analysis. *J Am Stat Assoc.* 106(493):
 320-33. doi: 10.1198/jasa.2011.tm09803.
 
 Xie Mg, Singh K. (2013): Confidence distribution, the frequentist
@@ -128,9 +133,9 @@ distribution estimator of a parameter: A review. *Internat Statist Rev.*
 
 ## Session info
 
-    #> R version 4.0.2 (2020-06-22)
+    #> R version 4.0.3 (2020-10-10)
     #> Platform: x86_64-w64-mingw32/x64 (64-bit)
-    #> Running under: Windows 10 x64 (build 19041)
+    #> Running under: Windows 10 x64 (build 19042)
     #> 
     #> Matrix products: default
     #> 
@@ -146,14 +151,14 @@ distribution estimator of a parameter: A review. *Internat Statist Rev.*
     #> [1] pvaluefunctions_1.6.0
     #> 
     #> loaded via a namespace (and not attached):
-    #>  [1] knitr_1.29       magrittr_1.5     tidyselect_1.1.0 munsell_0.5.0   
-    #>  [5] colorspace_1.4-1 R6_2.4.1         rlang_0.4.6      dplyr_1.0.0     
-    #>  [9] stringr_1.4.0    tools_4.0.2      grid_4.0.2       gtable_0.3.0    
-    #> [13] xfun_0.15        htmltools_0.5.0  ellipsis_0.3.1   yaml_2.2.1      
-    #> [17] digest_0.6.25    tibble_3.0.1     lifecycle_0.2.0  crayon_1.3.4    
-    #> [21] farver_2.0.3     purrr_0.3.4      ggplot2_3.3.2    vctrs_0.3.1     
-    #> [25] glue_1.4.1       evaluate_0.14    rmarkdown_2.3    pracma_2.2.9    
-    #> [29] stringi_1.4.6    compiler_4.0.2   pillar_1.4.4     generics_0.0.2  
+    #>  [1] knitr_1.30       magrittr_2.0.1   tidyselect_1.1.0 munsell_0.5.0   
+    #>  [5] colorspace_2.0-0 R6_2.5.0         rlang_0.4.9      dplyr_1.0.2     
+    #>  [9] stringr_1.4.0    tools_4.0.3      grid_4.0.3       gtable_0.3.0    
+    #> [13] xfun_0.19        htmltools_0.5.0  ellipsis_0.3.1   yaml_2.2.1      
+    #> [17] digest_0.6.27    tibble_3.0.4     lifecycle_0.2.0  crayon_1.3.4    
+    #> [21] farver_2.0.3     purrr_0.3.4      ggplot2_3.3.2    vctrs_0.3.5     
+    #> [25] glue_1.4.2       evaluate_0.14    rmarkdown_2.5    pracma_2.2.9    
+    #> [29] stringi_1.5.3    compiler_4.0.3   pillar_1.4.7     generics_0.1.0  
     #> [33] scales_1.1.1     pkgconfig_2.0.3
 
 ## License
