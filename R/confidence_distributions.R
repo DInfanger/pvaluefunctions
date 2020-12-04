@@ -1957,8 +1957,8 @@ wilson_cicc <- function(
   x <- round(estimate*n) # To get number of successes/failures
   estimate_compl <- (1 - estimate) # Complement of estimate
 
-  lower <- max(0, (2*x + z^2 - 1 - z*sqrt(z^2 - 2 - 1/n + 4*estimate*(n*estimate_compl + 1)))/(2*(n + z^2)))
-  upper <- min(1, (2*x + z^2 + 1 + z*sqrt(z^2 + 2 - 1/n + 4*estimate*(n*estimate_compl - 1)))/(2*(n + z^2)))
+  lower <- max(0, (2*x + z^2 - 1 - z*sqrt(z^2 - 2 - 1/n + 4*estimate*(n*estimate_compl + 1)))/(2*(n + z^2)), na.rm = TRUE)
+  upper <- min(1, (2*x + z^2 + 1 + z*sqrt(z^2 + 2 - 1/n + 4*estimate*(n*estimate_compl - 1)))/(2*(n + z^2)), na.rm = TRUE)
 
   c(lower, upper)
 
@@ -1992,8 +1992,8 @@ wilson_cicc_diff <- function(
   l2 <- res2[1]
   u2 <- res2[2]
 
-  lim1 <- max(-1, est_diff + sqrt((estimate[1] - l1)^2 + (u2 - estimate[2])^2))
-  lim2 <- min(1, est_diff - sqrt((u1 - estimate[1])^2 + (estimate[2] - l2)^2))
+  lim1 <- max(-1, est_diff - sqrt((estimate[1] - l1)^2 + (u2 - estimate[2])^2))
+  lim2 <- min(1, est_diff + sqrt((u1 - estimate[1])^2 + (estimate[2] - l2)^2))
 
   sort(c(lim1, lim2), decreasing = FALSE)
 
