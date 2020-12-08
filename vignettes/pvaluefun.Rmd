@@ -119,7 +119,7 @@ The main function `conf_dist()` returns five objects in a list:
 
 ### Two-sample *t*-test with unequal variances (Welch-Test)
 
-```{r ttest, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
+```{r ttest, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dpi = 200}
 #-----------------------------------------------------------------------------
 # T-Test
 #-----------------------------------------------------------------------------
@@ -161,7 +161,7 @@ res <- conf_dist(
 Because it's difficult to see very small *p*-values in the graph, you can set the option `log_yaxis = TRUE` so that *p*-values (i.e. the y-axes) below the value set in `cut_logyaxis` will be plotted on a logarithmic scale. This will make it much easier to see small *p*-values but has the disadvantage of creating a "kink" in the *p*-value function which is a pure artifact and puts an undue emphasis on the specified cutoff.
 
 
-```{r linreg_single_pval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
+```{r linreg_single_pval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dpi = 200}
 #-----------------------------------------------------------------------------
 # Model
 #-----------------------------------------------------------------------------
@@ -199,7 +199,7 @@ res <- conf_dist(
 
 #### Confidence distribution
 
-```{r linreg_single_cdf, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
+```{r linreg_single_cdf, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dpi = 200}
 res <- conf_dist(
   estimate = c(-0.02143)
   , df = c(43)
@@ -228,7 +228,7 @@ The point where the confidence distribution is $0.5$ is the median unbiased esti
 ### Multiple coefficients from a linear regression model
 #### *P*-value functions
 
-```{r linreg_multiple_pval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
+```{r linreg_multiple_pval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dpi = 200}
 res <- conf_dist(
   estimate = c(0.13115, 0.04913)
   , df = c(43, 43)
@@ -254,7 +254,7 @@ res <- conf_dist(
 
 #### Surprisal values
 
-```{r linreg_multiple_sval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
+```{r linreg_multiple_sval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dpi = 200}
 res <- conf_dist(
   estimate = c(0.13115, 0.04913)
   , df = c(43, 43)
@@ -278,7 +278,7 @@ res <- conf_dist(
 
 ### Pearson correlation coefficient (one-sided)
 
-```{r corr_pearson, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
+```{r corr_pearson, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dpi = 200}
 #-----------------------------------------------------------------------------
 # Calculate Pearson's correlation coefficient
 #-----------------------------------------------------------------------------
@@ -311,7 +311,7 @@ res <- conf_dist(
 
 ### Odds ratio from logistic regression
 
-```{r logreg, message = FALSE, warning = FALSE, fig.width = 10.0, fig.height = 7.2, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
+```{r logreg, message = FALSE, warning = FALSE, fig.width = 10.0, fig.height = 7.2, out.width = "80%", fig.align='center', dev = "png", dpi = 200}
 #-----------------------------------------------------------------------------
 # Create p-value function
 #-----------------------------------------------------------------------------
@@ -342,7 +342,7 @@ res <- conf_dist(
 
 The *p*-value function (and thus the confidence intervals) are based on Wilson's score interval and not the normal approximation. This means that the *p*-value function will never be outside the interval $[0, 1]$.
 
-```{r prop, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
+```{r prop, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dpi = 200}
 res <- conf_dist(
   estimate = c(0.44)
   , n = c(50)
@@ -367,7 +367,7 @@ res <- conf_dist(
 
 ### Difference between two independent proportions: Wilson's score by Newcombe with continuity correction
 
-```{r propdiff_Wilson, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
+```{r propdiff_Wilson, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dpi = 200}
 res <- conf_dist(
   estimate = c(68/100, 98/150)
   , n = c(100, 150)
@@ -391,7 +391,7 @@ res <- conf_dist(
 
 The standard Wald interval can be modified in a simple manner to drastically improve its coverage probabilities. Simply add 1 to the number of successes and add 2 to the sample size for both proportions. Then proceed to calculate the Wald interval with these modified data. The point estimate for the difference between proportions is still calculated using the unmodified data. The function `conf_dist` does not have a dedicaded type for this kind of estimator but as the Wald interval is based on the normal distribution, we can use `type = general_z` to create the *p*-value function.
 
-```{r propdiff_agresticaffo, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
+```{r propdiff_agresticaffo, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dpi = 200}
 
 # First proportion
 
@@ -443,7 +443,7 @@ res <- conf_dist(
 
 The confidence density of a variance estimate is skewed. This means that the mean, mode and median of the confidence density will not be identical, in general.
 
-```{r variance_calcs, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', eval = TRUE, echo = TRUE, fig.show = "hide", dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
+```{r variance_calcs, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', eval = TRUE, echo = TRUE, fig.show = "hide", dev = "png", dpi = 200}
 # Simulate some data from a normal distribution
 
 set.seed(142857)
@@ -471,7 +471,7 @@ res <- conf_dist(
 
 ```
 
-```{r variance_plot, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', eval = TRUE, echo = TRUE, dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
+```{r variance_plot, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', eval = TRUE, echo = TRUE, dev = "png", dpi = 200}
 # Add vertical lines at the point estimates (mode, median, mean)
 
 res$plot + ggplot2::geom_vline(xintercept = as.numeric(res$point_est[1, 1:3]), linetype = 2, size = 1)
@@ -481,7 +481,7 @@ res$plot + ggplot2::geom_vline(xintercept = as.numeric(res$point_est[1, 1:3]), l
 
 Here, I'm going to replicate **Figure 1** and **Figure 2** in Bender et al. (2005). To do this, we first need to define the transformation that transforms the log-HR into the relative survival effect. By specifying `trans = rse_fun`, the values are automatically transformed and plotted. In addition, we will plot the *p*-value function inverted so that the cusp is located at the bottom. First the *p*-value function:
 
-```{r rse_pval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
+```{r rse_pval, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dpi = 200}
 # Define the transformation function and its inverse for the relative survival effect
 
 rse_fun <- function(x){
@@ -519,7 +519,7 @@ rm(rse_fun, rse_fun_inv)
 
 ```
 Now the confidence distribution (Figure 2):
-```{r rse_cdf, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
+```{r rse_cdf, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dpi = 200}
 # Define the transformation function and its inverse for the relative survival effect
 
 rse_fun <- function(x){
@@ -560,7 +560,7 @@ rm(rse_fun, rse_fun_inv)
 ### Comparing the precision of multiple estimates using the AUCC (area under the confidence curve)
 The AUCC is a scalar representing the area under the *p*-value function (see Berrar (2017)). Values close to 0 indicate a high precision while larger values indicate poorer precision. Multiple estimates can be compared by their AUCC (in the context of a meta-analysis for example). The AUCC is calculated numerically using trapezoidal integration on the untransformed *p*-value function. The estimate can be quite poor if few x-values are used (i.e. argument `n_values` is low).
 
-```{r aucc_comparison, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dev.args = list(type = "cairo-png"), dpi = 200}
+```{r aucc_comparison, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dpi = 200}
 
 # Lungcancer dataset from the "meta" package
 

@@ -1,5 +1,11 @@
 ## NEWS and changes for the pvaluefunctions package
 
+1.6.1
+-------------
+
+  * Fixed a bug concerning the calculation of Newcombe's Wilson score interval with continuity correction for the difference of two proportions.
+  * Removed the "cairo" device from pngs in the vignette.
+
 1.6.0
 -------------
 
