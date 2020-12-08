@@ -18,10 +18,10 @@ knitr::opts_chunk$set(
 
 # *P*-value functions <img src="man/figures/logo3.svg" align="right" width="120" />
 
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/pvaluefunctions)](https://cran.r-project.org/package=pvaluefunctions)
+[![CRAN\_Status\_Badge](https://cranlogs.r-pkg.org:443/badges/grand-total/pvaluefunctions)](https://cran.r-project.org/package=pvaluefunctions)
 [![downloads](https://cranlogs.r-pkg.org/badges/pvaluefunctions)](https://cran.r-project.org/package=pvaluefunctions)
 [![total downloads](https://cranlogs.r-pkg.org/badges/grand-total/pvaluefunctions)](http://cranlogs.r-pkg.org/badges/grand-total/pvaluefunctions)
-[![Rdoc](http://www.rdocumentation.org/badges/version/pvaluefunctions)](http://www.rdocumentation.org/packages/pvaluefunctions)
+[![Rdoc](https://www.rdocumentation.org/packages/pvaluefunctions)](http://www.rdocumentation.org/packages/pvaluefunctions)
 
 ## Accompanying paper
 
@@ -64,7 +64,7 @@ Use the command `install.packages(c("ggplot2", "scales", "zipfR", "pracma"))` in
 
 For more examples and code, see the [vignette](https://CRAN.R-project.org/package=pvaluefunctions/vignettes/pvaluefun.html).
 
-```{r ttest_pval, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "70%", fig.align='left', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
+```{r ttest_pval, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "70%", fig.align='left', dev = "png", dpi = 600}
 
 # devtools::install_github("DInfanger/pvaluefunctions")
 
@@ -98,7 +98,7 @@ res <- conf_dist(
 )
 ```
 
-```{r ttest_sval, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "70%", fig.align='left', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
+```{r ttest_sval, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "70%", fig.align='left', dev = "png", dpi = 600}
 
 #-----------------------------------------------------------------------------
 # Create s-value function
@@ -129,7 +129,7 @@ res <- conf_dist(
 ```
 
 
-```{r benderfig1, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "70%", fig.align='left', dev = "png", dev.args = list(type = "cairo-png"), dpi = 600}
+```{r benderfig1, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "70%", fig.align='left', dev = "png", dpi = 600}
 rse_fun <- function(x){
   100*(1 - exp(x))
 }

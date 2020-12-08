@@ -19,11 +19,11 @@ pvaluefunctions
 
 # *P*-value functions <img src="man/figures/logo3.svg" align="right" width="120" />
 
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/pvaluefunctions)](https://cran.r-project.org/package=pvaluefunctions)
+[![CRAN\_Status\_Badge](https://cranlogs.r-pkg.org:443/badges/grand-total/pvaluefunctions)](https://cran.r-project.org/package=pvaluefunctions)
 [![downloads](https://cranlogs.r-pkg.org/badges/pvaluefunctions)](https://cran.r-project.org/package=pvaluefunctions)
 [![total
 downloads](https://cranlogs.r-pkg.org/badges/grand-total/pvaluefunctions)](http://cranlogs.r-pkg.org/badges/grand-total/pvaluefunctions)
-[![Rdoc](http://www.rdocumentation.org/badges/version/pvaluefunctions)](http://www.rdocumentation.org/packages/pvaluefunctions)
+[![Rdoc](https://www.rdocumentation.org/packages/pvaluefunctions)](http://www.rdocumentation.org/packages/pvaluefunctions)
 
 ## Accompanying paper
 
@@ -133,7 +133,7 @@ distribution estimator of a parameter: A review. *Internat Statist Rev.*
 
 ## Session info
 
-    #> R version 4.0.3 (2020-10-10)
+    #> R Under development (unstable) (2020-12-07 r79587)
     #> Platform: x86_64-w64-mingw32/x64 (64-bit)
     #> Running under: Windows 10 x64 (build 19042)
     #> 
@@ -148,18 +148,17 @@ distribution estimator of a parameter: A review. *Internat Statist Rev.*
     #> [1] stats     graphics  grDevices utils     datasets  methods   base     
     #> 
     #> other attached packages:
-    #> [1] pvaluefunctions_1.6.0
+    #> [1] pvaluefunctions_1.6.1
     #> 
     #> loaded via a namespace (and not attached):
-    #>  [1] knitr_1.30       magrittr_2.0.1   tidyselect_1.1.0 munsell_0.5.0   
-    #>  [5] colorspace_2.0-0 R6_2.5.0         rlang_0.4.9      dplyr_1.0.2     
-    #>  [9] stringr_1.4.0    tools_4.0.3      grid_4.0.3       gtable_0.3.0    
-    #> [13] xfun_0.19        htmltools_0.5.0  ellipsis_0.3.1   yaml_2.2.1      
-    #> [17] digest_0.6.27    tibble_3.0.4     lifecycle_0.2.0  crayon_1.3.4    
-    #> [21] farver_2.0.3     purrr_0.3.4      ggplot2_3.3.2    vctrs_0.3.5     
-    #> [25] glue_1.4.2       evaluate_0.14    rmarkdown_2.5    pracma_2.2.9    
-    #> [29] stringi_1.5.3    compiler_4.0.3   pillar_1.4.7     generics_0.1.0  
-    #> [33] scales_1.1.1     pkgconfig_2.0.3
+    #>  [1] knitr_1.30       magrittr_2.0.1   munsell_0.5.0    colorspace_2.0-0
+    #>  [5] R6_2.5.0         rlang_0.4.9      stringr_1.4.0    tools_4.1.0     
+    #>  [9] grid_4.1.0       gtable_0.3.0     xfun_0.19        htmltools_0.5.0 
+    #> [13] ellipsis_0.3.1   yaml_2.2.1       digest_0.6.27    tibble_3.0.4    
+    #> [17] lifecycle_0.2.0  crayon_1.3.4     farver_2.0.3     ggplot2_3.3.2   
+    #> [21] vctrs_0.3.5      glue_1.4.2       evaluate_0.14    rmarkdown_2.5   
+    #> [25] pracma_2.2.9     stringi_1.5.3    compiler_4.1.0   pillar_1.4.7    
+    #> [29] scales_1.1.1     pkgconfig_2.0.3
 
 ## License
 
