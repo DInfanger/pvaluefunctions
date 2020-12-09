@@ -21,9 +21,8 @@ pvaluefunctions
 
 [![CRAN\_Status\_Badge](https://cranlogs.r-pkg.org:443/badges/grand-total/pvaluefunctions)](https://cran.r-project.org/package=pvaluefunctions)
 [![downloads](https://cranlogs.r-pkg.org/badges/pvaluefunctions)](https://cran.r-project.org/package=pvaluefunctions)
-[![total
-downloads](https://cranlogs.r-pkg.org/badges/grand-total/pvaluefunctions)](http://cranlogs.r-pkg.org/badges/grand-total/pvaluefunctions)
-[![Rdoc](https://www.rdocumentation.org/packages/pvaluefunctions)](http://www.rdocumentation.org/packages/pvaluefunctions)
+<https://cranlogs.r-pkg.org/badges/grand-total/pvaluefunctions>
+<https://www.rdocumentation.org/packages/pvaluefunctions>
 
 ## Accompanying paper
 
