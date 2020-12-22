@@ -2085,7 +2085,8 @@ cdist_prop1 <- function(
       counternull_mat_tmp <- matrix(NA, ncol = 3, nrow = length(null_values))
 
       counternull_mat_tmp[, 1] <- null_values
-      counternull_mat_tmp[, 2] <- sapply(counter_tmp, function(x, cdf, q){x[which.min(abs(cdf - q))]}, x = x_calc, cdf = res_mat_tmp[, 2])
+      # counternull_mat_tmp[, 2] <- sapply(counter_tmp, function(x, cdf, q){x[which.min(abs(cdf - q))]}, x = x_calc, cdf = res_mat_tmp[, 2])
+      counternull_mat_tmp[, 2] <- vapply(counter_tmp, function(x, cdf, q){x[which.min(abs(cdf - q))]}, x = x_calc, cdf = res_mat_tmp[, 2], FUN.VALUE = double(1L))
       counternull_mat_tmp[, 3] <- rep(i, length(null_values))
 
       counternull_mat <- rbind(counternull_mat, counternull_mat_tmp)
@@ -2170,7 +2171,8 @@ cdist_propdiff <- function(
   # limits <- wilson_cicc_diff(estimate = estimate, n = n, conf_level = (1 - eps), alternative = alternative)
 
   conf_levels <- seq(eps, 1 - eps, length.out = ceiling(n_values/2))
-  x_calc <- sapply(conf_levels, wilson_cicc_diff, estimate = estimate, n = n, alternative = alternative)
+  # x_calc <- sapply(conf_levels, wilson_cicc_diff, estimate = estimate, n = n, alternative = alternative)
+  x_calc <- vapply(conf_levels, wilson_cicc_diff, estimate = estimate, n = n, alternative = alternative, FUN.VALUE = double(2L))
 
   val_min <- wilson_cicc_diff(estimate, n, conf_level = eps)
   val_between <- seq(min(val_min), max(val_min), length.out = 100)
