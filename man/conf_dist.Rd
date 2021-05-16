@@ -328,6 +328,8 @@ Berrar D. Confidence curves: an alternative to null hypothesis significance test
 
 Bonett DG, Wright TA. Sample size requirements for estimating Pearson, Kendall and Spearman correlations. \emph{Psychometrika.} 2000;65(1):23-28.
 
+Cole SR, Edwards JK, Greenland S. Surprise! \emph{Am J Epidemiol.} 2021:190(2):191-193.
+
 Infanger D, Schmidt-Trucksäss A. \emph{P} value functions: An underused method to present research results and to promote quantitative reasoning. \emph{Stat Med.} 2019;38:4189-4197.
 
 Newcombe RG. Interval estimation for the difference between independent proportions: comparison of eleven methods. \emph{Stat Med.} 1998;17:873-890.
@@ -335,6 +337,8 @@ Newcombe RG. Interval estimation for the difference between independent proporti
 Poole C. Confidence intervals exclude nothing. \emph{Am J Public Health.} 1987;77(4):492-493.
 
 Poole C. Beyond the confidence interval. \emph{Am J Public Health.} 1987;77(2):195-199.
+
+Rafi Z, Greenland S. Semantic and cognitive tools to aid statistical science: replace confidence and significance by compatibility and surprise. \emph{BMC Med Res Methodol} 2020;20:244.
 
 Rosenthal R, Rubin D. The counternull value of an effect size: a new statistic. \emph{Psychological Science.} 1994;5(6):329-334.
 

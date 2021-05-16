@@ -1,19 +1,19 @@
 pvaluefunctions
 ================
 
-  - [*P*-value functions
-    <img src="man/figures/logo3.svg" align="right" width="120" />](#p-value-functions)
-      - [Accompanying paper](#accompanying-paper)
-          - [Recreation of the figures in the
+-   [*P*-value functions
+    <img src="man/figures/logo3.svg" align="right" width="120" />](#p-value-functions-)
+    -   [Accompanying paper](#accompanying-paper)
+        -   [Recreation of the figures in the
             paper](#recreation-of-the-figures-in-the-paper)
-      - [Overview](#overview)
-      - [Installation](#installation)
-      - [Dependencies](#dependencies)
-      - [Examples](#examples)
-      - [References](#references)
-      - [Contact](#contact)
-      - [Session info](#session-info)
-      - [License](#license)
+    -   [Overview](#overview)
+    -   [Installation](#installation)
+    -   [Dependencies](#dependencies)
+    -   [Examples](#examples)
+    -   [References](#references)
+    -   [Contact](#contact)
+    -   [Session info](#session-info)
+    -   [License](#license)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -21,8 +21,9 @@ pvaluefunctions
 
 [![CRAN\_Status\_Badge](https://cranlogs.r-pkg.org:443/badges/grand-total/pvaluefunctions)](https://cran.r-project.org/package=pvaluefunctions)
 [![downloads](https://cranlogs.r-pkg.org/badges/pvaluefunctions)](https://cran.r-project.org/package=pvaluefunctions)
-<https://cranlogs.r-pkg.org/badges/grand-total/pvaluefunctions>
-<https://www.rdocumentation.org/packages/pvaluefunctions>
+[![total
+downloads](https://cranlogs.r-pkg.org/badges/grand-total/pvaluefunctions)](https://cranlogs.r-pkg.org/badges/grand-total/pvaluefunctions)
+[![Rdoc](https://www.rdocumentation.org/packages/pvaluefunctions)](https://www.rdocumentation.org/packages/pvaluefunctions)
 
 ## Accompanying paper
 
@@ -61,13 +62,15 @@ using `library(pvaluefunctions)`.
 The function depends on the following R packages, which need to be
 installed beforehand:
 
-  - [ggplot2](https://cran.r-project.org/package=ggplot2)
-  - [scales](https://cran.r-project.org/package=scales)
-  - [zipfR](https://cran.r-project.org/package=zipfR)
-  - [pracma](https://cran.r-project.org/package=pracma)
+-   [ggplot2](https://cran.r-project.org/package=ggplot2)
+-   [scales](https://cran.r-project.org/package=scales)
+-   [zipfR](https://cran.r-project.org/package=zipfR)
+-   [pracma](https://cran.r-project.org/package=pracma)
+-   [gsl](https://cran.r-project.org/package=gsl)
 
-Use the command `install.packages(c("ggplot2", "scales", "zipfR",
-"pracma"))` in R to install those packages.
+Use the command
+`install.packages(c("ggplot2", "scales", "zipfR", "pracma", "gsl"))` in
+R to install those packages.
 
 ## Examples
 
@@ -132,7 +135,7 @@ distribution estimator of a parameter: A review. *Internat Statist Rev.*
 
 ## Session info
 
-    #> R Under development (unstable) (2020-12-07 r79587)
+    #> R version 4.0.5 (2021-03-31)
     #> Platform: x86_64-w64-mingw32/x64 (64-bit)
     #> Running under: Windows 10 x64 (build 19042)
     #> 
@@ -147,17 +150,19 @@ distribution estimator of a parameter: A review. *Internat Statist Rev.*
     #> [1] stats     graphics  grDevices utils     datasets  methods   base     
     #> 
     #> other attached packages:
-    #> [1] pvaluefunctions_1.6.1
+    #> [1] pvaluefunctions_1.6.2
     #> 
     #> loaded via a namespace (and not attached):
-    #>  [1] knitr_1.30       magrittr_2.0.1   munsell_0.5.0    colorspace_2.0-0
-    #>  [5] R6_2.5.0         rlang_0.4.9      stringr_1.4.0    tools_4.1.0     
-    #>  [9] grid_4.1.0       gtable_0.3.0     xfun_0.19        htmltools_0.5.0 
-    #> [13] ellipsis_0.3.1   yaml_2.2.1       digest_0.6.27    tibble_3.0.4    
-    #> [17] lifecycle_0.2.0  crayon_1.3.4     farver_2.0.3     ggplot2_3.3.2   
-    #> [21] vctrs_0.3.5      glue_1.4.2       evaluate_0.14    rmarkdown_2.5   
-    #> [25] pracma_2.2.9     stringi_1.5.3    compiler_4.1.0   pillar_1.4.7    
-    #> [29] scales_1.1.1     pkgconfig_2.0.3
+    #>  [1] pracma_2.3.3      pillar_1.6.0      compiler_4.0.5    highr_0.9        
+    #>  [5] tools_4.0.5       digest_0.6.27     evaluate_0.14     lifecycle_1.0.0  
+    #>  [9] tibble_3.1.1      gtable_0.3.0      pkgconfig_2.0.3   rlang_0.4.11     
+    #> [13] DBI_1.1.1         yaml_2.2.1        xfun_0.23         stringr_1.4.0    
+    #> [17] dplyr_1.0.6       knitr_1.33        generics_0.1.0    vctrs_0.3.8      
+    #> [21] grid_4.0.5        tidyselect_1.1.1  glue_1.4.2        R6_2.5.0         
+    #> [25] fansi_0.4.2       rmarkdown_2.8     ggplot2_3.3.3     purrr_0.3.4      
+    #> [29] farver_2.1.0      magrittr_2.0.1    scales_1.1.1      ellipsis_0.3.2   
+    #> [33] htmltools_0.5.1.1 assertthat_0.2.1  colorspace_2.0-1  utf8_1.2.1       
+    #> [37] stringi_1.6.1     munsell_0.5.0     crayon_1.4.1
 
 ## License
 

@@ -60,6 +60,7 @@ The function depends on the following R packages:
 * [scales](https://cran.r-project.org/package=scales)
 * [zipfR](https://cran.r-project.org/package=zipfR)
 * [pracma](https://cran.r-project.org/package=pracma)
+* [gsl](https://cran.r-project.org/package=gsl)
 
 ## Usage
 
@@ -278,6 +279,8 @@ res <- conf_dist(
 
 ### Pearson correlation coefficient (one-sided)
 
+As of version 1.6.2, the package uses the exact distribution for Pearson's correlation coefficient as described in a preprint by Gunnar Taraldsen (2020). The calculations make use of the Gaussian hypergeometric function ($_2F_1$). It also makes the calculations slower, depending on the value in `n_values`.
+
 ```{r corr_pearson, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dpi = 200}
 #-----------------------------------------------------------------------------
 # Calculate Pearson's correlation coefficient
@@ -294,7 +297,7 @@ res <- conf_dist(
   , n = 47
   , type = "pearson"
   , plot_type = "p_val"
-  , n_values = 1e4L
+  , n_values = 1e3L
   # , est_names = c("")
   , conf_level = c(0.95, 0.90, 0.80)
   , null_values = c(0)

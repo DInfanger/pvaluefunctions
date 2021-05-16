@@ -50,6 +50,7 @@ The function depends on the following R packages:
 * [scales](https://cran.r-project.org/package=scales)
 * [zipfR](https://cran.r-project.org/package=zipfR)
 * [pracma](https://cran.r-project.org/package=pracma)
+* [gsl](https://cran.r-project.org/package=gsl)
 
 ## Usage
 

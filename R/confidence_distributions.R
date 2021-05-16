@@ -53,6 +53,8 @@ if (getRversion() >= "2.15.1") {
 #'
 #' Bonett DG, Wright TA. Sample size requirements for estimating Pearson, Kendall and Spearman correlations. \emph{Psychometrika.} 2000;65(1):23-28.
 #'
+#' Cole SR, Edwards JK, Greenland S. Surprise! \emph{Am J Epidemiol.} 2021:190(2):191-193.
+#'
 #' Infanger D, Schmidt-Trucksäss A. \emph{P} value functions: An underused method to present research results and to promote quantitative reasoning. \emph{Stat Med.} 2019;38:4189-4197.
 #'
 #' Newcombe RG. Interval estimation for the difference between independent proportions: comparison of eleven methods. \emph{Stat Med.} 1998;17:873-890.
@@ -60,6 +62,8 @@ if (getRversion() >= "2.15.1") {
 #' Poole C. Confidence intervals exclude nothing. \emph{Am J Public Health.} 1987;77(4):492-493.
 #'
 #' Poole C. Beyond the confidence interval. \emph{Am J Public Health.} 1987;77(2):195-199.
+#'
+#' Rafi Z, Greenland S. Semantic and cognitive tools to aid statistical science: replace confidence and significance by compatibility and surprise. \emph{BMC Med Res Methodol} 2020;20:244.
 #'
 #' Rosenthal R, Rubin D. The counternull value of an effect size: a new statistic. \emph{Psychological Science.} 1994;5(6):329-334.
 #'
@@ -467,8 +471,8 @@ conf_dist <- function(
     stop("Please provide the sample size for correlations and proportions.")
   }
 
-  if ((type %in% c("pearson", "spearman") && any(n < 4)) || (type %in% c("kendall") && any(n < 5))){
-    stop("Sample size must be at least 4 for Pearson and Spearman and at least 5 for Kendall's correlation.")
+  if ((type %in% c("pearson") && any(n < 2)) || (type %in% c("spearman") && any(n < 4)) || (type %in% c("kendall") && any(n < 5))){
+    stop("Sample size must be at least 2 for Pearson, at least 4 for Spearman and at least 5 for Kendall's correlation.")
   }
 
   if (type %in% c("var") && is.null(n)){
@@ -563,22 +567,36 @@ conf_dist <- function(
     # Ref 1: Bonett & Wright (2000): Sample size requirements for estimating Pearson, Kendall and Spearman correlations
     # Ref 2: Fieller, Hartley, Pearson (1957): Tests for rank correlation coefficients I.
 
-    stderr <- switch(
-      type
-      , pearson = 1/sqrt(n - 3)
-      , spearman = sqrt((1 + (estimate)^2/2)/(n - 3))
-      , kendall = sqrt(0.437/(n - 4))
-    )
+    if (type %in% c("spearman", "kendall")) { # Use approximations for Spearman and Kendall
 
-    res <- cdist_corr(
-      estimate = estimate
-      , stderr = stderr
-      , n = n
-      , n_values = n_values
-      , conf_level = conf_level
-      , null_values = null_values
-      , alternative = alternative
-    )
+      stderr <- switch(
+        type
+        , pearson = 1/sqrt(n - 3)
+        , spearman = sqrt((1 + (estimate)^2/2)/(n - 3))
+        , kendall = sqrt(0.437/(n - 4))
+      )
+
+      res <- cdist_corr(
+        estimate = estimate
+        , stderr = stderr
+        , n = n
+        , n_values = n_values
+        , conf_level = conf_level
+        , null_values = null_values
+        , alternative = alternative
+      )
+
+    } else if (type %in% "pearson") { # Use exact distribution for Pearson
+
+      res <- cdist_corr_exact(
+        estimate = estimate
+        , n = n
+        , n_values = n_values
+        , conf_level = conf_level
+        , null_values = null_values
+        , alternative = alternative
+      )
+    }
 
   } else if (type %in% "var") {
 
@@ -1794,6 +1812,188 @@ cdist_corr <- function(
   ))
 
 }
+
+cdist_corr_exact <- function(
+  estimate = NULL
+  , n = NULL
+  , n_values = NULL
+  , conf_level = NULL
+  , null_values = NULL
+  , alternative = NULL
+){
+
+  # Define functions for the exact density (see Taraldsen 2020)
+  conf_dens_corr <- function(rho, r, n) {
+    nu <- (n - 1)
+    (nu*(nu - 1)*gamma(nu - 1))/(sqrt(2*pi)*gamma(nu + (1/2)))*(1 - r^2)^((nu - 1)/2)*(1 - rho^2)^((nu - 2)/2)*(1 - r*rho)^((1 - 2*nu)/2)*gsl::hyperg_2F1(-1/2, 3/2, nu + (1/2), (1 + r*rho)/2, strict = FALSE)
+  }
+
+  cdf_dist <- function(z, r, n) {
+    nu <- (n - 1)
+    sapply(z, FUN = function(z, r, n) {integrate(conf_dens_corr, lower = -1, upper = z, r = r, n = n, subdivisions = 1000L)$value}, r = r, n = n)
+  }
+
+  # Function to find confidence intervals based on the cdf
+  find_ci <- function(conf_level, r, n, alternative) {
+
+    quants_tmp <- switch(
+      alternative
+      , two_sided = c(1 - (conf_level + 1)/2, (conf_level + 1)/2)
+      , one_sided = c((1 - conf_level), conf_level)
+    )
+
+    lower_fun <- function(z, r, n) {
+      cdf_dist(z = z, r = r, n = n) - quants_tmp[1]
+    }
+    upper_fun <- function(z, r, n) {
+      cdf_dist(z = z, r = r, n = n) - quants_tmp[2]
+    }
+    c(
+      uniroot(lower_fun, interval = c(-1, 1), r = r, n = n, maxiter = 2000)$root
+      , uniroot(upper_fun, interval = c(-1, 1), r = r, n = n, maxiter = 2000)$root
+    )
+  }
+
+  # Function to find counternull values
+  find_counternulls <- function(null_values, r, n) {
+
+    null_values_cdf <- cdf_dist(null_values, r = r, n = n)
+
+    zero_fun <- function(x, null_values_cdf, r = r, n = n) {
+
+      (1 - cdf_dist(x, r = r, n = n)) - null_values_cdf
+
+    }
+    uniroot(zero_fun, r = r, n = n, null_values_cdf = null_values_cdf, interval = c(-1, 1))$root
+  }
+
+  res_mat <- matrix(NA, nrow = 0, ncol = 6)
+
+  conf_mat <- matrix(NA, nrow = 0, ncol = 4)
+
+  counternull_mat <- matrix(NA, nrow = 0, ncol = 3)
+
+  for (i in seq_along(estimate)) {
+
+    limits <- c(-1, 1)
+
+    x_calc <- c(estimate[i], null_values, seq(limits[1], limits[2], length.out = (n_values + 2)))
+    x_calc <- x_calc[!(x_calc %in% c(-1, 1))]
+
+    res_mat_tmp <- matrix(NA, nrow = length(x_calc), ncol = 6)
+
+    res_mat_tmp[, 1] <- x_calc
+    res_mat_tmp[, 2] <- cdf_dist(x_calc, r = estimate[i], n = n[i])
+    res_mat_tmp[, 3] <- conf_dens_corr(x_calc, r = estimate[i], n = n[i])
+    res_mat_tmp[, 4] <- 1 - 2*abs(res_mat_tmp[, 2] - (1/2))
+    res_mat_tmp[, 5] <- (1/2) - abs(res_mat_tmp[, 2] - (1/2))
+    res_mat_tmp[, 6] <- rep(i, length(x_calc))
+
+    res_mat <- rbind(res_mat, res_mat_tmp)
+
+    # Confidence intervals
+
+    if (!is.null(conf_level)) {
+
+      conf_mat_tmp <- matrix(NA, ncol = 4, nrow = length(conf_level))
+
+      limits_tmp <- sapply(conf_level, FUN = find_ci, r = estimate[i], n = n[i], alternative = alternative)
+
+      conf_mat_tmp[, 1] <- conf_level
+      conf_mat_tmp[, 2] <- limits_tmp[1, ]
+      conf_mat_tmp[, 3] <- limits_tmp[2, ]
+      conf_mat_tmp[, 4] <- rep(i, length(conf_level))
+
+      conf_mat <- rbind(conf_mat, conf_mat_tmp)
+
+    }
+
+    # Counternulls
+
+    if (!is.null(null_values)) {
+
+      counternull_mat_tmp <- matrix(NA, ncol = 3, nrow = length(null_values))
+
+      counternulls_tmp <- sapply(null_values, find_counternulls, r = estimate[i], n = n[i])
+
+      counternull_mat_tmp[, 1] <- null_values
+      counternull_mat_tmp[, 2] <- counternulls_tmp
+      counternull_mat_tmp[, 3] <- rep(i, length(null_values))
+
+      counternull_mat <- rbind(counternull_mat, counternull_mat_tmp)
+
+    }
+  }
+
+  res_frame <- as.data.frame(res_mat)
+
+  names(res_frame) <- c("values", "conf_dist", "conf_dens", "p_two", "p_one", "variable")
+
+  if (!is.null(conf_level)) {
+
+    conf_frame <- as.data.frame(conf_mat)
+
+    names(conf_frame) <- c("conf_level", "lwr", "upr", "variable")
+
+  } else {
+    conf_frame <- NULL
+  }
+
+  if (!is.null(null_values)) {
+
+    counternull_frame <- as.data.frame(counternull_mat)
+
+    names(counternull_frame) <- c("null_value", "counternull", "variable")
+
+  } else {
+    counternull_frame <- NULL
+  }
+
+  # Point estimators
+
+  point_est_frame <- data.frame(
+    est_mean = rep(NA, length(estimate))
+    , est_median = rep(NA, length(estimate))
+    , est_mode = rep(NA, length(estimate))
+    , variable = seq(1, i, 1)
+  )
+
+  mean_fun <- function(rho, r, n) {
+    rho*conf_dens_corr(rho = rho, r = r, n = n)
+  }
+
+  median_fun <- function(r, n) {
+    zero_fun <- function(x, r = r, n = n) {
+      cdf_dist(x, r = r, n = n) - (1/2)
+    }
+    uniroot(zero_fun, r = r, n = n, interval = c(-1, 1))$root
+  }
+
+  mode_fun <- function(r, n) {
+    pdf_deriv <- function(rho, r = r, n = n) {
+      nu <- (n - 1)
+      -1/(8*sqrt(2*pi))*(1 - r^2)^(1/2*(nu - 1))*(nu - 1)*nu*(1 - r*rho)^(-1/2 - nu)*(1 - rho^2)^(1/2*(nu - 4))*gamma(nu - 1)*(4*(2*(nu - 2)*rho + r*(1 - 2*nu + 3*rho^2))*(gsl::hyperg_2F1(-1/2, 3/2, 1/2 + nu, 1/2*(1 + r*rho), strict = FALSE))/gamma(1/2 + nu) + 3*r*(r*rho - 1)*(rho^2 - 1)*(gsl::hyperg_2F1(1/2, 5/2, 3/2 + nu, 1/2*(1 + rho*r), strict = FALSE)/gamma(3/2 + nu)))
+    }
+    uniroot(pdf_deriv, r = r, n = n, lower = -0.99999, upper = 0.99999)$root
+  }
+
+  for (i in seq_along(estimate)) {
+
+    point_est_frame$est_mean[i] <- integrate(mean_fun, lower = -1, upper = 1, r = estimate[i], n = n[i], rel.tol = 1e-10)$value # Mean
+    point_est_frame$est_median[i] <- median_fun(r = estimate[i], n = n[i])
+    point_est_frame$est_mode[i] <- mode_fun(r = estimate[i], n = n[i])
+
+  }
+
+  return(list(
+    res_frame = res_frame
+    , conf_frame = conf_frame
+    , counternull_frame = counternull_frame
+    , point_est = point_est_frame
+  ))
+
+}
+
 
 cdist_var <- function(
   estimate = NULL

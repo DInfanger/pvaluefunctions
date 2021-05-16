@@ -57,8 +57,9 @@ The function depends on the following R packages, which need to be installed bef
 * [scales](https://cran.r-project.org/package=scales)
 * [zipfR](https://cran.r-project.org/package=zipfR)
 * [pracma](https://cran.r-project.org/package=pracma)
+* [gsl](https://cran.r-project.org/package=gsl)
 
-Use the command `install.packages(c("ggplot2", "scales", "zipfR", "pracma"))` in R to install those packages.
+Use the command `install.packages(c("ggplot2", "scales", "zipfR", "pracma", "gsl"))` in R to install those packages.
 
 ## Examples
 
