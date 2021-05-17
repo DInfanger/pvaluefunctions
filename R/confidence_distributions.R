@@ -1860,9 +1860,7 @@ cdist_corr_exact <- function(
     null_values_cdf <- cdf_dist(null_values, r = r, n = n)
 
     zero_fun <- function(x, null_values_cdf, r = r, n = n) {
-
       (1 - cdf_dist(x, r = r, n = n)) - null_values_cdf
-
     }
     uniroot(zero_fun, r = r, n = n, null_values_cdf = null_values_cdf, interval = c(-1, 1))$root
   }
@@ -1958,10 +1956,15 @@ cdist_corr_exact <- function(
     , variable = seq(1, i, 1)
   )
 
-  mean_fun <- function(rho, r, n) {
-    rho*conf_dens_corr(rho = rho, r = r, n = n)
+  # The mean is obtained by numerical integration
+  mean_fun <- function(r, n) {
+    int_fun <- function(rho, r = r, n = n) {
+      rho*conf_dens_corr(rho = rho, r = r, n = n)
+    }
+    integrate(int_fun, lower = -1, upper = 1, r = estimate[i], n = n[i], rel.tol = 1e-10)$value
   }
 
+  # The median is found by numerical root-finding using the cdf
   median_fun <- function(r, n) {
     zero_fun <- function(x, r = r, n = n) {
       cdf_dist(x, r = r, n = n) - (1/2)
@@ -1969,6 +1972,7 @@ cdist_corr_exact <- function(
     uniroot(zero_fun, r = r, n = n, interval = c(-1, 1))$root
   }
 
+  # Find the root of the derivative of the pdf numerically
   mode_fun <- function(r, n) {
     pdf_deriv <- function(rho, r = r, n = n) {
       nu <- (n - 1)
@@ -1979,8 +1983,8 @@ cdist_corr_exact <- function(
 
   for (i in seq_along(estimate)) {
 
-    point_est_frame$est_mean[i] <- integrate(mean_fun, lower = -1, upper = 1, r = estimate[i], n = n[i], rel.tol = 1e-10)$value # Mean
-    point_est_frame$est_median[i] <- median_fun(r = estimate[i], n = n[i])
+    point_est_frame$est_mean[i] <- mean_fun(r = estimate[i], n = n[i])
+      point_est_frame$est_median[i] <- median_fun(r = estimate[i], n = n[i])
     point_est_frame$est_mode[i] <- mode_fun(r = estimate[i], n = n[i])
 
   }
@@ -2464,7 +2468,6 @@ cdist_propdiff <- function(
       }
     }
 
-
     counternull_mat_tmp <- matrix(NA, ncol = 3, nrow = length(null_values))
     counternull_mat_tmp[, 1] <- null_values
     counternull_mat_tmp[, 2] <- cnull_tmp
@@ -2568,22 +2571,3 @@ magnify_trans_log_rev <- function(interval_low = 0.05, interval_high = 1,  reduc
 
   trans_new(name = 'customlog_rev', transform = trans, inverse = inv, domain = c(1e-16, Inf))
 }
-
-# # Surprisal transformation
-#
-# trans_surprisal <- function() {
-#
-#   trans <- Vectorize(function(x) {
-#     if(!is.na(x)) {
-#       -log2(x)
-#     }
-#   })
-#
-#   inv <- Vectorize(function(x) {
-#     if(!is.na(x)) {
-#       2^(-x)
-#     }
-#   })
-#
-#   trans_new(name = 'surprisal', transform = trans, inverse = inv, domain = c(1e-16, Inf))
-# }
