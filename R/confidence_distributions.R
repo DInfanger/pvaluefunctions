@@ -471,8 +471,8 @@ conf_dist <- function(
     stop("Please provide the sample size for correlations and proportions.")
   }
 
-  if ((type %in% c("pearson") && any(n < 2)) || (type %in% c("spearman") && any(n < 4)) || (type %in% c("kendall") && any(n < 5))){
-    stop("Sample size must be at least 2 for Pearson, at least 4 for Spearman and at least 5 for Kendall's correlation.")
+  if ((type %in% c("pearson") && any(n < 3)) || (type %in% c("spearman") && any(n < 4)) || (type %in% c("kendall") && any(n < 5))){
+    stop("Sample size must be at least 3 for Pearson, at least 4 for Spearman and at least 5 for Kendall's correlation.")
   }
 
   if (type %in% c("var") && is.null(n)){
@@ -1822,12 +1822,12 @@ cdist_corr_exact <- function(
   , alternative = NULL
 ){
 
-  # Define functions for the exact density (see Taraldsen 2020)
+  # Define function for the exact density (see Taraldsen 2020)
   conf_dens_corr <- function(rho, r, n) {
     nu <- (n - 1)
     (nu*(nu - 1)*gamma(nu - 1))/(sqrt(2*pi)*gamma(nu + (1/2)))*(1 - r^2)^((nu - 1)/2)*(1 - rho^2)^((nu - 2)/2)*(1 - r*rho)^((1 - 2*nu)/2)*gsl::hyperg_2F1(-1/2, 3/2, nu + (1/2), (1 + r*rho)/2, strict = FALSE)
   }
-
+  # The cdf is obtained by numerical integration of the pdf
   cdf_dist <- function(z, r, n) {
     nu <- (n - 1)
     sapply(z, FUN = function(z, r, n) {integrate(conf_dens_corr, lower = -1, upper = z, r = r, n = n, subdivisions = 1000L)$value}, r = r, n = n)
@@ -1897,7 +1897,7 @@ cdist_corr_exact <- function(
 
       conf_mat_tmp <- matrix(NA, ncol = 4, nrow = length(conf_level))
 
-      limits_tmp <- sapply(conf_level, FUN = find_ci, r = estimate[i], n = n[i], alternative = alternative)
+      limits_tmp <- vapply(conf_level, FUN = find_ci, r = estimate[i], n = n[i], alternative = alternative, FUN.VALUE = double(2L))
 
       conf_mat_tmp[, 1] <- conf_level
       conf_mat_tmp[, 2] <- limits_tmp[1, ]
@@ -1914,7 +1914,7 @@ cdist_corr_exact <- function(
 
       counternull_mat_tmp <- matrix(NA, ncol = 3, nrow = length(null_values))
 
-      counternulls_tmp <- sapply(null_values, find_counternulls, r = estimate[i], n = n[i])
+      counternulls_tmp <- vapply(null_values, find_counternulls, r = estimate[i], n = n[i], FUN.VALUE = double(1L))
 
       counternull_mat_tmp[, 1] <- null_values
       counternull_mat_tmp[, 2] <- counternulls_tmp
