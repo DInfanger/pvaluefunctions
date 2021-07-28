@@ -4,6 +4,7 @@
 -------------
 
   * The calculations for Pearson's correlation coefficient now use the exact distribution described in a preprint by Gunnar Taraldsen (2020). This makes the use of the gsl package necessary because the calculations involve the Gaussian hypergeometric function (2F1). Warning: This can make the calculations drastically longer if a high value of `n_values` is used.
+  * Small changes in the help page for `conf_dist`.
 
 1.6.1
 -------------
