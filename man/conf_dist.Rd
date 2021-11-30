@@ -77,7 +77,7 @@ conf_dist(
 
 \item{plot_legend}{Logical. Indicating if a legend should be plotted if multiple curves are plotted together with different colors (i.e. \code{together = TRUE)} and \code{same_color = FALSE}).}
 
-\item{same_color}{Logical. Indicating if curves should be distinguished using colors if they are plotted together (i.e. \code{together = TRUE}).}
+\item{same_color}{Logical. Indicating if curves should be distinguished using colors if they are plotted together (i.e. \code{together = TRUE}). Setting this to FALSE also disables the default behavior that the two halves of the curves are plotted in different colors for a one-sided alternative.}
 
 \item{col}{String indicating the colour of the curves. Only relevant for single curves, multiple curves not plotted together (i.e. \code{together = FALSE}) and multiple curves plotted together but with the option \code{same_color} set to \code{TRUE}.}
 
@@ -102,7 +102,7 @@ conf_dist(
 \item{plot}{Logical. Should a plot be created (\code{TRUE}, the default) or not (\code{FALSE}). \code{FALSE} can be useful if users want to create their own plots using the returned data from the function. If \code{FALSE}, no ggplot2 object is returned.}
 }
 \value{
-\code{conf_dist} returns four data frames and if \code{plot = TRUE} was specified, a ggplot2-plot object: \code{res_frame} (contains parameter values (e.g. mean differences, odds ratios etc.), \emph{p}-values (one- and two-sided), s-values, confidence distributions and densities, variable names and type of hypothesis), \code{conf_frame} (contains the specified confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull and the corresponding null values), \code{point_est} (contains the mean, median and mode point estimates) and if \code{plot = TRUE} was specified, \code{aucc_frame} contains the estimated AUCC (area under the confidence curves) calculated by trapezoidal integration on the untransformed scale, \code{plot} (a ggplot2 object).
+\code{conf_dist} returns four data frames and if \code{plot = TRUE} was specified, a ggplot2-plot object: \code{res_frame} (contains parameter values (e.g. mean differences, odds ratios etc.), \emph{p}-values (one- and two-sided), s-values, confidence distributions and densities, variable names and type of hypothesis), \code{conf_frame} (contains the specified confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull and the corresponding null values), \code{point_est} (contains the mean, median and mode point estimates) and if \code{plot = TRUE} was specified, \code{aucc_frame} contains the estimated AUCC (area under the confidence curve, see Berrar 2017) calculated by trapezoidal integration on the untransformed scale. Also provides the proportion of the aucc that lies above the null value(s) if they are provided. \code{plot} (a ggplot2 object).
 }
 \description{
 The function \code{conf_dist} generates confidence distributions (cdf), confidence densities (pdf), Shannon suprisal (s-value) functions and \emph{p}-value functions for several commonly used estimates. In addition, counternulls (see Rosenthal et al. 1994), point estimates and the area under the confidence curve (AUCC) are calculated.
