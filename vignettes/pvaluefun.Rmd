@@ -113,7 +113,7 @@ The main function `conf_dist()` returns five objects in a list:
 * `conf_frame`: A data frame containing the confidence intervals for the specified confidence levels for all estimates.
 * `counternull_frame`: A data frame containing the counternull values for the specified null values (see Rosenthal & Rubin (1994) for more information about the counternull).
 * `point_est`: A data frame containing the point estimates for all estimates. The point estimates correspond to the mean, median or mode of the confidence density (see Xie & Singh (2013) for more information). Estimates are produced using numerical procedures: Increase the number of points `n_values` for higher numerical precision.
-* `aucc_frame`: A data frame containing the estimated AUCC (area under the confidence curves). The AUCC is a measures of precision with higher values indicating a poorer precision compared to smaller values (see Berrar (2017)).
+* `aucc_frame`: A data frame containing the estimated AUCC (area under the confidence curve). The AUCC is a measures of precision with higher values indicating a poorer precision compared to smaller values (see Berrar (2017)). It also provides the proportion of the AUCC that lies above the null value(s), if they are provided.
 * `plot`: A [ggplot2](https://ggplot2.tidyverse.org/) plot object (only returned if the option `plot = TRUE` was specified).
 
 ## Examples
@@ -561,7 +561,7 @@ rm(rse_fun, rse_fun_inv)
 
 
 ### Comparing the precision of multiple estimates using the AUCC (area under the confidence curve)
-The AUCC is a scalar representing the area under the *p*-value function (see Berrar (2017)). Values close to 0 indicate a high precision while larger values indicate poorer precision. Multiple estimates can be compared by their AUCC (in the context of a meta-analysis for example). The AUCC is calculated numerically using trapezoidal integration on the untransformed *p*-value function. The estimate can be quite poor if few x-values are used (i.e. argument `n_values` is low).
+The AUCC is a scalar representing the area under the *p*-value function (see Berrar (2017)). Values close to 0 indicate a high precision while larger values indicate poorer precision. Multiple estimates can be compared by their AUCC (in the context of a meta-analysis for example). The AUCC is calculated numerically using trapezoidal integration on the untransformed *p*-value function. The estimate can be quite poor if few x-values are used (i.e. argument `n_values` is low). If there are null values provided, the function will also return the proportion of the AUCC that lies above those nulls.
 
 ```{r aucc_comparison, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dpi = 200}
 

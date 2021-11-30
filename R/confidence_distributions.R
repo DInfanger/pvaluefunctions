@@ -46,7 +46,7 @@ if (getRversion() >= "2.15.1") {
 #' @param x_scale String indicating the scaling of the x-axis. The default is to scale the x-axis logarithmically if the transformation specified in \code{trans} is "exp" (exponential) and linearly otherwise. The option \code{linear} (can be abbreviated) forces a linear scaling and the option \code{logarithm} (can be abbreviated) forces a logarithmic scaling, regardless what has been specified in \code{trans}.
 #' @param plot Logical. Should a plot be created (\code{TRUE}, the default) or not (\code{FALSE}). \code{FALSE} can be useful if users want to create their own plots using the returned data from the function. If \code{FALSE}, no ggplot2 object is returned.
 
-#' @return \code{conf_dist} returns four data frames and if \code{plot = TRUE} was specified, a ggplot2-plot object: \code{res_frame} (contains parameter values (e.g. mean differences, odds ratios etc.), \emph{p}-values (one- and two-sided), s-values, confidence distributions and densities, variable names and type of hypothesis), \code{conf_frame} (contains the specified confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull and the corresponding null values), \code{point_est} (contains the mean, median and mode point estimates) and if \code{plot = TRUE} was specified, \code{aucc_frame} contains the estimated AUCC (area under the confidence curves) calculated by trapezoidal integration on the untransformed scale, \code{plot} (a ggplot2 object).
+#' @return \code{conf_dist} returns four data frames and if \code{plot = TRUE} was specified, a ggplot2-plot object: \code{res_frame} (contains parameter values (e.g. mean differences, odds ratios etc.), \emph{p}-values (one- and two-sided), s-values, confidence distributions and densities, variable names and type of hypothesis), \code{conf_frame} (contains the specified confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull and the corresponding null values), \code{point_est} (contains the mean, median and mode point estimates) and if \code{plot = TRUE} was specified, \code{aucc_frame} contains the estimated AUCC (area under the confidence curves, see Berrar 2017) calculated by trapezoidal integration on the untransformed scale. Also provides the proportion of the aucc that lies above the null value(s) if they are provided. \code{plot} (a ggplot2 object).
 #' @references Bender R, Berg G, Zeeb H. Tutorial: using confidence curves in medical research. \emph{Biom J.} 2005;47(2):237-247.
 #'
 #' Berrar D. Confidence curves: an alternative to null hypothesis significance testing for the comparison of classifiers. \emph{Mach Learn.} 2017;106:911-949.
@@ -660,29 +660,84 @@ conf_dist <- function(
 
   #-----------------------------------------------------------------------------
   # Calculate AUCC (area under the confidence curve), see Berrar (2017) Mach Learn 106:911-494
+  # Also calculate the area above the null values
   #-----------------------------------------------------------------------------
 
-  res$aucc_frame <- data.frame(
-    variable = est_names
-    , aucc = NA
-  )
+  if (!is.null(null_values)) {
 
-  for(i in seq_along(estimate)) {
-
-    x_tmp <- res$res_frame$values[res$res_frame$variable %in% est_names[i]]
-    y_tmp <- res$res_frame$p_two[res$res_frame$variable %in% est_names[i]]
-
-    nona_ind <- which(!is.na(y_tmp) & !is.na(x_tmp))
-
-    order_tmp <- order(res$res_frame$values[res$res_frame$variable %in% est_names[i]][nona_ind], decreasing = FALSE)
-
-    res$aucc_frame$aucc[res$aucc_frame$variable %in% est_names[i]] <- pracma::trapz(
-      x = x_tmp[nona_ind][order_tmp]
-      , y = y_tmp[nona_ind][order_tmp]
+    res$aucc_frame <- data.frame(
+      variable = rep(est_names, each = length(null_values))
+      , aucc = NA
+      , null = rep(null_values, times = length(est_names))
+      , p_above_null = NA
     )
 
-    rm(x_tmp, y_tmp, nona_ind, order_tmp)
+    for(i in seq_along(estimate)) {
 
+      x_tmp <- res$res_frame$values[res$res_frame$variable %in% est_names[i]]
+      y_tmp <- res$res_frame$p_two[res$res_frame$variable %in% est_names[i]]
+
+      nona_ind <- which(!is.na(y_tmp) & !is.na(x_tmp))
+
+      order_tmp <- order(res$res_frame$values[res$res_frame$variable %in% est_names[i]][nona_ind], decreasing = FALSE)
+
+      res$aucc_frame$aucc[res$aucc_frame$variable %in% est_names[i]] <- pracma::trapz(
+        x = x_tmp[nona_ind][order_tmp]
+        , y = y_tmp[nona_ind][order_tmp]
+      )
+
+      rm(x_tmp, y_tmp, nona_ind, order_tmp)
+
+      for (j in seq_along(null_values)) {
+
+        x_tmp <- res$res_frame$values[res$res_frame$variable %in% est_names[i]]
+        y_tmp <- res$res_frame$p_two[res$res_frame$variable %in% est_names[i]]
+
+        above_null_ind <- which(res$res_frame$values[res$res_frame$variable %in% est_names[i]] > null_values[j])
+
+        x_tmp <- x_tmp[above_null_ind]
+        y_tmp <- y_tmp[above_null_ind]
+
+        nona_ind <- which(!is.na(y_tmp) & !is.na(x_tmp))
+
+        order_tmp <- order(res$res_frame$values[res$res_frame$variable %in% est_names[i]][above_null_ind][nona_ind], decreasing = FALSE)
+
+        aucc_above_null <- pracma::trapz(
+          x = x_tmp[nona_ind][order_tmp]
+          , y = y_tmp[nona_ind][order_tmp]
+        )
+
+        res$aucc_frame$p_above_null[res$aucc_frame$variable %in% est_names[i] & res$aucc_frame$null == null_values[j]] <- aucc_above_null/res$aucc_frame$aucc[res$aucc_frame$variable %in% est_names[i] & res$aucc_frame$null == null_values[j]]
+
+        rm(x_tmp, y_tmp, nona_ind, order_tmp, aucc_above_null)
+
+      }
+    }
+
+  } else {
+
+    res$aucc_frame <- data.frame(
+      variable = est_names
+      , aucc = NA
+    )
+
+    for(i in seq_along(estimate)) {
+
+      x_tmp <- res$res_frame$values[res$res_frame$variable %in% est_names[i]]
+      y_tmp <- res$res_frame$p_two[res$res_frame$variable %in% est_names[i]]
+
+      nona_ind <- which(!is.na(y_tmp) & !is.na(x_tmp))
+
+      order_tmp <- order(res$res_frame$values[res$res_frame$variable %in% est_names[i]][nona_ind], decreasing = FALSE)
+
+      res$aucc_frame$aucc[res$aucc_frame$variable %in% est_names[i]] <- pracma::trapz(
+        x = x_tmp[nona_ind][order_tmp]
+        , y = y_tmp[nona_ind][order_tmp]
+      )
+
+      rm(x_tmp, y_tmp, nona_ind, order_tmp)
+
+    }
   }
 
   #-----------------------------------------------------------------------------
