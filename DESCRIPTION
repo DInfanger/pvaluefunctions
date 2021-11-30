@@ -8,10 +8,10 @@ Description: Contains functions to compute and plot confidence distributions, co
 Depends: R (>= 3.5.0)
 Imports:
 	ggplot2 (>= 3.3.0),
-	scales (>= 1.1.0),
-	zipfR (>= 0.6-66),
-	pracma (>= 2.2.9),
-	gsl (>= 2.1-6),
+	scales (>= 1.1.1),
+	zipfR (>= 0.6-70),
+	pracma (>= 2.3.3),
+	gsl (>= 2.1-7.1),
 	stats
 Suggests:
 	knitr,
