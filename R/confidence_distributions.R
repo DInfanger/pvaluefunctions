@@ -1051,7 +1051,7 @@ conf_dist <- function(
   # For only one one-sided p-value curve, set the colors to black and blue
 
   if (alternative %in% "one_sided" & (isFALSE(together) | (isTRUE(together) & length(estimate) < 2)) & isFALSE(same_color)) {
-    p <- p + geom_line(aes(colour = hypothesis), size = 1.5) +
+    p <- p + geom_line(aes(colour = hypothesis), linewidth = 1.5) +
       scale_colour_manual(values = c("black", "#08A9CF"))  +
       theme(
         legend.position="none"
@@ -1059,7 +1059,7 @@ conf_dist <- function(
 
   } else if (alternative %in% "one_sided" & (isFALSE(together) | (isTRUE(together) & length(estimate) < 2)) & isTRUE(same_color)) {
 
-    p <- p + geom_line(aes(colour = hypothesis), size = 1.5) +
+    p <- p + geom_line(aes(colour = hypothesis), linewidth = 1.5) +
       scale_colour_manual(values = c(col, col))  +
       theme(
         legend.position="none"
@@ -1068,13 +1068,13 @@ conf_dist <- function(
     # For only one two-sided p-value curve, set the color to black
 
   } else if (alternative %in% "two_sided" & (isFALSE(together) | (isTRUE(together) & length(estimate) < 2) | (isTRUE(together) & isTRUE(same_color)))) {
-    p <- p + geom_line(size = 1.5, colour = col)
+    p <- p + geom_line(linewidth = 1.5, colour = col)
 
     # For 2 or more estimates plotted together: set the colors according to "Set1" palette
 
   } else if ((alternative %in% "two_sided" & (length(estimate) >= 2) & isTRUE(together) & isFALSE(same_color) & isTRUE(plot_legend)) |
              (alternative %in% "one_sided" & (length(estimate) >= 2) & isTRUE(together) & isTRUE(plot_legend))) { # Plot legend
-    p <- p + geom_line(size = 1.5) +
+    p <- p + geom_line(linewidth = 1.5) +
       scale_colour_brewer(palette = "Set1", name = "") +
       theme(
         legend.position="top"
@@ -1084,7 +1084,7 @@ conf_dist <- function(
 
   } else if((alternative %in% "two_sided" & (length(estimate) >= 2) & isTRUE(together) & isFALSE(same_color) & isFALSE(plot_legend)) |
             (alternative %in% "one_sided" & (length(estimate) >= 2) & isTRUE(together) & isFALSE(plot_legend))) { # Plot no legend
-    p <- p + geom_line(size = 1.5) +
+    p <- p + geom_line(linewidth = 1.5) +
       scale_colour_brewer(palette = "Set1", name = "") +
       theme(
         legend.position="none"
@@ -1301,17 +1301,17 @@ conf_dist <- function(
 
       if ((length(null_outside_plot) < length(null_values))) { # There are some null-values to plot
 
-        p <- p + geom_vline(data = res$counternull_frame, aes(xintercept = null_value), linetype = 1, size = 0.5)
+        p <- p + geom_vline(data = res$counternull_frame, aes(xintercept = null_value), linetype = 1, linewidth = 0.5)
 
       } else if ((length(null_outside_plot) == length(null_values))) { # All null-values outside of plotting area
 
-        p <- p + geom_vline(data = res$counternull_frame[-null_outside_plot, ], aes(xintercept = null_value), linetype = 1, size = 0.5)
+        p <- p + geom_vline(data = res$counternull_frame[-null_outside_plot, ], aes(xintercept = null_value), linetype = 1, linewidth = 0.5)
 
       }
 
     } else if (length(null_outside_plot) == 0) { # No null-values outside of plot
 
-      p <- p + geom_vline(data = res$counternull_frame, aes(xintercept = null_value), linetype = 1, size = 0.5)
+      p <- p + geom_vline(data = res$counternull_frame, aes(xintercept = null_value), linetype = 1, linewidth = 0.5)
 
     }
 
@@ -1415,16 +1415,16 @@ conf_dist <- function(
 
     if (isTRUE(together) & (length(estimate) >= 2) & isFALSE(same_color)) {
 
-      p <- p + geom_point(aes(x = values, y = counternull, colour = variable), size = 4, pch = 21, fill = "white", stroke = 1.7) +
+      p <- p + geom_point(aes(x = values, y = counternull, colour = variable), size = 4, shape = 21, fill = "white", stroke = 1.7) +
         guides(colour = guide_legend(override.aes = list(pch = NA)))
 
     } else if (isTRUE(together) & (length(estimate) >= 2) & isTRUE(same_color)) {
 
-      p <- p + geom_point(aes(x = values, y = counternull), colour = col, size = 4, pch = 21, fill = "white", stroke = 1.7)
+      p <- p + geom_point(aes(x = values, y = counternull), colour = col, size = 4, shape = 21, fill = "white", stroke = 1.7)
 
     } else if (isFALSE(together) | (isTRUE(together) & (length(estimate) < 2))) {
 
-      p <- p + geom_point(aes(x = values, y = counternull), colour = col, size = 4, pch = 21, fill = "white", stroke = 1.7)
+      p <- p + geom_point(aes(x = values, y = counternull), colour = col, size = 4, shape = 21, fill = "white", stroke = 1.7)
 
     }
   }
@@ -2575,7 +2575,7 @@ cdist_propdiff <- function(
 
 }
 
-# Define new mixed scale: log for p <= 0.05, else linear
+# Define new mixed scale: log for p <= interval_low, else linear
 
 magnify_trans_log <- function(interval_low = 0.05, interval_high = 1,  reducer = 0.05, reducer2 = 8) {
 
