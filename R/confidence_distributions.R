@@ -1434,18 +1434,18 @@ conf_dist <- function(
   #-----------------------------------------------------------------------------
 
   p <- p + theme(
-    axis.title.y.left=element_text(colour = "black", size = 17, hjust = 0.5, margin = margin(0, 10, 0, 0))
-    , axis.title.y.right=element_text(colour = "black", size = 17, hjust = 0.5, margin = margin(0, 0, 0, 10))
-    , axis.title.x=element_text(colour = "black", size = 17)
+    axis.title.y.left = element_text(colour = "black", size = 17, hjust = 0.5, margin = margin(0, 10, 0, 0))
+    , axis.title.y.right = element_text(colour = "black", size = 17, hjust = 0.5, margin = margin(0, 0, 0, 10))
+    , axis.title.x = element_text(colour = "black", size = 17)
     # , axis.title.y=element_text(size=15,hjust=0.5, vjust=1)
-    , axis.text.x=element_text(colour = "black", size=15)
-    , axis.text.y=element_text(colour = "black", size=15)
+    , axis.text.x = element_text(colour = "black", size = 15)
+    , axis.text.y = element_text(colour = "black", size = 15)
     # , plot.margin=unit(c(2,2,2,2,2),"line")
     , panel.grid.minor.y = element_blank()
     # , panel.grid.major = element_line(colour=grey(0.8), size=0.5)
     , plot.title = element_text(face = "bold")
     # , strip.background=element_rect(fill="white")
-    , strip.text.x=element_text(size=15)
+    , strip.text.x = element_text(size = 15)
   )
 
   #-----------------------------------------------------------------------------

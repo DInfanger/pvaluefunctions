@@ -279,7 +279,7 @@ res <- conf_dist(
 
 ### Pearson correlation coefficient (one-sided)
 
-As of version 1.6.2, the package uses the exact distribution for Pearson's correlation coefficient as described in a preprint by Gunnar Taraldsen (2020). The calculations make use of the Gaussian hypergeometric function ($_2F_1$). It also makes the calculations slower, depending on the value in `n_values`.
+As of version 1.6.2, the package uses the exact distribution for Pearson's correlation coefficient as described in Taraldsen (2023). The calculations make use of the Gaussian hypergeometric function ($_2F_1$). It also makes the calculations slower, depending on the value in `n_values`.
 
 ```{r corr_pearson, message = FALSE, warning = FALSE, fig.width = 9, fig.height = 7, out.width = "80%", fig.align='center', dev = "png", dpi = 200}
 #-----------------------------------------------------------------------------
@@ -615,6 +615,8 @@ Poole C. (1987b) Confidence intervals exclude nothing. *Am J Public Health.* 77(
 Rosenthal R, Rubin DB. (1994): The counternull value of an effect size: A new statistic. Psychol Sci. 5(6): 329-34.
 
 Schweder T, Hjort NL. (2016): Confidence, likelihood, probability: statistical inference with confidence distributions. New York, NY: Cambridge University Press.
+
+Taraldsen, G. (2023). The confidence density for correlation. Sankhya A, 85(1), 600-616.
 
 Xie M, Singh K, Strawderman WE. (2011): Confidence Distributions and a Unifying Framework for Meta-Analysis. *J Am Stat Assoc* 106(493): 320-33. doi: 10.1198/jasa.2011.tm09803.
 
