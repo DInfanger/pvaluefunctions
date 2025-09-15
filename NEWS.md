@@ -3,7 +3,7 @@
 1.6.3
 -------------
 
-  * Deprecated arguments in ggplot2 were changed, such as "size" in "geom_line".
+  * Deprecated arguments in ggplot2 were changed, such as "size" in "geom_line". No more messages should appear now.
   * Small changes in the references in the vignette.
 
 1.6.2
