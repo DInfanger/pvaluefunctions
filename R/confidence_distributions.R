@@ -436,7 +436,7 @@ conf_dist <- function(
       stop("Please provide two limits for the x-axis.")
     }
 
-    if (any(is.na(xlim)) || any(!is.finite(xlim))) {
+    if (anyNA(xlim) || any(!is.finite(xlim))) {
       stop("Missing or infinite values are not allowed for x-axis limits (xlim). Please provide exactly two finite x-axis limits.")
     }
 
@@ -767,7 +767,7 @@ conf_dist <- function(
   #-----------------------------------------------------------------------------
 
   # If there are limits given, take those in any case
-  if(is.null(xlim)) {
+  if (is.null(xlim)) {
 
     xlim <- c(NA, NA)
 
@@ -988,12 +988,12 @@ conf_dist <- function(
   # Labeller functions for custom log-scale
 
   lab_onesided <- Vectorize(function(x){
-    if(!is.na(x) && (x < cut_logyaxis_one) & (round((x %% 1)*10) == 0)) {sprintf("%.5g", x)}
+    if (!is.na(x) && (x < cut_logyaxis_one) & (round((x %% 1)*10) == 0)) {sprintf("%.5g", x)}
     else {sprintf("%.2f", x)}
   })
 
   lab_twosided <- Vectorize(function(x){
-    if(!is.na(x) && (x <= cut_logyaxis) & (round((x %% 1)*10) == 0)) {sprintf("%.5g", x)}
+    if (!is.na(x) && (x <= cut_logyaxis) & (round((x %% 1)*10) == 0)) {sprintf("%.5g", x)}
     else {sprintf("%.1f", x)}
   })
 
@@ -1082,7 +1082,7 @@ conf_dist <- function(
         , legend.title=element_text(size=15)
       )
 
-  } else if((alternative %in% "two_sided" & (length(estimate) >= 2) & isTRUE(together) & isFALSE(same_color) & isFALSE(plot_legend)) |
+  } else if ((alternative %in% "two_sided" & (length(estimate) >= 2) & isTRUE(together) & isFALSE(same_color) & isFALSE(plot_legend)) |
             (alternative %in% "one_sided" & (length(estimate) >= 2) & isTRUE(together) & isFALSE(plot_legend))) { # Plot no legend
     p <- p + geom_line(linewidth = 1.5) +
       scale_colour_brewer(palette = "Set1", name = "") +
@@ -2580,9 +2580,9 @@ cdist_propdiff <- function(
 magnify_trans_log <- function(interval_low = 0.05, interval_high = 1,  reducer = 0.05, reducer2 = 8) {
 
   trans <- Vectorize(function(x, i_low = interval_low, i_high = interval_high, r = reducer, r2 = reducer2) {
-    if(is.na(x) || (x >= i_low & x <= i_high)) {
+    if (is.na(x) || (x >= i_low & x <= i_high)) {
       x
-    } else if(x < i_low & !is.na(x)) {
+    } else if (x < i_low & !is.na(x)) {
       (log10(x / r)/r2 + i_low)
     } else {
       log10((x - i_high) / r + i_high)/r2
@@ -2590,9 +2590,9 @@ magnify_trans_log <- function(interval_low = 0.05, interval_high = 1,  reducer =
   })
 
   inv <- Vectorize(function(x, i_low = interval_low, i_high = interval_high, r = reducer, r2 = reducer2) {
-    if(is.na(x) || (x >= i_low & x <= i_high)) {
+    if (is.na(x) || (x >= i_low & x <= i_high)) {
       x
-    } else if(x < i_low & !is.na(x)) {
+    } else if (x < i_low & !is.na(x)) {
       10^(-(i_low - x)*r2)*r
     } else {
       i_high + 10^(x*r2)*r - i_high*r
@@ -2605,9 +2605,9 @@ magnify_trans_log <- function(interval_low = 0.05, interval_high = 1,  reducer =
 magnify_trans_log_rev <- function(interval_low = 0.05, interval_high = 1,  reducer = 0.05, reducer2 = 8) {
 
   trans <- Vectorize(function(x, i_low = interval_low, i_high = interval_high, r = reducer, r2 = reducer2) {
-    -if(is.na(x) || (x >= i_low & x <= i_high)) {
+    -if (is.na(x) || (x >= i_low & x <= i_high)) {
       x
-    } else if(x < i_low & !is.na(x)) {
+    } else if (x < i_low & !is.na(x)) {
       (log10(x / r)/r2 + i_low)
     } else {
       log10((x - i_high)/r + i_high)/r2 + i_high
@@ -2615,9 +2615,9 @@ magnify_trans_log_rev <- function(interval_low = 0.05, interval_high = 1,  reduc
   })
 
   inv <- Vectorize(function(x, i_low = interval_low, i_high = interval_high, r = reducer, r2 = reducer2) {
-    if(is.na(x) || (-x >= i_low & -x <= i_high)) {
+    if (is.na(x) || (-x >= i_low & -x <= i_high)) {
       -x
-    } else if(-x < i_low & !is.na(x)) {
+    } else if (-x < i_low & !is.na(x)) {
       (10^(-(i_low + x)*r2)*r)
     } else {
       i_high + 10^(-r2*(i_high + x))*r - i_high*r
