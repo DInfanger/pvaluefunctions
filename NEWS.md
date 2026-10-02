@@ -1,6 +1,6 @@
 ## NEWS and changes for the pvaluefunctions package
 
-1.6.3.9000 (development version)
+1.7.0
 -------------
 
 Bug fixes
