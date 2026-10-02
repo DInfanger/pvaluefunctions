@@ -47,21 +47,21 @@ conf_dist(
 
 \item{stderr}{Numerical vector containing the standard error(s) of the estimate(s). Required for statistics based on the \emph{t}-distribution (e.g. linear regression) and the normal distribution (e.g. logistic regression). Must be equal the number of estimate(s).}
 
-\item{tstat}{Numerical vector contaiqning the \emph{t}-statistic(s). Required for \emph{t}-tests (means and mean differences). Must be equal the number of estimates.}
+\item{tstat}{Numerical vector containing the \emph{t}-statistic(s). Required for \emph{t}-tests (means and mean differences). Must be equal the number of estimates.}
 
 \item{type}{String indicating the type of the estimate. Must be one of the following: \code{ttest}, \code{linreg}, \code{gammareg}, \code{general_t}, \code{logreg}, \code{poisreg}, \code{coxreg}, \code{general_z}, \code{pearson}, \code{spearman}, \code{kendall}, \code{var}, \code{prop}, \code{propdiff}.}
 
 \item{plot_type}{String indicating the type of plot. Must be one of the following: \code{cdf} (confidence distribution), \code{pdf} (confidence density), \code{p_val} (\emph{p}-value function, the default), \code{s_val} (Surprisal value functions). For differences between independent proportions, only \emph{p}-value functions and Surprisal values are available.}
 
-\item{n_values}{(optional) Integer indicating the number of points that are used to generate the graphics. The higher this number, the higher the computation time and resolution.}
+\item{n_values}{(optional) Integer indicating the number of points that are used to generate the graphics. Must be at least 2. The higher this number, the higher the computation time and resolution.}
 
 \item{est_names}{(optional) String vector indicating the names of the estimate(s). Must be equal the number of estimates.}
 
-\item{conf_level}{(optional) Numerical vector indicating the confidence level(s). Bust be between 0 and 1.}
+\item{conf_level}{(optional) Numerical vector indicating the confidence level(s). Must be between 0 and 1.}
 
 \item{null_values}{(optional) Numerical vector indicating the null value(s) in the plot on the \emph{untransformed (original)} scale. For example: The null values for an odds ratio of 1 is 0 on the log-odds scale. If x limits are specified with \code{xlim}, all null values outside of the specified x limits are ignored for plotting and a message is printed.}
 
-\item{trans}{(optional) String indicating the transformation function that will be applied to the estimates and confidence curves. For example: \code{"exp"} for an exponential transformation of the log-odds in logistic regression. Can be a custom function.}
+\item{trans}{(optional) String indicating the transformation function that will be applied to the estimates and confidence curves. For example: \code{"exp"} for an exponential transformation of the log-odds in logistic regression. Can be a custom function, given either as a function or as the name of a function (as a string). A custom function must be vectorized and receives the values to be transformed as its first argument.}
 
 \item{alternative}{String indicating if the confidence level(s) are two-sided or one-sided. Must be one of the following: \code{two_sided}, \code{one_sided}.}
 
@@ -75,7 +75,7 @@ conf_dist(
 
 \item{together}{Logical. Indicating if graphics for multiple estimates should be displayed together or on separate plots.}
 
-\item{plot_legend}{Logical. Indicating if a legend should be plotted if multiple curves are plotted together with different colors (i.e. \code{together = TRUE)} and \code{same_color = FALSE}).}
+\item{plot_legend}{Logical. Indicating if a legend should be plotted if multiple curves are plotted together with different colors (i.e. \code{together = TRUE} and \code{same_color = FALSE}).}
 
 \item{same_color}{Logical. Indicating if curves should be distinguished using colors if they are plotted together (i.e. \code{together = TRUE}). Setting this to FALSE also disables the default behavior that the two halves of the curves are plotted in different colors for a one-sided alternative.}
 
@@ -95,7 +95,7 @@ conf_dist(
 
 \item{ylab_sec}{(optional) String indicating the title for the secondary (right) y-axis.}
 
-\item{inverted}{Logical. Indicating the orientation of the y-axis for the \emph{P}-value function (\code{p_val}), S-value function (\code{s_val}) and the confidence distribution (\code{cdf}). By default (i.e. \code{inverted = FALSE}) small \emph{P}-values are plotted at the bottom and large ones at the top so that the cusp of the \emph{P}-value function is a the top. By setting \code{inverted = TRUE}, the y-axis is inverted. Ignored for confidence densities.}
+\item{inverted}{Logical. Indicating the orientation of the y-axis for the \emph{P}-value function (\code{p_val}), S-value function (\code{s_val}) and the confidence distribution (\code{cdf}). By default (i.e. \code{inverted = FALSE}) small \emph{P}-values are plotted at the bottom and large ones at the top so that the cusp of the \emph{P}-value function is at the top. By setting \code{inverted = TRUE}, the y-axis is inverted. Ignored for confidence densities.}
 
 \item{x_scale}{String indicating the scaling of the x-axis. The default is to scale the x-axis logarithmically if the transformation specified in \code{trans} is "exp" (exponential) and linearly otherwise. The option \code{linear} (can be abbreviated) forces a linear scaling and the option \code{logarithm} (can be abbreviated) forces a logarithmic scaling, regardless what has been specified in \code{trans}.}
 
@@ -289,11 +289,11 @@ res <- conf_dist(
 # Define the transformation function and its inverse for the relative survival effect
 
 rse_fun <- function(x){ # x is the log-hazard ratio
-  100*(1 - exp(x))
+  100 * (1 - exp(x))
 }
 
 rse_fun_inv <- function(x){
-  log(1 - (x/100))
+  log(1 - (x / 100))
 }
 
 res <- conf_dist(
