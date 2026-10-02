@@ -7,10 +7,13 @@
 ^cran-comments\.md$
 ^CRAN-RELEASE$
 ^vignettes/figure$
-^Readme\.Rmd$
+^README\.Rmd$
 ^R/confidence_distributions_experimental\.R$
 ^R/testing_experimental\.R$
 ^Rplots\.pdf
 ^doc$
 ^Meta$
 ^CRAN-SUBMISSION$
+^\.agents$
+^\.posit$
+^AGENTS\.md$
