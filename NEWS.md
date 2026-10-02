@@ -1,5 +1,32 @@
 ## NEWS and changes for the pvaluefunctions package
 
+1.6.3.9000 (development version)
+-------------
+
+Bug fixes
+
+  * `x_scale = "logarithm"` is now honored. Previously only the automatic logarithmic scale for `trans = "exp"` worked.
+  * Pearson's correlation coefficient: the exact distribution no longer fails with `n` larger than about 172 (overflow of the gamma function), and the counternull is now computed accurately for extreme tail probabilities. Several Pearson estimates in one call (`n` and `estimate` of length > 1) no longer fail.
+  * The lengths of `stderr`, `df`, `tstat` and `estimate` are now checked correctly. Previously a mismatch of the third argument went unnoticed.
+  * `trans` can now be a function as documented, not only the name of a function. Names are no longer forced to lower case when looking up the function (a lower case name is still tried as a fallback), functions defined inside the calling function are found, and the transformation function does not need an argument named `x`.
+  * An invalid `type` now gives an informative error message.
+  * One-sided confidence limits for proportions (`type = "prop"`) now use the matching two-sided level (`2 * conf_level - 1`) like all other types. Previously, the two-sided interval of level `conf_level` was returned.
+  * The labels for the confidence levels no longer trigger a deprecation warning with ggplot2 4.0.0 or later (`label.size`).
+  * Null values that are outside of the plotting area or whose counternull is missing no longer cause errors when plotting.
+
+Input validation
+
+  * Inputs are now validated up front and give informative errors, e.g. for missing values, non-positive standard errors, degrees of freedom or sample sizes, non-logical flags, an invalid `n_values`, `plot_p_limit`, `cut_logyaxis`, `nrow` or `ncol`, and duplicated `est_names`.
+  * Correlation coefficients of exactly -1 or 1 are rejected. The minimum sample size is 4 for Pearson's correlation (n = 3 never worked).
+  * t-statistics must be non-zero and have the same sign as the estimates.
+  * A message is printed if confidence levels are ignored because they are too low for the alternative.
+
+Internal changes
+
+  * Code is split into several files, duplicated code was removed and imports are now explicit. `ggplot2 (>= 3.5.0)` and `scales (>= 1.3.0)` are now required (`transform` instead of `trans`, `new_transform()`).
+  * `README.Rmd` and tooling files are now correctly excluded from the package build.
+  * Added a testthat test suite (closed-form checks against `stats`, input validation, plot properties and regression tests against the results of version 1.6.3).
+
 1.6.3
 -------------
 
