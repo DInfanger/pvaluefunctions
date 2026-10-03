@@ -128,12 +128,32 @@ test_that("the counternull mirrors the null value around the estimate", {
 })
 
 test_that("mean, median and mode of the distribution equal the estimate", {
-  # Median and mode are read off a grid, so use a fine one
-  res <- cd(estimate = est, stderr = se, type = "general_t", df = 20, n_values = 2000L)
+  res <- cd(estimate = est, stderr = se, type = "general_t", df = 20)
 
   expect_equal(res$point_est$est_mean, est)
-  expect_equal(res$point_est$est_median, est, tolerance = 1e-2)
-  expect_equal(res$point_est$est_mode, est, tolerance = 1e-2)
+  expect_equal(res$point_est$est_median, est)
+  expect_equal(res$point_est$est_mode, est)
+
+  res_z <- cd(estimate = est, stderr = se, type = "general_z")
+
+  expect_equal(res_z$point_est$est_mean, est)
+  expect_equal(res_z$point_est$est_median, est)
+  expect_equal(res_z$point_est$est_mode, est)
+})
+
+test_that("point estimates are exact for heavy tails and the mean needs df > 1", {
+  # A coarse grid over the very wide range of a t-distribution with small df
+  # used to give medians far away from the estimate
+  res <- cd(
+    estimate = c(1, 1, 1),
+    stderr = c(1, 1, 1),
+    df = c(0.5, 1, 3),
+    type = "general_t"
+  )
+
+  expect_equal(res$point_est$est_median, c(1, 1, 1))
+  expect_equal(res$point_est$est_mode, c(1, 1, 1))
+  expect_equal(res$point_est$est_mean, c(NA, NA, 1))
 })
 
 test_that("the area under the confidence curve matches the closed form", {

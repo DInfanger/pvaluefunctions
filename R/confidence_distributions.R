@@ -6,7 +6,7 @@
 
 #' Create and Plot \emph{P}-Value Functions, S-Value Functions, Confidence Distributions and Confidence Densities
 #'
-#' The function \code{conf_dist} generates confidence distributions (cdf), confidence densities (pdf), Shannon suprisal (s-value) functions and \emph{p}-value functions for several commonly used estimates. In addition, counternulls (see Rosenthal et al. 1994), point estimates and the area under the confidence curve (AUCC) are calculated.
+#' The function \code{conf_dist} generates confidence distributions (cdf), confidence densities (pdf), Shannon surprisal (s-value) functions and \emph{p}-value functions for several commonly used estimates. In addition, counternulls (see Rosenthal et al. 1994), point estimates and the area under the confidence curve (AUCC) are calculated.
 #'
 #' \emph{P}-value functions and confidence intervals are calculated based on the \emph{t}-distribution for \emph{t}-tests, linear regression coefficients, and gamma regression models (GLM). The normal distribution is used for logistic regression, poisson regression and cox regression models. For correlation coefficients, Fisher's transform is used using the corresponding variances (see Bonett et al. 2000). \emph{P}-value functions and confidence intervals for variances are constructed using the Chi2 distribution. Finally, Wilson's score intervals are used for one proportion. For differences of proportions, the Wilson score interval with continuity correction is used (Newcombe 1998).
 #'
@@ -953,10 +953,12 @@ conf_dist <- function(
             labels = lab_onesided
           )
         ) +
+        # I() gives panel coordinates, which bypass the x-axis transformation
+        # (-Inf or 0 would be NaN or -Inf on a logarithmic x-axis)
         annotate(
           "rect",
-          xmin = -Inf,
-          xmax = Inf,
+          xmin = I(0),
+          xmax = I(1),
           ymin = p_cutoff,
           ymax = cut_logyaxis,
           alpha = 0.1,
@@ -1034,24 +1036,6 @@ conf_dist <- function(
         transform = "log",
         breaks = scales::pretty_breaks(n = 10)
       )
-
-    # If y-axis is plotted on a log-scale, re-add the gray rectangle
-    if (plot_type %in% c("p_val") && isTRUE(log_yaxis)) {
-      p <- p +
-        annotate(
-          "rect",
-          xmin = 0,
-          xmax = 100,
-          ymin = ifelse(
-            alternative %in% "two_sided",
-            plot_p_limit,
-            plot_p_limit * 2
-          ),
-          ymax = cut_logyaxis,
-          alpha = 0.1,
-          colour = "#E6E6E6"
-        )
-    }
   } else {
     p <- p + scale_x_continuous(breaks = scales::pretty_breaks(n = 10))
   }
@@ -1082,7 +1066,7 @@ conf_dist <- function(
     x_range <- ggplot_build(p)$layout$panel_params[[1]]$x.range
 
     if (trans %in% "exp" && x_scale %in% "log") {
-      # If the x-axis was log-transformed, we need to backtransforme the plotting limits because they are given on the log-scale
+      # If the x-axis was log-transformed, we need to backtransform the plotting limits because they are given on the log-scale
       plot_limits <- trans_fun(x_range)
     } else if (!trans %in% "exp" && x_scale %in% "log") {
       plot_limits <- exp(x_range)

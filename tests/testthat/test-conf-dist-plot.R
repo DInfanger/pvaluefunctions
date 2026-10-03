@@ -116,6 +116,32 @@ test_that("the y-axis can be logarithmic", {
   )
 })
 
+test_that("the logarithmic part of the y-axis is shaded across the whole x-axis", {
+  shading_of <- function(p) {
+    built <- ggplot2::ggplot_build(p)
+    built$data[[which(geoms_of(p) == "GeomRect")]]
+  }
+
+  linear <- plot_of(log_yaxis = TRUE)
+  expect_equal(sum(geoms_of(linear) == "GeomRect"), 1L)
+  expect_no_warning(shading <- shading_of(linear))
+  expect_equal(as.numeric(shading$xmin), 0)
+  expect_equal(as.numeric(shading$xmax), 1)
+
+  # Odds ratios far above 100 on a logarithmic x-axis
+  log_x <- plot_of(
+    estimate = log(500),
+    stderr = 0.3,
+    type = "logreg",
+    trans = "exp",
+    log_yaxis = TRUE
+  )
+  expect_equal(sum(geoms_of(log_x) == "GeomRect"), 1L)
+  expect_no_warning(shading <- shading_of(log_x))
+  expect_equal(as.numeric(shading$xmin), 0)
+  expect_equal(as.numeric(shading$xmax), 1)
+})
+
 test_that("the x-axis is logarithmic for exp and can be forced", {
   default <- plot_of(trans = "exp", type = "logreg")
   linear <- plot_of(trans = "exp", type = "logreg", x_scale = "linear")

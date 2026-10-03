@@ -20,6 +20,16 @@ check_configuration <- function(name) {
   res <- suppressMessages(suppressWarnings(do.call(conf_dist, args)))
   ref <- reference[[name]]
 
+  # Version 1.6.3 read the median of the t- and normal distributions off a
+  # coarse grid. It is now exactly the estimate (see test-location-scale.R).
+  location_scale_types <- c(
+    "ttest", "linreg", "gammareg", "general_t",
+    "logreg", "poisreg", "coxreg", "general_z"
+  )
+  if (args$type %in% location_scale_types) {
+    ref$point_est$est_median <- res$point_est$est_median
+  }
+
   expect_equal(
     mask_extreme_s_val(res$res_frame),
     mask_extreme_s_val(ref$res_frame),

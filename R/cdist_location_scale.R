@@ -87,32 +87,17 @@ cdist_location_scale <- function(
     null_values = null_values
   )
 
-  # Point estimators
+  # Point estimators: the distributions are symmetric around the estimate, so
+  # median and mode equal the estimate. The mean of the t-distribution only
+  # exists for df > 1 (df is NULL for the normal distribution).
+  has_mean <- if (is.null(df)) rep(TRUE, length(estimate)) else df > 1
 
-  point_est_frame <- empty_point_est_frame(length(estimate))
-
-  mean_fun <- function(x, estimate, stderr, dens_fun) {
-    x * dens_fun((x - estimate) / stderr) * (1 / stderr)
-  }
-
-  for (i in seq_along(estimate)) {
-    point_est_frame$est_mean[i] <- integrate(
-      mean_fun,
-      lower = -Inf,
-      upper = Inf,
-      estimate = estimate[i],
-      stderr = stderr[i],
-      dens_fun = location_scale_funs(df, i)$d,
-      rel.tol = 1e-10
-    )$value # Mean
-    point_est_frame[i, c("est_median", "est_mode")] <-
-      point_est_median_mode(frames$res_frame, i)
-  }
-
-  list(
-    res_frame = frames$res_frame,
-    conf_frame = frames$conf_frame,
-    counternull_frame = frames$counternull_frame,
-    point_est = point_est_frame
+  point_est_frame <- data.frame(
+    est_mean = ifelse(has_mean, estimate, NA_real_),
+    est_median = estimate,
+    est_mode = estimate,
+    variable = seq_along(estimate)
   )
+
+  c(frames, list(point_est = point_est_frame))
 }
