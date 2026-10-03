@@ -131,41 +131,22 @@ cdist_corr_exact <- function(
         strict = FALSE
       )
   }
-  # The cdf is obtained by numerical integration of the pdf
-  cdf_dist <- function(z, r, n) {
-    sapply(
+  # Tail probabilities P(rho < z) (the cdf) or P(rho > z) by numerical
+  # integration of the pdf
+  tail_prob <- function(z, r, n, upper = FALSE) {
+    vapply(
       z,
-      FUN = function(z, r, n) {
+      function(z) {
         integrate(
           conf_dens_corr,
-          lower = -1,
-          upper = z,
+          lower = if (upper) z else -1,
+          upper = if (upper) 1 else z,
           r = r,
           n = n,
           subdivisions = 1000L
         )$value
       },
-      r = r,
-      n = n
-    )
-  }
-
-  # Upper tail probability P(rho > z), integrated directly
-  cdf_upper <- function(z, r, n) {
-    sapply(
-      z,
-      FUN = function(z, r, n) {
-        integrate(
-          conf_dens_corr,
-          lower = z,
-          upper = 1,
-          r = r,
-          n = n,
-          subdivisions = 1000L
-        )$value
-      },
-      r = r,
-      n = n
+      double(1L)
     )
   }
 
@@ -173,22 +154,14 @@ cdist_corr_exact <- function(
   find_ci <- function(conf_level, r, n, alternative) {
     quants_tmp <- conf_limit_probs(conf_level, alternative)
 
-    lower_fun <- function(z, r, n) {
-      cdf_dist(z = z, r = r, n = n) - quants_tmp[1]
-    }
-    upper_fun <- function(z, r, n) {
-      cdf_dist(z = z, r = r, n = n) - quants_tmp[2]
-    }
-    c(
+    limit_at <- function(prob) {
       uniroot(
-        lower_fun,
+        function(z) tail_prob(z, r = r, n = n) - prob,
         interval = c(-1, 1),
-        r = r,
-        n = n,
         maxiter = 2000
-      )$root,
-      uniroot(upper_fun, interval = c(-1, 1), r = r, n = n, maxiter = 2000)$root
-    )
+      )$root
+    }
+    c(limit_at(quants_tmp[1]), limit_at(quants_tmp[2]))
   }
 
   # Function to find counternull values
@@ -196,18 +169,18 @@ cdist_corr_exact <- function(
   # The tail probabilities are integrated directly instead of using
   # 1 - cdf because this loses all precision for extreme tails (i.e. large n).
   find_counternulls <- function(null_values, r, n) {
-    lower_tail_null <- cdf_dist(null_values, r = r, n = n)
+    lower_tail_null <- tail_prob(null_values, r = r, n = n)
 
     if (lower_tail_null <= 1 / 2) {
       zero_fun <- function(x, target, r, n) {
-        cdf_upper(x, r = r, n = n) - target
+        tail_prob(x, r = r, n = n, upper = TRUE) - target
       }
       target <- lower_tail_null
     } else {
       zero_fun <- function(x, target, r, n) {
-        cdf_dist(x, r = r, n = n) - target
+        tail_prob(x, r = r, n = n) - target
       }
-      target <- cdf_upper(null_values, r = r, n = n)
+      target <- tail_prob(null_values, r = r, n = n, upper = TRUE)
     }
 
     uniroot(
@@ -237,7 +210,7 @@ cdist_corr_exact <- function(
 
     res_list[[length(res_list) + 1]] <- cdist_res_matrix(
       x = x_calc,
-      cdf = cdf_dist(x_calc, r = estimate[i], n = n[i]),
+      cdf = tail_prob(x_calc, r = estimate[i], n = n[i]),
       dens = conf_dens_corr(x_calc, r = estimate[i], n = n[i]),
       i = i
     )
@@ -311,7 +284,7 @@ cdist_corr_exact <- function(
   # The median is found by numerical root-finding using the cdf
   median_fun <- function(r, n) {
     zero_fun <- function(x, r, n) {
-      cdf_dist(x, r = r, n = n) - (1 / 2)
+      tail_prob(x, r = r, n = n) - (1 / 2)
     }
     uniroot(zero_fun, r = r, n = n, interval = c(-1, 1))$root
   }
