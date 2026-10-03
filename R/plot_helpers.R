@@ -8,35 +8,23 @@ magnify_trans_log <- function(
   reducer = 0.05,
   reducer2 = 8
 ) {
-  trans <- Vectorize(function(
-    x,
-    i_low = interval_low,
-    i_high = interval_high,
-    r = reducer,
-    r2 = reducer2
-  ) {
-    if (is.na(x) || (x >= i_low && x <= i_high)) {
+  trans <- Vectorize(function(x) {
+    if (is.na(x) || (x >= interval_low && x <= interval_high)) {
       x
-    } else if (x < i_low && !is.na(x)) {
-      (log10(x / r) / r2 + i_low)
+    } else if (x < interval_low) {
+      (log10(x / reducer) / reducer2 + interval_low)
     } else {
-      log10((x - i_high) / r + i_high) / r2
+      log10((x - interval_high) / reducer + interval_high) / reducer2
     }
   })
 
-  inv <- Vectorize(function(
-    x,
-    i_low = interval_low,
-    i_high = interval_high,
-    r = reducer,
-    r2 = reducer2
-  ) {
-    if (is.na(x) || (x >= i_low && x <= i_high)) {
+  inv <- Vectorize(function(x) {
+    if (is.na(x) || (x >= interval_low && x <= interval_high)) {
       x
-    } else if (x < i_low && !is.na(x)) {
-      10^(-(i_low - x) * r2) * r
+    } else if (x < interval_low) {
+      10^(-(interval_low - x) * reducer2) * reducer
     } else {
-      i_high + 10^(x * r2) * r - i_high * r
+      interval_high + 10^(x * reducer2) * reducer - interval_high * reducer
     }
   })
 
@@ -54,35 +42,23 @@ magnify_trans_log_rev <- function(
   reducer = 0.05,
   reducer2 = 8
 ) {
-  trans <- Vectorize(function(
-    x,
-    i_low = interval_low,
-    i_high = interval_high,
-    r = reducer,
-    r2 = reducer2
-  ) {
-    -if (is.na(x) || (x >= i_low && x <= i_high)) {
+  trans <- Vectorize(function(x) {
+    -if (is.na(x) || (x >= interval_low && x <= interval_high)) {
       x
-    } else if (x < i_low && !is.na(x)) {
-      (log10(x / r) / r2 + i_low)
+    } else if (x < interval_low) {
+      (log10(x / reducer) / reducer2 + interval_low)
     } else {
-      log10((x - i_high) / r + i_high) / r2 + i_high
+      log10((x - interval_high) / reducer + interval_high) / reducer2 + interval_high
     }
   })
 
-  inv <- Vectorize(function(
-    x,
-    i_low = interval_low,
-    i_high = interval_high,
-    r = reducer,
-    r2 = reducer2
-  ) {
-    if (is.na(x) || (-x >= i_low && -x <= i_high)) {
+  inv <- Vectorize(function(x) {
+    if (is.na(x) || (-x >= interval_low && -x <= interval_high)) {
       -x
-    } else if (-x < i_low && !is.na(x)) {
-      (10^(-(i_low + x) * r2) * r)
+    } else if (-x < interval_low) {
+      (10^(-(interval_low + x) * reducer2) * reducer)
     } else {
-      i_high + 10^(-r2 * (i_high + x)) * r - i_high * r
+      interval_high + 10^(-reducer2 * (interval_high + x)) * reducer - interval_high * reducer
     }
   })
 
