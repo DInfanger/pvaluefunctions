@@ -184,6 +184,11 @@ test_that("estimates are shown in separate panels unless together", {
   expect_s3_class(together$facet, "FacetNull")
   expect_equal(nrow(ggplot2::ggplot_build(separate)$layout$layout), 3)
   expect_equal(nrow(ggplot2::ggplot_build(together)$layout$layout), 1)
+
+  # Densities get a free y-axis per panel, the other plot types share it
+  densities <- do.call(plot_of, c(args, list(together = FALSE, plot_type = "pdf")))
+  expect_identical(separate$facet$params$free, list(x = TRUE, y = FALSE))
+  expect_identical(densities$facet$params$free, list(x = TRUE, y = TRUE))
 })
 
 test_that("nrow and ncol control the layout of the panels", {

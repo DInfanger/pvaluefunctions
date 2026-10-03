@@ -841,23 +841,15 @@ conf_dist <- function(
   ) {
     # For only one two-sided p-value curve, set the color to black
     p <- p + geom_line(linewidth = 1.5, colour = col)
-  } else if (isTRUE(plot_legend)) {
+  } else {
     # For 2 or more estimates plotted together: set the colors according to "Set1" palette
     p <- p +
       geom_line(linewidth = 1.5) +
       scale_colour_brewer(palette = "Set1", name = "") +
       theme(
-        legend.position = "top",
+        legend.position = if (isTRUE(plot_legend)) "top" else "none",
         legend.text = element_text(size = 15),
         legend.title = element_text(size = 15)
-      )
-  } else {
-    # Same, but without legend
-    p <- p +
-      geom_line(linewidth = 1.5) +
-      scale_colour_brewer(palette = "Set1", name = "") +
-      theme(
-        legend.position = "none"
       )
   }
 
@@ -891,12 +883,8 @@ conf_dist <- function(
           seq(ceiling(cut_logyaxis_one / 0.05) * 0.05, 0.5, 0.05)
         )
       } else {
-        breaks_two <- c(
-          10^(log10(seq(ceiling(cut_logyaxis / 0.1) * 0.1, 1, by = 0.1)))
-        )
-        breaks_one <- c(
-          10^(log10(seq(ceiling(cut_logyaxis_one / 0.05) * 0.05, 0.5, 0.05)))
-        )
+        breaks_two <- seq(ceiling(cut_logyaxis / 0.1) * 0.1, 1, by = 0.1)
+        breaks_one <- seq(ceiling(cut_logyaxis_one / 0.05) * 0.05, 0.5, 0.05)
       }
 
       # Remove possible duplicates
@@ -905,24 +893,14 @@ conf_dist <- function(
       breaks_one <- unique(breaks_one)
 
       # The inverted axis uses the reversed limits and the reversed transformation
-      if (isTRUE(inverted)) {
-        y_limits <- c(1, p_cutoff)
-        y_transform <- magnify_trans(
-          rev = TRUE,
-          interval_low = cut_logyaxis,
-          interval_high = 1,
-          reducer = cut_logyaxis,
-          reducer2 = 8
-        )
-      } else {
-        y_limits <- c(p_cutoff, 1)
-        y_transform <- magnify_trans(
-          interval_low = cut_logyaxis,
-          interval_high = 1,
-          reducer = cut_logyaxis,
-          reducer2 = 8
-        )
-      }
+      y_limits <- if (isTRUE(inverted)) c(1, p_cutoff) else c(p_cutoff, 1)
+      y_transform <- magnify_trans(
+        rev = isTRUE(inverted),
+        interval_low = cut_logyaxis,
+        interval_high = 1,
+        reducer = cut_logyaxis,
+        reducer2 = 8
+      )
 
       p <- p +
         scale_y_continuous(
@@ -1072,13 +1050,12 @@ conf_dist <- function(
     if (length(null_outside_plot) > 0) {
       # Print a message that shows which null values were outside of the x-axis limits.
 
-      cli::cli_inform(paste0(
-        "The following null values are outside of the specified x-axis range (xlim) and are not shown: ",
-        paste(
-          unique(res$counternull_frame$null_value[null_outside_plot]),
-          collapse = ", "
-        )
-      ))
+      nulls_outside <- unique(
+        res$counternull_frame$null_value[null_outside_plot]
+      )
+      cli::cli_inform(
+        "The following null values are outside of the specified x-axis range (xlim) and are not shown: {.val {nulls_outside}}"
+      )
 
       null_lines <- null_lines[-null_outside_plot, ]
     }
@@ -1099,23 +1076,13 @@ conf_dist <- function(
   #-----------------------------------------------------------------------------
 
   if (length(estimate) >= 2 && isFALSE(together)) {
-    if (plot_type %in% "pdf") {
-      p <- p +
-        facet_wrap(
-          vars(.data$variable),
-          nrow = nrow,
-          ncol = ncol,
-          scales = "free"
-        )
-    } else {
-      p <- p +
-        facet_wrap(
-          vars(.data$variable),
-          nrow = nrow,
-          ncol = ncol,
-          scales = "free_x"
-        )
-    }
+    p <- p +
+      facet_wrap(
+        vars(.data$variable),
+        nrow = nrow,
+        ncol = ncol,
+        scales = if (plot_type %in% "pdf") "free" else "free_x"
+      )
   }
 
   #-----------------------------------------------------------------------------
