@@ -270,3 +270,63 @@ test_that("the confidence density of a proportion matches the closed form", {
   # The density integrates to 1
   expect_equal(trapz_sorted(x, rows$conf_dens), 1, tolerance = 1e-3)
 })
+
+test_that("the mean of a proportion is found for narrow distributions", {
+  # integrate() over (0, 1) used to miss the peak and returned 0
+  res <- cd(estimate = 0.3, n = 1e6, type = "prop")
+
+  expect_equal(res$point_est$est_mean, 0.3, tolerance = 1e-5)
+})
+
+test_that("proportions of 0 and 1 give valid results", {
+  # The z-score was 0 / 0 at the estimate, which gave NaN p-values
+  for (successes in c(0, 20)) {
+    res <- cd(
+      estimate = successes / 20,
+      n = 20,
+      type = "prop",
+      conf_level = 0.95,
+      null_values = 0.5
+    )
+    rows <- res$res_frame
+
+    expect_false(anyNA(rows$conf_dist))
+    expect_false(anyNA(rows$p_two))
+    expect_false(anyNA(rows$s_val))
+    expect_true(all(rows$p_two >= 0 & rows$p_two <= 1))
+    expect_equal(max(rows$p_two), 1)
+
+    wilson <- stats::prop.test(successes, 20, correct = FALSE)$conf.int[1:2]
+    expect_equal(c(res$conf_frame$lwr, res$conf_frame$upr), wilson)
+  }
+
+  # The distributions for 0 and 1 are mirror images
+  mean_0 <- cd(estimate = 0, n = 20, type = "prop")$point_est$est_mean
+  mean_1 <- cd(estimate = 1, n = 20, type = "prop")$point_est$est_mean
+  expect_equal(mean_0, 1 - mean_1)
+  expect_gt(mean_0, 0)
+})
+
+test_that("wilson_cicc() handles 0 and n successes without warnings", {
+  # The square root of a negative number was taken (and silently dropped)
+  for (successes in c(0, 20)) {
+    expected <- stats::prop.test(successes, 20, correct = TRUE)$conf.int[1:2]
+
+    expect_no_warning(limits <- wilson_cicc(successes / 20, 20, 0.95))
+    expect_equal(limits, expected, tolerance = 1e-8)
+  }
+})
+
+test_that("differences of proportions of 0 and 1 give no warnings", {
+  for (estimate in list(c(0, 0), c(0, 1), c(1, 1))) {
+    expect_no_warning(
+      cd(
+        estimate = estimate,
+        n = c(20, 20),
+        type = "propdiff",
+        conf_level = 0.95,
+        null_values = 0
+      )
+    )
+  }
+})

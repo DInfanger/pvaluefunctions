@@ -15,26 +15,35 @@ wilson_cicc <- function(estimate, n, conf_level) {
   x <- round(estimate * n) # To get number of successes/failures
   estimate_compl <- (1 - estimate) # Complement of estimate
 
-  lower <- max(
-    0,
-    (2 *
-      x +
-      z^2 -
-      1 -
-      z * sqrt(z^2 - 2 - 1 / n + 4 * estimate * (n * estimate_compl + 1))) /
-      (2 * (n + z^2)),
-    na.rm = TRUE
-  )
-  upper <- min(
-    1,
-    (2 *
-      x +
-      z^2 +
-      1 +
-      z * sqrt(z^2 + 2 - 1 / n + 4 * estimate * (n * estimate_compl - 1))) /
-      (2 * (n + z^2)),
-    na.rm = TRUE
-  )
+  # The limits are 0 for x = 0 and 1 for x = n by definition (Newcombe 1998).
+  # The formulas would take the square root of a negative number there.
+  if (x == 0) {
+    lower <- 0
+  } else {
+    lower <- max(
+      0,
+      (2 *
+        x +
+        z^2 -
+        1 -
+        z * sqrt(z^2 - 2 - 1 / n + 4 * estimate * (n * estimate_compl + 1))) /
+        (2 * (n + z^2))
+    )
+  }
+
+  if (x == n) {
+    upper <- 1
+  } else {
+    upper <- min(
+      1,
+      (2 *
+        x +
+        z^2 +
+        1 +
+        z * sqrt(z^2 + 2 - 1 / n + 4 * estimate * (n * estimate_compl - 1))) /
+        (2 * (n + z^2))
+    )
+  }
 
   c(lower, upper)
 }
@@ -67,12 +76,19 @@ cdist_prop1 <- function(
   # Auxiliary functions: the z-score of Wilson's interval as a function of the
   # true proportion x and its derivative with respect to x
 
+  # For an estimate of 0 or 1, the grid contains x = p at the boundary, where
+  # the formulas give 0 / 0. The z-score tends to 0 there and the density
+  # diverges.
   cdf_fun <- function(x, n, p) {
-    sqrt(n) * (x - p) / sqrt(x * (1 - x))
+    ifelse(x == p, 0, sqrt(n) * (x - p) / sqrt(x * (1 - x)))
   }
 
   deriv_fun <- function(x, n, p) {
-    sqrt(n) * (x + p - 2 * p * x) / (2 * (x * (1 - x))^1.5)
+    ifelse(
+      x * (1 - x) == 0,
+      Inf,
+      sqrt(n) * (x + p - 2 * p * x) / (2 * (x * (1 - x))^1.5)
+    )
   }
 
   eps <- 1e-10
@@ -151,21 +167,22 @@ cdist_prop1 <- function(
 
   point_est_frame <- empty_point_est_frame(length(estimate))
 
-  mean_fun <- function(x, estimate, n) {
-    x *
-      dnorm(cdf_fun(x = x, n = n, p = estimate)) *
-      deriv_fun(x = x, n = n, p = estimate)
+  # The mean is E[x(Z)] with Z ~ N(0, 1), where x(z) is the inverse of the
+  # z-score above (a limit of Wilson's interval). Integrating on the z scale
+  # cannot miss the peak of a narrow density (large n) and also covers the
+  # point mass of 1/2 at the boundary for estimates of 0 or 1.
+  wilson_inverse <- function(z, n, p) {
+    (p + z^2 / (2 * n) + z * sqrt(p * (1 - p) / n + z^2 / (4 * n^2))) /
+      (1 + z^2 / n)
   }
 
   for (i in seq_along(estimate)) {
     point_est_frame$est_mean[i] <- integrate(
-      mean_fun,
-      lower = 0,
-      upper = 1,
-      n = n[i],
-      estimate = estimate[i],
+      function(z) wilson_inverse(z, n = n[i], p = estimate[i]) * dnorm(z),
+      lower = -10,
+      upper = 10,
       rel.tol = 1e-10
-    )$value # Mean
+    )$value
     point_est_frame[i, c("est_median", "est_mode")] <-
       point_est_median_mode(frames$res_frame, i)
   }

@@ -221,3 +221,33 @@ test_that("exact Pearson works for several estimates", {
   )
   expect_equal(res$conf_frame$lwr[2], single$conf_frame$lwr, tolerance = 1e-6)
 })
+
+test_that("exact Pearson works for very narrow distributions", {
+  skip_on_cran()
+
+  # integrate() used to miss the narrow peak of the density, so that the
+  # confidence limits could not be found
+  res <- cd(
+    estimate = 0.99,
+    n = 500,
+    type = "pearson",
+    n_values = 300L,
+    conf_level = 0.95,
+    null_values = 0.98
+  )
+  rows <- res$res_frame
+
+  # Fisher's z is accurate for this sample size
+  fisher <- tanh(atanh(0.99) + c(-1, 1) * qnorm(0.975) / sqrt(500 - 3))
+  expect_equal(c(res$conf_frame$lwr, res$conf_frame$upr), fisher, tolerance = 1e-3)
+  expect_equal(max(rows$conf_dist), 1, tolerance = 1e-4)
+  expect_equal(res$point_est$est_mean, 0.99, tolerance = 1e-3)
+  expect_gt(res$counternull_frame$counternull, 0.99)
+})
+
+test_that("the mean of the Fisher z distribution is found for narrow distributions", {
+  # integrate() over (-1, 1) used to miss the peak and returned 0
+  res <- cd(estimate = 0.8, n = 1e5, type = "spearman")
+
+  expect_equal(res$point_est$est_mean, 0.8, tolerance = 1e-4)
+})

@@ -241,3 +241,23 @@ test_that("argument matching works for partial strings", {
     "should be one of"
   )
 })
+
+test_that("probabilities and densities are valid for all regression configurations", {
+  skip_on_cran()
+
+  configs <- regression_configs()
+
+  for (name in names(configs)) {
+    args <- configs[[name]]
+    args$plot <- FALSE
+    args$plot_p_limit <- 0
+    args$n_values <- 200L
+    res <- suppressMessages(suppressWarnings(do.call(conf_dist, args)))
+    rows <- res$res_frame
+
+    expect_true(all(rows$conf_dist >= 0 & rows$conf_dist <= 1, na.rm = TRUE), label = name)
+    expect_true(all(rows$conf_dens >= 0, na.rm = TRUE), label = name)
+    expect_true(all(rows$p_two >= 0 & rows$p_two <= 1, na.rm = TRUE), label = name)
+    expect_false(any(is.nan(rows$s_val)), label = name)
+  }
+})

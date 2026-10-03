@@ -12,6 +12,10 @@ Bug fixes
   * Differences of proportions: null values close to the estimated difference (inside the gap left by the continuity correction) no longer fail with "f() values at end points not of opposite sign". Their counternull is `NA`.
   * A logarithmic y-axis (`log_yaxis = TRUE`) no longer fails with "wrong sign in 'by' argument" if `plot_p_limit` is close to `cut_logyaxis` (e.g. one-sided with `plot_p_limit = 0.02`).
   * Pearson's correlation coefficient: the exact confidence distribution no longer exceeds 1 because of integration error close to r = 1. This gave negative *p*-values, `NaN` s-values and the warning "NaNs produced".
+  * Pearson's correlation coefficient: very narrow distributions (large `n` and estimates close to -1 or 1, e.g. `estimate = 0.99` with `n = 500`) no longer fail with "f() values at end points not of opposite sign". The numerical integration missed the peak of the density.
+  * The mean of the confidence distribution is now correct for narrow distributions of Spearman's and Kendall's correlation and of proportions. Previously, the numerical integration could miss the peak of the density and returned 0 (e.g. `type = "prop"` with `n = 1e6`).
+  * Proportions of exactly 0 or 1 (`type = "prop"`) no longer give `NaN` *p*-values and s-values. Their mean now includes the probability mass at the boundary.
+  * Differences of proportions with 0 or `n` successes no longer give the warning "NaNs produced".
 
 Changes
 

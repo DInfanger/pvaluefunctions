@@ -70,21 +70,21 @@ cdist_corr <- function(
 
   point_est_frame <- empty_point_est_frame(length(estimate))
 
-  mean_fun <- function(x, stderr, estimate) {
-    x *
-      ((-dnorm((1 / stderr) * (atanh(estimate) - atanh(x))) *
-        (-1 / (stderr * (1 - x^2)))))
+  # The mean is E[tanh(Z)] with Z ~ N(atanh(estimate), stderr). Integrating
+  # over +-10 standard errors on Fisher's z scale cannot miss the peak of the
+  # density, unlike integrating over (-1, 1) for small standard errors.
+  mean_fun <- function(estimate, stderr) {
+    centre <- atanh(estimate)
+    integrate(
+      function(z) tanh(z) * dnorm(z, mean = centre, sd = stderr),
+      lower = centre - 10 * stderr,
+      upper = centre + 10 * stderr,
+      rel.tol = 1e-10
+    )$value
   }
 
   for (i in seq_along(estimate)) {
-    point_est_frame$est_mean[i] <- integrate(
-      mean_fun,
-      lower = -1,
-      upper = 1,
-      stderr = stderr[i],
-      estimate = estimate[i],
-      rel.tol = 1e-10
-    )$value # Mean
+    point_est_frame$est_mean[i] <- mean_fun(estimate[i], stderr[i])
     point_est_frame[i, c("est_median", "est_mode")] <-
       point_est_median_mode(frames$res_frame, i)
   }
@@ -138,18 +138,46 @@ cdist_corr_exact <- function(
     probs <- vapply(
       z,
       function(z) {
-        integrate(
+        integrate_around_peak(
           conf_dens_corr,
           lower = if (upper) z else -1,
           upper = if (upper) 1 else z,
           r = r,
-          n = n,
-          subdivisions = 1000L
-        )$value
+          n = n
+        )
       },
       double(1L)
     )
     pmin(pmax(probs, 0), 1)
+  }
+
+  # For large n and |r| close to 1, the density is so narrow that integrate()
+  # can miss its peak entirely and return 0 for the whole range. Splitting
+  # the range at points around the peak (approximate standard deviations on
+  # the correlation scale) avoids that. Pieces far in the tails are almost 0,
+  # where integrate() cannot reach the relative tolerance and would stop with
+  # "roundoff error"; their (tiny) estimates are kept instead.
+  integrate_around_peak <- function(f, lower, upper, r, n, ...) {
+    spread <- (1 - r^2) / sqrt(n - 3)
+    breaks <- r + c(-10, -3, 0, 3, 10) * spread
+    points <- c(lower, breaks[breaks > lower & breaks < upper], upper)
+
+    sum(vapply(
+      seq_len(length(points) - 1L),
+      function(k) {
+        integrate(
+          f,
+          lower = points[k],
+          upper = points[k + 1L],
+          r = r,
+          n = n,
+          subdivisions = 1000L,
+          stop.on.error = FALSE,
+          ...
+        )$value
+      },
+      double(1L)
+    ))
   }
 
   # Function to find confidence intervals based on the cdf
@@ -273,14 +301,14 @@ cdist_corr_exact <- function(
     int_fun <- function(rho, r, n) {
       rho * conf_dens_corr(rho = rho, r = r, n = n)
     }
-    integrate(
+    integrate_around_peak(
       int_fun,
       lower = -1,
       upper = 1,
       r = r,
       n = n,
       rel.tol = 1e-10
-    )$value
+    )
   }
 
   # The median is found by numerical root-finding using the cdf
