@@ -413,11 +413,11 @@ conf_dist <- function(
   # Calculate the confidence distributions/densities and p-value curves
   #-----------------------------------------------------------------------------
 
-  if (type %in% c("ttest", "linreg", "gammareg", "general_t")) {
-    if (type %in% "ttest") {
-      stderr <- estimate / tstat
-    }
+  if (type %in% "ttest") {
+    stderr <- estimate / tstat
+  }
 
+  if (type %in% c("ttest", "linreg", "gammareg", "general_t")) {
     res <- cdist_location_scale(
       estimate = estimate,
       stderr = stderr,
@@ -923,7 +923,8 @@ conf_dist <- function(
       # The inverted axis uses the reversed limits and the reversed transformation
       if (isTRUE(inverted)) {
         y_limits <- c(1, p_cutoff)
-        y_transform <- magnify_trans_log_rev(
+        y_transform <- magnify_trans(
+          rev = TRUE,
           interval_low = cut_logyaxis,
           interval_high = 1,
           reducer = cut_logyaxis,
@@ -931,7 +932,7 @@ conf_dist <- function(
         )
       } else {
         y_limits <- c(p_cutoff, 1)
-        y_transform <- magnify_trans_log(
+        y_transform <- magnify_trans(
           interval_low = cut_logyaxis,
           interval_high = 1,
           reducer = cut_logyaxis,
