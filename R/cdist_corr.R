@@ -83,10 +83,13 @@ cdist_corr <- function(
     )$value
   }
 
+  # Fisher's z is symmetric around atanh(estimate), so the median is the
+  # estimate
+  point_est_frame$est_median <- estimate
+
   for (i in seq_along(estimate)) {
     point_est_frame$est_mean[i] <- mean_fun(estimate[i], stderr[i])
-    point_est_frame[i, c("est_median", "est_mode")] <-
-      point_est_median_mode(frames$res_frame, i)
+    point_est_frame$est_mode[i] <- point_est_mode(frames$res_frame, i)
   }
 
   c(frames, list(point_est = point_est_frame))
@@ -181,6 +184,7 @@ cdist_corr_exact <- function(
       uniroot(
         function(z) tail_prob(z, r = r, n = n) - prob,
         interval = c(-1, 1),
+        tol = 1e-12,
         maxiter = 2000
       )$root
     }
@@ -211,7 +215,8 @@ cdist_corr_exact <- function(
       r = r,
       n = n,
       target = target,
-      interval = c(-1, 1)
+      interval = c(-1, 1),
+      tol = 1e-12
     )$root
   }
 
@@ -309,7 +314,7 @@ cdist_corr_exact <- function(
     zero_fun <- function(x, r, n) {
       tail_prob(x, r = r, n = n) - (1 / 2)
     }
-    uniroot(zero_fun, r = r, n = n, interval = c(-1, 1))$root
+    uniroot(zero_fun, r = r, n = n, interval = c(-1, 1), tol = 1e-12)$root
   }
 
   # Find the root of the derivative of the pdf numerically
@@ -368,7 +373,8 @@ cdist_corr_exact <- function(
       n = n,
       drop_positive_factor = drop_factor,
       lower = bounds[1],
-      upper = bounds[2]
+      upper = bounds[2],
+      tol = 1e-12
     )$root
   }
 

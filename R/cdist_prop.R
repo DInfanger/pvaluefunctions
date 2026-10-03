@@ -91,6 +91,15 @@ cdist_prop1 <- function(
     )
   }
 
+  # Inverse of the z-score: the true proportion x with z-score z (a limit of
+  # Wilson's interval). Rounding can push it just outside of [0, 1] for
+  # estimates of 0 or 1.
+  wilson_inverse <- function(z, n, p) {
+    x <- (p + z^2 / (2 * n) + z * sqrt(p * (1 - p) / n + z^2 / (4 * n^2))) /
+      (1 + z^2 / n)
+    pmin(pmax(x, 0), 1)
+  }
+
   eps <- 1e-10
 
   res_list <- list()
@@ -135,20 +144,14 @@ cdist_prop1 <- function(
     # Counternulls
 
     if (!is.null(null_values)) {
-      counter_tmp <- 1 -
-        (pnorm(cdf_fun(x = null_values, n = n[i], p = estimate[i])))
-
+      # The counternull has the z-score of the null value with opposite sign
       counternull_list[[length(counternull_list) + 1]] <-
         cdist_counternull_matrix(
           null_values = null_values,
-          counternull = vapply(
-            counter_tmp,
-            function(x, cdf, q) {
-              x[which.min(abs(cdf - q))]
-            },
-            x = x_calc,
-            cdf = cdf_calc,
-            FUN.VALUE = double(1L)
+          counternull = wilson_inverse(
+            -cdf_fun(x = null_values, n = n[i], p = estimate[i]),
+            n = n[i],
+            p = estimate[i]
           ),
           i = i
         )
@@ -167,14 +170,11 @@ cdist_prop1 <- function(
 
   point_est_frame <- empty_point_est_frame(length(estimate))
 
-  # The mean is E[x(Z)] with Z ~ N(0, 1), where x(z) is the inverse of the
-  # z-score above (a limit of Wilson's interval). Integrating on the z scale
-  # cannot miss the peak of a narrow density (large n) and also covers the
-  # point mass of 1/2 at the boundary for estimates of 0 or 1.
-  wilson_inverse <- function(z, n, p) {
-    (p + z^2 / (2 * n) + z * sqrt(p * (1 - p) / n + z^2 / (4 * n^2))) /
-      (1 + z^2 / n)
-  }
+  # The mean is E[x(Z)] with Z ~ N(0, 1). Integrating on the z scale cannot
+  # miss the peak of a narrow density (large n) and also covers the point mass
+  # of 1/2 at the boundary for estimates of 0 or 1. The median is the estimate
+  # (z = 0).
+  point_est_frame$est_median <- estimate
 
   for (i in seq_along(estimate)) {
     point_est_frame$est_mean[i] <- integrate(
@@ -183,8 +183,7 @@ cdist_prop1 <- function(
       upper = 10,
       rel.tol = 1e-10
     )$value
-    point_est_frame[i, c("est_median", "est_mode")] <-
-      point_est_median_mode(frames$res_frame, i)
+    point_est_frame$est_mode[i] <- point_est_mode(frames$res_frame, i)
   }
 
   c(frames, list(point_est = point_est_frame))
@@ -262,7 +261,8 @@ cdist_propdiff <- function(
         wilson_cicc_diff(estimate, n, conf_level = conf)[side] - null_value
       },
       lower = eps,
-      upper = 1 - eps
+      upper = 1 - eps,
+      tol = 1e-12
     )$root
 
     wilson_cicc_diff(estimate, n, conf_level = null_conf)[3L - side]
