@@ -966,7 +966,7 @@ conf_dist <- function(
           ymin = p_cutoff,
           ymax = cut_logyaxis,
           alpha = 0.1,
-          colour = grey(0.9)
+          colour = "#E6E6E6"
         )
     } else {
       y_scale <- if (isTRUE(inverted)) scale_y_reverse else scale_y_continuous
@@ -1055,7 +1055,7 @@ conf_dist <- function(
           ),
           ymax = cut_logyaxis,
           alpha = 0.1,
-          colour = grey(0.9)
+          colour = "#E6E6E6"
         )
     }
   } else {
