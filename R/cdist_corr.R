@@ -106,20 +106,13 @@ cdist_corr_exact <- function(
   conf_dens_corr <- function(rho, r, n) {
     nu <- (n - 1)
 
-    # For nu == 2 the exponent is 0, so the term is 1 even for |rho| == 1
-    log_rho_term <- if (nu == 2) {
-      0
-    } else {
-      ((nu - 2) / 2) * log1p(-rho^2)
-    }
-
     log_prefactor <- log(nu) +
       log(nu - 1) +
       lgamma(nu - 1) -
       log(sqrt(2 * pi)) -
       lgamma(nu + (1 / 2)) +
       ((nu - 1) / 2) * log1p(-r^2) +
-      log_rho_term +
+      ((nu - 2) / 2) * log1p(-rho^2) +
       ((1 - 2 * nu) / 2) * log1p(-r * rho)
 
     exp(log_prefactor) *

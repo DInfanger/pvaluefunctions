@@ -276,3 +276,43 @@ test_that("representative error messages are stable", {
     error = TRUE
   )
 })
+
+test_that("sample sizes of proportions must be whole numbers of at least 1", {
+  expect_error(cd(estimate = 0.3, n = 10.5, type = "prop"), "whole numbers")
+  expect_error(cd(estimate = 0.3, n = 0.5, type = "prop"), "whole numbers")
+  expect_error(
+    cd(estimate = c(0.3, 0.4), n = c(10, 10.5), type = "propdiff"),
+    "whole numbers"
+  )
+})
+
+test_that("successes just below an integer do not warn for differences", {
+  # 0.29 * 100 is 28.999999999999996 in floating point
+  expect_no_warning(
+    cd(estimate = c(0.29, 0.57), n = c(100, 100), type = "propdiff")
+  )
+})
+
+test_that("null values are range checked for variances and differences", {
+  expect_error(
+    cd(estimate = 4, n = 20, type = "var", null_values = 0),
+    "larger than 0"
+  )
+  expect_error(
+    cd(estimate = 4, n = 20, type = "var", null_values = -1),
+    "larger than 0"
+  )
+  expect_error(
+    cd(estimate = c(0.4, 0.3), n = c(60, 60), type = "propdiff", null_values = 2),
+    "between -1 and 1"
+  )
+  expect_no_error(
+    cd(estimate = c(0.4, 0.3), n = c(60, 60), type = "propdiff", null_values = -1)
+  )
+})
+
+test_that("no confidence frame is returned if all levels were dropped", {
+  expect_null(cd_z(conf_level = numeric(0))$conf_frame)
+  expect_message(res <- cd_z(conf_level = c(0, -0.1)), "too low")
+  expect_null(res$conf_frame)
+})

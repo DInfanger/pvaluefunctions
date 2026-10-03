@@ -251,3 +251,22 @@ test_that("the mean of the Fisher z distribution is found for narrow distributio
 
   expect_equal(res$point_est$est_mean, 0.8, tolerance = 1e-4)
 })
+
+# The exact Pearson tests above are skipped on CRAN; this one is fast and
+# keeps the exact distribution covered there
+test_that("exact Pearson results are plausible (also run on CRAN)", {
+  res <- cd(
+    estimate = 0.3,
+    n = 30,
+    type = "pearson",
+    n_values = 40L,
+    conf_level = 0.95,
+    null_values = 0
+  )
+  fisher <- fisher_limits(0.3, 1 / sqrt(27), 0.95)
+
+  expect_equal(res$conf_frame$lwr, fisher$lwr, tolerance = 0.05)
+  expect_equal(res$conf_frame$upr, fisher$upr, tolerance = 0.05)
+  expect_true(all(res$res_frame$p_two >= 0 & res$res_frame$p_two <= 1))
+  expect_gt(res$counternull_frame$counternull, 0.3)
+})

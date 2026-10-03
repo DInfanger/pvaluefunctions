@@ -245,3 +245,12 @@ test_that("default estimate names are the indices", {
 
   expect_equal(levels(res$res_frame$variable), c("1", "2"))
 })
+
+test_that("the t distribution with infinite df is the normal distribution", {
+  args <- list(estimate = est, stderr = se, conf_level = 0.95, null_values = 0)
+
+  expect_equal(
+    do.call(cd, c(args, type = "general_t", df = Inf)),
+    do.call(cd, c(args, type = "general_z"))
+  )
+})

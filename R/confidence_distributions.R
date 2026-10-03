@@ -11,7 +11,7 @@
 #' \emph{P}-value functions and confidence intervals are calculated based on the \emph{t}-distribution for \emph{t}-tests, linear regression coefficients, and gamma regression models (GLM). The normal distribution is used for logistic regression, poisson regression and cox regression models. For correlation coefficients, Fisher's transform is used using the corresponding variances (see Bonett et al. 2000). \emph{P}-value functions and confidence intervals for variances are constructed using the Chi2 distribution. Finally, Wilson's score intervals are used for one proportion. For differences of proportions, the Wilson score interval with continuity correction is used (Newcombe 1998).
 #'
 #' @param estimate Numerical vector containing the estimate(s).
-#' @param n Numerical vector containing the sample size(s). Required for correlations, variances, proportions and differences between proportions. Must be equal the number of estimates.
+#' @param n Numerical vector containing the sample size(s). Required for correlations, variances, proportions and differences between proportions. Must be equal the number of estimates. Must be whole numbers for proportions and differences between proportions.
 #' @param df Numerical vector containing the degrees of freedom. Required for statistics based on the \emph{t}-distribution (e.g. linear regression) and \emph{t}-tests. Must be equal the number of estimates.
 #' @param stderr Numerical vector containing the standard error(s) of the estimate(s). Required for statistics based on the \emph{t}-distribution (e.g. linear regression) and the normal distribution (e.g. logistic regression). Must be equal the number of estimate(s).
 #' @param tstat Numerical vector containing the \emph{t}-statistic(s). Required for \emph{t}-tests (means and mean differences). Must be equal the number of estimates.
@@ -20,7 +20,7 @@
 #' @param n_values (optional) Integer indicating the number of points that are used to generate the graphics. Must be at least 2. The higher this number, the higher the computation time and resolution.
 #' @param est_names (optional) String vector indicating the names of the estimate(s). Must be equal the number of estimates.
 #' @param conf_level (optional) Numerical vector indicating the confidence level(s). Must be between 0 and 1.
-#' @param null_values (optional) Numerical vector indicating the null value(s) in the plot on the \emph{untransformed (original)} scale. For example: The null values for an odds ratio of 1 is 0 on the log-odds scale. If x limits are specified with \code{xlim}, all null values outside of the specified x limits are ignored for plotting and a message is printed.
+#' @param null_values (optional) Numerical vector indicating the null value(s) in the plot on the \emph{untransformed (original)} scale. Null values must be positive for variances and lie between -1 and 1 for differences of proportions. For example: The null values for an odds ratio of 1 is 0 on the log-odds scale. If x limits are specified with \code{xlim}, all null values outside of the specified x limits are ignored for plotting and a message is printed.
 #' @param trans (optional) String indicating the transformation function that will be applied to the estimates and confidence curves. For example: \code{"exp"} for an exponential transformation of the log-odds in logistic regression. Can be a custom function, given either as a function or as the name of a function (as a string). A custom function must be vectorized and receives the values to be transformed as its first argument.
 #' @param alternative String indicating if the confidence level(s) are two-sided or one-sided. Must be one of the following: \code{two_sided}, \code{one_sided}.
 #' @param log_yaxis Logical. Indicating if a portion of the y-axis should be displayed on the logarithmic scale.
@@ -39,7 +39,7 @@
 #' @param ylab (optional) String indicating the title for the primary (left) y-axis.
 #' @param ylab_sec (optional) String indicating the title for the secondary (right) y-axis.
 #' @param inverted Logical. Indicating the orientation of the y-axis for the \emph{P}-value function (\code{p_val}), S-value function (\code{s_val}) and the confidence distribution (\code{cdf}). By default (i.e. \code{inverted = FALSE}) small \emph{P}-values are plotted at the bottom and large ones at the top so that the cusp of the \emph{P}-value function is at the top. By setting \code{inverted = TRUE}, the y-axis is inverted. Ignored for confidence densities.
-#' @param x_scale String indicating the scaling of the x-axis. The default is to scale the x-axis logarithmically if the transformation specified in \code{trans} is "exp" (exponential) and linearly otherwise. The option \code{linear} (can be abbreviated) forces a linear scaling and the option \code{logarithm} (can be abbreviated) forces a logarithmic scaling, regardless what has been specified in \code{trans}.
+#' @param x_scale String indicating the scaling of the x-axis. The default is to scale the x-axis logarithmically if the transformation specified in \code{trans} is "exp" (exponential) and linearly otherwise. The option \code{linear} (can be abbreviated) forces a linear scaling and the option \code{logarithm} (can be abbreviated) forces a logarithmic scaling, regardless what has been specified in \code{trans}. A logarithmic x-axis requires positive x limits.
 #' @param plot Logical. Should a plot be created (\code{TRUE}, the default) or not (\code{FALSE}). \code{FALSE} can be useful if users want to create their own plots using the returned data from the function. If \code{FALSE}, no ggplot2 object is returned.
 
 #' @return \code{conf_dist} invisibly returns a list with the following elements:
@@ -384,6 +384,11 @@ conf_dist <- function(
     }
   }
 
+  # No confidence levels left is the same as none requested
+  if (length(conf_level) == 0L) {
+    conf_level <- NULL
+  }
+
   if (
     type %in%
       c("pearson", "spearman", "kendall", "var", "prop", "propdiff") &&
@@ -619,6 +624,15 @@ conf_dist <- function(
     }
 
     xlim <- sort(trans_fun(xlim), decreasing = FALSE)
+  }
+
+  if (isTRUE(plot) && x_scale %in% "log" && xlim[1] <= 0) {
+    cli::cli_abort(
+      c(
+        "A logarithmic x-axis can only show positive values.",
+        i = "Use {.code x_scale = \"linear\"} or choose {.arg xlim} so that the plotted values are positive."
+      )
+    )
   }
 
   #-----------------------------------------------------------------------------

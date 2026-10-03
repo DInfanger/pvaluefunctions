@@ -495,11 +495,18 @@ validate_args <- function(
     )
   }
 
+  if (type %in% c("prop", "propdiff") && any(n < 1 | n != round(n))) {
+    cli::cli_abort(
+      "Sample sizes for proportions must be whole numbers of at least 1.",
+      call = call
+    )
+  }
+
+  # Distance to the nearest integer: `%% 1` alone would flag floating point
+  # results just below an integer (e.g. 0.29 * 100 = 28.999999999999996)
   if (
-    type %in%
-      "propdiff" &&
-      (((estimate[1] * n[1]) %% 1 >= 0.05) ||
-        ((estimate[2] * n[2]) %% 1 >= 0.05))
+    type %in% "propdiff" &&
+      any(abs(estimate * n - round(estimate * n)) >= 0.05)
   ) {
     cli::cli_warn(
       "Number of successes (i.e. estimate*n) of proportions not integer! The number of successes was rounded (i.e. round(estimate*n))."
@@ -535,6 +542,22 @@ validate_args <- function(
   ) {
     cli::cli_abort(
       "Null values for proportions must lie between 0 and 1 (excluding).",
+      call = call
+    )
+  }
+
+  if (type %in% "var" && !is.null(null_values) && any(null_values <= 0)) {
+    cli::cli_abort(
+      "Null values for variances must be larger than 0.",
+      call = call
+    )
+  }
+
+  if (
+    type %in% "propdiff" && !is.null(null_values) && any(abs(null_values) > 1)
+  ) {
+    cli::cli_abort(
+      "Null values for differences of proportions must lie between -1 and 1.",
       call = call
     )
   }

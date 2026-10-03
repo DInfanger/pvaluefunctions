@@ -41,7 +41,7 @@ conf_dist(
 \arguments{
 \item{estimate}{Numerical vector containing the estimate(s).}
 
-\item{n}{Numerical vector containing the sample size(s). Required for correlations, variances, proportions and differences between proportions. Must be equal the number of estimates.}
+\item{n}{Numerical vector containing the sample size(s). Required for correlations, variances, proportions and differences between proportions. Must be equal the number of estimates. Must be whole numbers for proportions and differences between proportions.}
 
 \item{df}{Numerical vector containing the degrees of freedom. Required for statistics based on the \emph{t}-distribution (e.g. linear regression) and \emph{t}-tests. Must be equal the number of estimates.}
 
@@ -59,7 +59,7 @@ conf_dist(
 
 \item{conf_level}{(optional) Numerical vector indicating the confidence level(s). Must be between 0 and 1.}
 
-\item{null_values}{(optional) Numerical vector indicating the null value(s) in the plot on the \emph{untransformed (original)} scale. For example: The null values for an odds ratio of 1 is 0 on the log-odds scale. If x limits are specified with \code{xlim}, all null values outside of the specified x limits are ignored for plotting and a message is printed.}
+\item{null_values}{(optional) Numerical vector indicating the null value(s) in the plot on the \emph{untransformed (original)} scale. Null values must be positive for variances and lie between -1 and 1 for differences of proportions. For example: The null values for an odds ratio of 1 is 0 on the log-odds scale. If x limits are specified with \code{xlim}, all null values outside of the specified x limits are ignored for plotting and a message is printed.}
 
 \item{trans}{(optional) String indicating the transformation function that will be applied to the estimates and confidence curves. For example: \code{"exp"} for an exponential transformation of the log-odds in logistic regression. Can be a custom function, given either as a function or as the name of a function (as a string). A custom function must be vectorized and receives the values to be transformed as its first argument.}
 
@@ -97,7 +97,7 @@ conf_dist(
 
 \item{inverted}{Logical. Indicating the orientation of the y-axis for the \emph{P}-value function (\code{p_val}), S-value function (\code{s_val}) and the confidence distribution (\code{cdf}). By default (i.e. \code{inverted = FALSE}) small \emph{P}-values are plotted at the bottom and large ones at the top so that the cusp of the \emph{P}-value function is at the top. By setting \code{inverted = TRUE}, the y-axis is inverted. Ignored for confidence densities.}
 
-\item{x_scale}{String indicating the scaling of the x-axis. The default is to scale the x-axis logarithmically if the transformation specified in \code{trans} is "exp" (exponential) and linearly otherwise. The option \code{linear} (can be abbreviated) forces a linear scaling and the option \code{logarithm} (can be abbreviated) forces a logarithmic scaling, regardless what has been specified in \code{trans}.}
+\item{x_scale}{String indicating the scaling of the x-axis. The default is to scale the x-axis logarithmically if the transformation specified in \code{trans} is "exp" (exponential) and linearly otherwise. The option \code{linear} (can be abbreviated) forces a linear scaling and the option \code{logarithm} (can be abbreviated) forces a logarithmic scaling, regardless what has been specified in \code{trans}. A logarithmic x-axis requires positive x limits.}
 
 \item{plot}{Logical. Should a plot be created (\code{TRUE}, the default) or not (\code{FALSE}). \code{FALSE} can be useful if users want to create their own plots using the returned data from the function. If \code{FALSE}, no ggplot2 object is returned.}
 }

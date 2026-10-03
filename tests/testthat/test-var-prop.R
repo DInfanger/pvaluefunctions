@@ -211,7 +211,7 @@ test_that("the counternull of a difference of proportions is found", {
     estimate = estimate,
     n = n,
     type = "propdiff",
-    null_values = c(-0.1, 0.05, 0.3, 5),
+    null_values = c(-0.1, 0.05, 0.3, 1),
     n_values = 100L
   )
   counternull <- res$counternull_frame

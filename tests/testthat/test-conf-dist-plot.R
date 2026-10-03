@@ -387,3 +387,38 @@ test_that("null values are placed correctly on a logarithmic x-axis", {
 
   expect_equal(vline$xintercept, log(3))
 })
+
+test_that("a logarithmic x-axis requires positive values", {
+  expect_error(plot_of(x_scale = "logarithm"), "only show positive values")
+  expect_error(
+    plot_of(estimate = 2, x_scale = "logarithm", xlim = c(-1, 3)),
+    "only show positive values"
+  )
+  # Without a plot, the data are returned as usual
+  expect_no_error(cd(estimate = 0.5, stderr = 0.2, type = "general_z", x_scale = "logarithm"))
+})
+
+test_that("null values are placed correctly for odds ratios", {
+  p <- plot_of(estimate = log(2), stderr = 0.3, type = "logreg", trans = "exp", null_values = log(1.5))
+  vline <- ggplot2::ggplot_build(p)$data[[which(geoms_of(p) == "GeomVline")]]
+
+  # The x-axis is on the log scale of the odds ratio
+  expect_equal(vline$xintercept, log(1.5))
+
+  expect_message(
+    plot_of(estimate = log(2), stderr = 0.3, type = "logreg", trans = "exp", null_values = log(100), xlim = log(c(1, 4))),
+    "outside of the specified x-axis range"
+  )
+})
+
+test_that("confidence levels beyond the p-value limit are not labelled", {
+  label_rows <- function(p) {
+    nrow(ggplot2::ggplot_build(p)$data[[which(geoms_of(p) == "GeomLabel")]])
+  }
+
+  # The p-value of the 99.99% level is below the default limit of 0.001
+  expect_equal(
+    label_rows(plot_of(conf_level = c(0.9999, 0.95))),
+    label_rows(plot_of(conf_level = 0.95))
+  )
+})
