@@ -90,7 +90,7 @@ cdist_prop1 <- function(
   null_values = NULL,
   alternative = NULL
 ) {
-  # Auxilliary functions
+  # Auxiliary functions
 
   cdf_fun <- function(x, n, p) {
     x <- as.complex(x)
