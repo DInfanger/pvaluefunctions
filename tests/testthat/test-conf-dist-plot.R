@@ -142,6 +142,19 @@ test_that("the logarithmic part of the y-axis is shaded across the whole x-axis"
   expect_equal(as.numeric(shading$xmax), 1)
 })
 
+test_that("a logarithmic y-axis works when the cutoff is close to the p-limit", {
+  # No power of ten fits between the p-limit and the cutoff, which used to
+  # fail with "wrong sign in 'by' argument"
+  expect_s3_class(
+    plot_of(log_yaxis = TRUE, plot_p_limit = 0.02, alternative = "one_sided"),
+    "ggplot"
+  )
+  expect_s3_class(
+    plot_of(log_yaxis = TRUE, plot_p_limit = 0.06, cut_logyaxis = 0.15),
+    "ggplot"
+  )
+})
+
 test_that("the x-axis is logarithmic for exp and can be forced", {
   default <- plot_of(trans = "exp", type = "logreg")
   linear <- plot_of(trans = "exp", type = "logreg", x_scale = "linear")

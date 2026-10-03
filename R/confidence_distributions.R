@@ -876,9 +876,9 @@ conf_dist <- function(
       lower_ylim_two <- round(10^(ceiling(round(log10(p_cutoff), 5))), 10)
       lower_ylim_one <- round(10^(ceiling(round(log10(p_cutoff / 2), 5))), 10)
 
+      # Both axes need at least one power of ten below their cutoff
       if (
-        (alternative == "two_sided" && (lower_ylim_two <= cut_logyaxis)) ||
-          (alternative == "one_sided" && (lower_ylim_one <= cut_logyaxis * 2))
+        lower_ylim_two <= cut_logyaxis && lower_ylim_one <= cut_logyaxis_one
       ) {
         # Split the breaks into two parts: i) below the cutoff i.e. the logarithmic part and ii) the linear part above the cutoff
 
