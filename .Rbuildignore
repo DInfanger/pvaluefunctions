@@ -8,12 +8,13 @@
 ^CRAN-RELEASE$
 ^vignettes/figure$
 ^README\.Rmd$
-^Rplots\.pdf
+^Rplots\.pdf$
 ^doc$
 ^Meta$
 ^CRAN-SUBMISSION$
 ^\.agents$
 ^\.posit$
 ^AGENTS\.md$
-^\.posit/assistant$
+^\.claude$
 ^dev$
+^vignettes/.*\.md$

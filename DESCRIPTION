@@ -16,7 +16,6 @@ Imports:
 Suggests:
 	knitr,
 	rmarkdown,
-	devtools,
 	testthat (>= 3.0.0),
 	grDevices
 Config/testthat/edition: 3

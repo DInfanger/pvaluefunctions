@@ -17,6 +17,17 @@ Changes
   * `conf_dist()` now returns its results invisibly. The plot is still printed if `plot = TRUE`, but calling `conf_dist()` without assigning the result no longer prints all data frames to the console.
   * With `plot = FALSE`, the plot is no longer built in the background. As a consequence, the message about null values outside of the x-axis range only appears if a plot is created.
 
+Documentation
+
+  * The help page of `conf_dist()` now lists all returned elements. `aucc_frame` is always returned, not only if `plot = TRUE`.
+  * The dependencies listed in the README and the vignette are up to date.
+
+Internal changes
+
+  * The plotting code of `conf_dist()` is now in a separate internal function.
+  * `devtools` was removed from the suggested packages.
+  * Generated vignette files are no longer tracked in git and are excluded from the package build.
+
 1.7.0
 -------------
 
