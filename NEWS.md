@@ -1,6 +1,6 @@
 ## NEWS and changes for the pvaluefunctions package
 
-Development version
+1.8.0
 -------------
 
 Bug fixes
@@ -16,6 +16,9 @@ Bug fixes
   * The mean of the confidence distribution is now correct for narrow distributions of Spearman's and Kendall's correlation and of proportions. Previously, the numerical integration could miss the peak of the density and returned 0 (e.g. `type = "prop"` with `n = 1e6`).
   * Proportions of exactly 0 or 1 (`type = "prop"`) no longer give `NaN` *p*-values and s-values. Their mean now includes the probability mass at the boundary.
   * Differences of proportions with 0 or `n` successes no longer give the warning "NaNs produced".
+  * Pearson's correlation coefficient: confidence limits, counternulls, median and mode are now found with a much smaller tolerance. Previously they could be noticeably off for narrow distributions (e.g. `estimate = 0.99` with `n = 500`: the tail probabilities at the limits of the 95% interval were 0.027 and 0.976 instead of 0.025 and 0.975).
+  * Spearman's and Kendall's correlation and proportions: the median is now exactly the estimate. Previously it was read off the grid.
+  * Proportions: the counternull is now computed exactly. Previously it was read off the grid and was inaccurate for small `n_values`.
 
 Changes
 
@@ -26,6 +29,7 @@ Documentation
 
   * The help page of `conf_dist()` now lists all returned elements. `aucc_frame` is always returned, not only if `plot = TRUE`.
   * The dependencies listed in the README and the vignette are up to date.
+  * The help page of `conf_dist()` now states that the exact distribution is used for Pearson's correlation coefficient.
 
 Internal changes
 
