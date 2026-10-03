@@ -132,9 +132,10 @@ cdist_corr_exact <- function(
       )
   }
   # Tail probabilities P(rho < z) (the cdf) or P(rho > z) by numerical
-  # integration of the pdf
+  # integration of the pdf. The integration error can push the result
+  # slightly outside of [0, 1], which gives negative p-values.
   tail_prob <- function(z, r, n, upper = FALSE) {
-    vapply(
+    probs <- vapply(
       z,
       function(z) {
         integrate(
@@ -148,6 +149,7 @@ cdist_corr_exact <- function(
       },
       double(1L)
     )
+    pmin(pmax(probs, 0), 1)
   }
 
   # Function to find confidence intervals based on the cdf

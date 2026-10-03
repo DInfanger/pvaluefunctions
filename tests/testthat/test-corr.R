@@ -82,6 +82,21 @@ test_that("exact Pearson distribution is a proper distribution", {
   expect_true(abs(res$point_est$est_mean - 0.3) < 0.02)
 })
 
+test_that("exact Pearson p-values are not negative in the extreme tails", {
+  skip_on_cran()
+
+  # The integration error made the cdf slightly larger than 1 close to r = 1,
+  # which gave negative p-values and NaN s-values
+  expect_no_warning(
+    res <- cd(estimate = 0.6, n = 15, type = "pearson", n_values = 500L)
+  )
+  rows <- res$res_frame
+
+  expect_true(all(rows$conf_dist >= 0 & rows$conf_dist <= 1))
+  expect_true(all(rows$p_two >= 0))
+  expect_false(anyNA(rows$s_val))
+})
+
 test_that("exact Pearson confidence limits have the stated coverage", {
   skip_on_cran()
 
