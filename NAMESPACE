@@ -31,7 +31,6 @@ importFrom(ggplot2,
   xlab,
   ylab
 )
-importFrom(grDevices,grey)
 importFrom(rlang,.data)
 importFrom(stats,
   dchisq,

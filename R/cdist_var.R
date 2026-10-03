@@ -92,7 +92,7 @@ cdist_var <- function(
   )
   point_est_frame$est_median <- estimate *
     df /
-    (2 * zipfR::Rgamma.inv(df / 2, 1 / 2))
+    (2 * stats::qgamma(0.5, df / 2, lower.tail = FALSE))
   point_est_frame$est_mode <- exp((log(estimate) + log(df)) - (log(2 + df)))
 
   list(

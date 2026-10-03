@@ -8,7 +8,6 @@
 #' @importFrom ggplot2 guides margin scale_colour_brewer scale_colour_manual
 #' @importFrom ggplot2 scale_x_continuous scale_y_continuous scale_y_reverse
 #' @importFrom ggplot2 sec_axis theme theme_bw vars xlab ylab
-#' @importFrom grDevices grey
 #' @importFrom rlang .data
 #' @importFrom stats dchisq dnorm dt integrate pchisq pnorm pt qchisq qnorm qt
 #' @importFrom stats uniroot

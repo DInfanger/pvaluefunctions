@@ -73,7 +73,7 @@ test_that("exact Pearson distribution is a proper distribution", {
   rows <- res$res_frame[order(res$res_frame$values), ]
 
   # Density integrates to one and agrees with the distribution function
-  expect_equal(pracma::trapz(rows$values, rows$conf_dens), 1, tolerance = 1e-2)
+  expect_equal(sum(diff(rows$values) * (rows$conf_dens[-1] + rows$conf_dens[-length(rows$conf_dens)]) / 2), 1, tolerance = 1e-2)
   expect_true(all(diff(rows$conf_dist) >= -1e-8))
 
   # Median and mode of the confidence distribution are close to the estimate

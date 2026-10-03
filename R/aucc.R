@@ -9,7 +9,9 @@ trapz_sorted <- function(x, y) {
   y <- y[not_missing]
   ordered <- order(x, decreasing = FALSE)
 
-  pracma::trapz(x = x[ordered], y = y[ordered])
+  x <- x[ordered]
+  y <- y[ordered]
+  sum(diff(x) * (y[-1] + y[-length(y)]) / 2)
 }
 
 # Internal helper: AUCC of the two-sided p-value function of every estimate.
