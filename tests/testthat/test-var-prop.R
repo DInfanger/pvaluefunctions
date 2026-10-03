@@ -103,6 +103,11 @@ test_that("proportion distribution is centred on the estimate", {
   expect_true(all(rows$values > 0 & rows$values < 1))
   expect_true(all(res$counternull_frame$counternull < 0.3))
   expect_equal(nrow(res$aucc_frame), 1)
+  expect_identical(res$point_est$est_median, 0.3)
+
+  # The counternull has the z-score of the null value with opposite sign
+  z_score <- function(x) sqrt(50) * (x - 0.3) / sqrt(x * (1 - x))
+  expect_equal(z_score(res$counternull_frame$counternull), -z_score(0.5))
 })
 
 test_that("wilson_cicc() equals prop.test() with continuity correction", {

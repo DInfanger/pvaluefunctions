@@ -51,16 +51,12 @@ assemble_cdist_frames <- function(
   )
 }
 
-# Internal helper: median and mode point estimates for estimate i.
-point_est_median_mode <- function(res_frame, i) {
+# Internal helper: mode of the confidence density of estimate i on the grid.
+point_est_mode <- function(res_frame, i) {
   values <- res_frame$values[res_frame$variable == i]
-  conf_dist <- res_frame$conf_dist[res_frame$variable == i]
   conf_dens <- res_frame$conf_dens[res_frame$variable == i]
 
-  c(
-    values[which.min(abs(conf_dist[-1] - 0.5)) + 1],
-    values[which.max(conf_dens)]
-  )
+  values[which.max(conf_dens)]
 }
 
 # Internal helper: probabilities of the lower and upper confidence limits, i.e.

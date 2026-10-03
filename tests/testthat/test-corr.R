@@ -42,6 +42,7 @@ test_that("the Fisher z distribution matches the closed form", {
   expect_equal(rows$conf_dist, 1 - pnorm(z))
   expect_equal(rows$p_two, 2 * (1 - pnorm(abs(z))))
   expect_true(all(abs(rows$values) < 1))
+  expect_identical(res$point_est$est_median, 0.5)
 })
 
 test_that("rank correlations have a counternull on Fisher's z scale", {
@@ -239,10 +240,23 @@ test_that("exact Pearson works for very narrow distributions", {
 
   # Fisher's z is accurate for this sample size
   fisher <- tanh(atanh(0.99) + c(-1, 1) * qnorm(0.975) / sqrt(500 - 3))
-  expect_equal(c(res$conf_frame$lwr, res$conf_frame$upr), fisher, tolerance = 1e-3)
+  limits <- c(res$conf_frame$lwr, res$conf_frame$upr)
+  expect_equal(limits, fisher, tolerance = 1e-3)
   expect_equal(max(rows$conf_dist), 1, tolerance = 1e-4)
   expect_equal(res$point_est$est_mean, 0.99, tolerance = 1e-3)
   expect_gt(res$counternull_frame$counternull, 0.99)
+
+  # The default tolerance of uniroot() (about 1e-4) is close to the width of
+  # the distribution and gave limits with tail probabilities of 0.027 and 0.976
+  check <- cd(
+    estimate = 0.99,
+    n = 500,
+    type = "pearson",
+    n_values = 20L,
+    null_values = limits
+  )$res_frame
+  cdf_at_limits <- check$conf_dist[match(limits, check$values)]
+  expect_equal(cdf_at_limits, c(0.025, 0.975), tolerance = 1e-6)
 })
 
 test_that("the mean of the Fisher z distribution is found for narrow distributions", {

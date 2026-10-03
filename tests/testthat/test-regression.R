@@ -20,14 +20,36 @@ check_configuration <- function(name) {
   res <- suppressMessages(suppressWarnings(do.call(conf_dist, args)))
   ref <- reference[[name]]
 
-  # Version 1.6.3 read the median of the t- and normal distributions off a
-  # coarse grid. It is now exactly the estimate (see test-location-scale.R).
-  location_scale_types <- c(
+  # Version 1.6.3 read the median of the t- and normal distributions, of
+  # Fisher's z (Spearman, Kendall) and of proportions off a coarse grid. It is
+  # now exactly the estimate. The counternull of a proportion was also read off
+  # the grid and is now exact.
+  exact_median_types <- c(
     "ttest", "linreg", "gammareg", "general_t",
-    "logreg", "poisreg", "coxreg", "general_z"
+    "logreg", "poisreg", "coxreg", "general_z",
+    "spearman", "kendall", "prop"
   )
-  if (args$type %in% location_scale_types) {
+  if (args$type %in% exact_median_types) {
     ref$point_est$est_median <- res$point_est$est_median
+  }
+  if (args$type %in% "prop" && !is.null(ref$counternull_frame)) {
+    ref$counternull_frame$counternull <- res$counternull_frame$counternull
+  }
+
+  # The limits, counternulls, median and mode of the exact Pearson
+  # distribution were found with the default (absolute) tolerance of uniroot()
+  # (about 1e-4) and are now more precise
+  if (args$type %in% "pearson") {
+    frames <- c("conf_frame", "counternull_frame", "point_est")
+    for (frame in frames[!vapply(res[frames], is.null, logical(1L))]) {
+      cols <- setdiff(names(res[[frame]]), "variable")
+      expect_lt(
+        max(abs(as.matrix(res[[frame]][cols]) - as.matrix(ref[[frame]][cols]))),
+        1e-4,
+        label = paste(name, frame)
+      )
+      ref[[frame]] <- res[[frame]]
+    }
   }
 
   # Missing point estimates (propdiff) were logical in version 1.6.3 and are
