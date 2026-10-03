@@ -3,8 +3,6 @@ packrat/lib*/
 .agents/
 .Rproj.user
 *.Rproj
-R/confidence_distributions_experimental.R
-R/testing_experimental.R
 .posit/
 Rplots.pdf
 doc
@@ -16,3 +14,4 @@ CRAN-RELEASE
 .httr-oauth
 .DS_Store
 AGENTS.md
+dev/

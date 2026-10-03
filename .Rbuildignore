@@ -8,8 +8,6 @@
 ^CRAN-RELEASE$
 ^vignettes/figure$
 ^README\.Rmd$
-^R/confidence_distributions_experimental\.R$
-^R/testing_experimental\.R$
 ^Rplots\.pdf
 ^doc$
 ^Meta$
@@ -18,3 +16,4 @@
 ^\.posit$
 ^AGENTS\.md$
 ^\.posit/assistant$
+^dev$
