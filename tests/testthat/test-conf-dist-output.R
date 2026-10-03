@@ -54,13 +54,13 @@ test_that("a plot is only returned on request", {
   expect_s3_class(with_plot$plot, "ggplot")
 })
 
-test_that("conf_dist() prints the plot", {
+test_that("conf_dist() prints the plot and returns the results invisibly", {
   skip_on_cran()
 
   grDevices::pdf(NULL)
   on.exit(grDevices::dev.off())
 
-  expect_no_error(conf_dist(
+  expect_invisible(conf_dist(
     estimate = 0.5,
     stderr = 0.2,
     type = "general_z",

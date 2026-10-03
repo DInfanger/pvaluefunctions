@@ -12,6 +12,11 @@ Bug fixes
   * Differences of proportions: null values close to the estimated difference (inside the gap left by the continuity correction) no longer fail with "f() values at end points not of opposite sign". Their counternull is `NA`.
   * A logarithmic y-axis (`log_yaxis = TRUE`) no longer fails with "wrong sign in 'by' argument" if `plot_p_limit` is close to `cut_logyaxis` (e.g. one-sided with `plot_p_limit = 0.02`).
 
+Changes
+
+  * `conf_dist()` now returns its results invisibly. The plot is still printed if `plot = TRUE`, but calling `conf_dist()` without assigning the result no longer prints all data frames to the console.
+  * With `plot = FALSE`, the plot is no longer built in the background. As a consequence, the message about null values outside of the x-axis range only appears if a plot is created.
+
 1.7.0
 -------------
 

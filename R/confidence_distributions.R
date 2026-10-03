@@ -758,5 +758,5 @@ conf_dist <- function(
 
   res$res_frame <- res$res_frame[order(res$res_frame$values), ]
 
-  res
+  invisible(res)
 }
