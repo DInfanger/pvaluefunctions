@@ -9,6 +9,7 @@ Bug fixes
   * The shaded logarithmic part of the y-axis (`log_yaxis = TRUE`) now spans the whole logarithmic x-axis. Previously it stopped at x = 100.
   * The warnings for the approximations of Spearman's and Kendall's correlation now also apply to negative estimates.
   * Variances: the mean of the confidence distribution is now `NA` for `n <= 3` because it does not exist. Previously it was `Inf` for `n = 3` and a meaningless finite value for `n = 2`.
+  * Differences of proportions: null values close to the estimated difference (inside the gap left by the continuity correction) no longer fail with "f() values at end points not of opposite sign". Their counternull is `NA`.
   * A logarithmic y-axis (`log_yaxis = TRUE`) no longer fails with "wrong sign in 'by' argument" if `plot_p_limit` is close to `cut_logyaxis` (e.g. one-sided with `plot_p_limit = 0.02`).
 
 1.7.0

@@ -1,11 +1,6 @@
 # Confidence distributions for proportions and differences of proportions.
 
-wilson_ci <- function(
-  estimate,
-  n,
-  conf_level,
-  alternative
-) {
+wilson_ci <- function(estimate, n, conf_level) {
   z <- qnorm((conf_level + 1) / 2)
 
   p1 <- estimate + (1 / 2) * z^2 / n
@@ -15,12 +10,7 @@ wilson_ci <- function(
   c((p1 - p2) / p3, (p1 + p2) / p3)
 }
 
-wilson_cicc <- function(
-  estimate,
-  n,
-  conf_level,
-  alternative
-) {
+wilson_cicc <- function(estimate, n, conf_level) {
   z <- qnorm((conf_level + 1) / 2)
   x <- round(estimate * n) # To get number of successes/failures
   estimate_compl <- (1 - estimate) # Complement of estimate
@@ -49,27 +39,11 @@ wilson_cicc <- function(
   c(lower, upper)
 }
 
-wilson_cicc_diff <- function(
-  estimate,
-  n,
-  conf_level,
-  alternative
-) {
+wilson_cicc_diff <- function(estimate, n, conf_level) {
   est_diff <- (estimate[1] - estimate[2])
 
-  res1 <- wilson_cicc(
-    estimate = estimate[1],
-    n = n[1],
-    conf_level = conf_level,
-    alternative = alternative
-  )
-
-  res2 <- wilson_cicc(
-    estimate = estimate[2],
-    n = n[2],
-    conf_level = conf_level,
-    alternative = alternative
-  )
+  res1 <- wilson_cicc(estimate = estimate[1], n = n[1], conf_level = conf_level)
+  res2 <- wilson_cicc(estimate = estimate[2], n = n[2], conf_level = conf_level)
 
   l1 <- res1[1]
   u1 <- res1[2]
@@ -90,25 +64,15 @@ cdist_prop1 <- function(
   null_values = NULL,
   alternative = NULL
 ) {
-  # Auxiliary functions
+  # Auxiliary functions: the z-score of Wilson's interval as a function of the
+  # true proportion x and its derivative with respect to x
 
   cdf_fun <- function(x, n, p) {
-    x <- as.complex(x)
-    n <- as.complex(n)
-    p <- as.complex(p)
-
-    -Re((1i * sqrt(n) * (p - x)) / (sqrt(x - 1) * sqrt(x)))
+    sqrt(n) * (x - p) / sqrt(x * (1 - x))
   }
 
   deriv_fun <- function(x, n, p) {
-    x <- as.complex(x)
-    n <- as.complex(n)
-    p <- as.complex(p)
-
-    Re(
-      (1i * sqrt(n) * (-x + p * (-1 + 2 * x))) /
-        (2 * (-1 + x)^(3 / 2) * x^(3 / 2))
-    )
+    sqrt(n) * (x + p - 2 * p * x) / (2 * (x * (1 - x))^1.5)
   }
 
   eps <- 1e-10
@@ -120,12 +84,7 @@ cdist_prop1 <- function(
   counternull_list <- list()
 
   for (i in seq_along(estimate)) {
-    limits <- wilson_ci(
-      estimate = estimate[i],
-      n = n[i],
-      conf_level = (1 - eps),
-      alternative = alternative
-    )
+    limits <- wilson_ci(estimate = estimate[i], n = n[i], conf_level = 1 - eps)
 
     x_calc <- c(
       estimate[i],
@@ -146,20 +105,12 @@ cdist_prop1 <- function(
     # Confidence intervals
 
     if (!is.null(conf_level)) {
-      # A one-sided level corresponds to a two-sided interval of level 2 * l - 1
-      conf_tmp <- switch(
-        alternative,
-        two_sided = conf_level,
-        one_sided = 2 * conf_level - 1
-      )
-
       conf_list[[length(conf_list) + 1]] <- cdist_conf_matrix(
         conf_level = conf_level,
         limits = wilson_ci(
           estimate = estimate[i],
           n = n[i],
-          conf_level = conf_tmp,
-          alternative = alternative
+          conf_level = two_sided_level(conf_level, alternative)
         ),
         i = i
       )
@@ -231,132 +182,83 @@ cdist_propdiff <- function(
   alternative = NULL
 ) {
   eps <- 1e-15
+  est_diff <- estimate[1] - estimate[2]
 
-  res_list <- list()
-
-  conf_list <- list()
-
-  counternull_list <- list()
-
+  # Two-sided p-values only: each confidence level gives the two values at
+  # which the p-value function equals 1 - level
   conf_levels <- seq(eps, 1 - eps, length.out = ceiling(n_values / 2))
   x_calc <- vapply(
     conf_levels,
     wilson_cicc_diff,
     estimate = estimate,
     n = n,
-    alternative = alternative,
     FUN.VALUE = double(2L)
   )
 
-  val_min <- wilson_cicc_diff(estimate, n, conf_level = eps)
-  val_between <- seq(min(val_min), max(val_min), length.out = 100)
+  # The continuity correction leaves a gap around the estimate even for a
+  # confidence level of (almost) 0. It is filled with values without p-values.
+  n_gap <- 100L
+  gap <- wilson_cicc_diff(estimate, n, conf_level = eps)
+  values <- c(x_calc[1, ], x_calc[2, ], seq(gap[1], gap[2], length.out = n_gap))
+  p_two <- c(1 - conf_levels, 1 - conf_levels, rep(NA, n_gap))
 
-  res_mat_tmp <- matrix(NA, nrow = length(x_calc) + 100, ncol = 6)
-
-  res_mat_tmp[, 1] <- c(x_calc[1, ], x_calc[2, ], val_between)
-  is.na(res_mat_tmp[, 2]) <- TRUE # No confidence distribution for this one
-  is.na(res_mat_tmp[, 3]) <- TRUE # No confidence density for this one
-  res_mat_tmp[, 4] <- c(1 - conf_levels, 1 - conf_levels, rep(NA, 100))
-  res_mat_tmp[, 5] <- c(
-    (1 - conf_levels) / 2,
-    (1 - conf_levels) / 2,
-    rep(NA, 100)
-  )
-  res_mat_tmp[, 6] <- rep(1, times = (length(x_calc) + 100))
-
-  res_list[[length(res_list) + 1]] <- res_mat_tmp
+  # No confidence distribution and density for this one
+  res_list <- list(cbind(values, NA, NA, p_two, p_two / 2, 1))
 
   # Confidence intervals
 
+  conf_list <- list()
+
   if (!is.null(conf_level)) {
-    conf_tmp <- switch(
-      alternative,
-      two_sided = conf_level,
-      one_sided = 2 * conf_level - 1
+    limits <- vapply(
+      two_sided_level(conf_level, alternative),
+      wilson_cicc_diff,
+      estimate = estimate,
+      n = n,
+      FUN.VALUE = double(2L)
     )
 
-    conf_mat_tmp <- matrix(NA, ncol = 4, nrow = length(conf_level))
-
-    limits_tmp <- matrix(NA, ncol = 2, nrow = length(conf_tmp))
-
-    for (j in seq_along(conf_tmp)) {
-      limits_tmp[j, ] <- wilson_cicc_diff(
-        estimate = estimate,
-        n = n,
-        conf_level = conf_tmp[j],
-        alternative = alternative
-      )
-    }
-
-    conf_mat_tmp[, 1] <- conf_level
-    conf_mat_tmp[, 2] <- limits_tmp[, 1]
-    conf_mat_tmp[, 3] <- limits_tmp[, 2]
-    conf_mat_tmp[, 4] <- rep(1, length(conf_level))
-
-    conf_list[[length(conf_list) + 1]] <- conf_mat_tmp
+    conf_list[[1]] <- cdist_conf_matrix(
+      conf_level = conf_level,
+      limits = c(limits[1, ], limits[2, ]),
+      i = 1
+    )
   }
 
-  # Counternulls
+  # Counternulls: find the confidence level at which one limit equals the
+  # null value; the counternull is then the other limit. Null values outside
+  # of the computed range or inside the gap have no counternull.
+
+  counternull_of <- function(null_value) {
+    if (
+      null_value > max(values) ||
+        null_value < min(values) ||
+        (null_value >= gap[1] && null_value <= gap[2])
+    ) {
+      return(NA_real_)
+    }
+
+    side <- if (null_value > est_diff) 2L else 1L
+
+    null_conf <- uniroot(
+      function(conf) {
+        wilson_cicc_diff(estimate, n, conf_level = conf)[side] - null_value
+      },
+      lower = eps,
+      upper = 1 - eps
+    )$root
+
+    wilson_cicc_diff(estimate, n, conf_level = null_conf)[3L - side]
+  }
+
+  counternull_list <- list()
 
   if (!is.null(null_values)) {
-    cnull_tmp <- rep(NA, length(null_values))
-
-    tmp_fun_up <- function(conf_level, estimate, n, null_values) {
-      wilson_cicc_diff(estimate = estimate, n = n, conf_level = conf_level)[2] -
-        null_values
-    }
-
-    tmp_fun_low <- function(conf_level, estimate, n, null_values) {
-      wilson_cicc_diff(estimate = estimate, n = n, conf_level = conf_level)[1] -
-        null_values
-    }
-
-    for (j in seq_along(null_values)) {
-      if (
-        (null_values[j] > max(res_mat_tmp[, 1])) ||
-          (null_values[j] < min(res_mat_tmp[, 1]))
-      ) {
-        is.na(cnull_tmp[j]) <- TRUE # Set values in the "gap" to missing for plotting
-      } else {
-        if (null_values[j] > -diff(estimate)) {
-          null_conf <- uniroot(
-            tmp_fun_up,
-            lower = 1e-15,
-            upper = 1 - 1e-15,
-            null_values = null_values[j],
-            estimate = estimate,
-            n = n
-          )$root
-
-          cnull_tmp[j] <- wilson_cicc_diff(
-            estimate = estimate,
-            n = n,
-            conf_level = null_conf
-          )[1]
-        } else if (null_values[j] < -diff(estimate)) {
-          null_conf <- uniroot(
-            tmp_fun_low,
-            lower = 1e-15,
-            upper = 1 - 1e-15,
-            null_values = null_values[j],
-            estimate = estimate,
-            n = n
-          )$root
-
-          cnull_tmp[j] <- wilson_cicc_diff(
-            estimate = estimate,
-            n = n,
-            conf_level = null_conf
-          )[2]
-        }
-      }
-    }
-
-    counternull_mat_tmp <- matrix(NA, ncol = 3, nrow = length(null_values))
-    counternull_mat_tmp[, 1] <- null_values
-    counternull_mat_tmp[, 2] <- cnull_tmp
-    counternull_mat_tmp[, 3] <- rep(1, length(null_values))
-    counternull_list[[length(counternull_list) + 1]] <- counternull_mat_tmp
+    counternull_list[[1]] <- cdist_counternull_matrix(
+      null_values = null_values,
+      counternull = vapply(null_values, counternull_of, double(1L)),
+      i = 1
+    )
   }
 
   frames <- assemble_cdist_frames(
@@ -367,9 +269,5 @@ cdist_propdiff <- function(
     null_values = null_values
   )
 
-  # Point estimators
-
-  point_est_frame <- empty_point_est_frame(1)
-
-  c(frames, list(point_est = point_est_frame))
+  c(frames, list(point_est = empty_point_est_frame(1)))
 }

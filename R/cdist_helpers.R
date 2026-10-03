@@ -73,6 +73,17 @@ conf_limit_probs <- function(conf_level, alternative) {
   )
 }
 
+# Internal helper: the two-sided confidence level whose limits are the limits
+# of the requested confidence levels. A one-sided level l corresponds to a
+# two-sided interval of level 2 * l - 1.
+two_sided_level <- function(conf_level, alternative) {
+  switch(
+    alternative,
+    two_sided = conf_level,
+    one_sided = 2 * conf_level - 1
+  )
+}
+
 # Internal helper: result matrix for estimate i with the columns values,
 # confidence distribution, confidence density, two-sided p-value, one-sided
 # p-value and the index of the estimate.

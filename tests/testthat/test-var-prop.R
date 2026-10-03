@@ -119,7 +119,7 @@ test_that("wilson_cicc() equals prop.test() with continuity correction", {
         )$conf.int[1:2]
 
         expect_equal(
-          wilson_cicc(successes / n, n, level, "two_sided"),
+          wilson_cicc(successes / n, n, level),
           expected,
           tolerance = 1e-8,
           label = paste("successes", successes, "n", n, "level", level)
@@ -132,7 +132,7 @@ test_that("wilson_cicc() equals prop.test() with continuity correction", {
 test_that("wilson_ci() equals prop.test() without continuity correction", {
   expected <- stats::prop.test(7, 31, conf.level = 0.9, correct = FALSE)$conf.int[1:2]
 
-  expect_equal(wilson_ci(7 / 31, 31, 0.9, "two_sided"), expected)
+  expect_equal(wilson_ci(7 / 31, 31, 0.9), expected)
 })
 
 #-------------------------------------------------------------------------------
@@ -142,12 +142,12 @@ test_that("wilson_ci() equals prop.test() without continuity correction", {
 test_that("wilson_cicc_diff() follows Newcombe's method 10", {
   for (level in c(0.8, 0.95, 0.99)) {
     expect_equal(
-      wilson_cicc_diff(c(56 / 70, 48 / 80), c(70, 80), level, "two_sided"),
+      wilson_cicc_diff(c(56 / 70, 48 / 80), c(70, 80), level),
       newcombe_cc(56, 70, 48, 80, level),
       tolerance = 1e-8
     )
     expect_equal(
-      wilson_cicc_diff(c(5 / 20, 12 / 30), c(20, 30), level, "two_sided"),
+      wilson_cicc_diff(c(5 / 20, 12 / 30), c(20, 30), level),
       newcombe_cc(5, 20, 12, 30, level),
       tolerance = 1e-8
     )
@@ -240,4 +240,33 @@ test_that("the counternull of a difference of proportions is found", {
       tolerance = 1e-2
     )
   }
+})
+
+test_that("null values in the gap of a difference of proportions have no counternull", {
+  # The continuity correction leaves a gap around the estimated difference
+  # (-0.1) in which uniroot() used to fail
+  estimate <- c(0.3, 0.4)
+  n <- c(10, 10)
+  gap <- wilson_cicc_diff(estimate, n, 1e-15)
+  null_values <- c(gap[1] + 0.01, estimate[1] - estimate[2], gap[2] - 0.01)
+
+  res <- cd(estimate = estimate, n = n, type = "propdiff", null_values = null_values)
+
+  expect_equal(res$counternull_frame$counternull, rep(NA_real_, 3))
+})
+
+test_that("the confidence density of a proportion matches the closed form", {
+  # Wilson's score: z(x) = sqrt(n) * (x - p) / sqrt(x * (1 - x))
+  p <- 0.3
+  n <- 40
+  res <- cd(estimate = p, n = n, type = "prop")
+  rows <- res$res_frame
+  x <- rows$values
+  z <- sqrt(n) * (x - p) / sqrt(x * (1 - x))
+  dz <- sqrt(n) * (x + p - 2 * p * x) / (2 * (x * (1 - x))^1.5)
+
+  expect_equal(rows$conf_dist, pnorm(z))
+  expect_equal(rows$conf_dens, dnorm(z) * dz)
+  # The density integrates to 1
+  expect_equal(trapz_sorted(x, rows$conf_dens), 1, tolerance = 1e-3)
 })
