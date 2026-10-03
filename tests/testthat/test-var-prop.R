@@ -60,6 +60,13 @@ test_that("variance point estimates match the closed form", {
   expect_equal(res$point_est$est_median, est * df / qchisq(0.5, df))
 })
 
+test_that("the variance mean is missing for n <= 3", {
+  # The mean of the scaled inverse chi-squared distribution needs df > 2
+  res <- cd(estimate = c(4, 4, 4), n = c(2, 3, 4), type = "var")
+
+  expect_equal(res$point_est$est_mean, c(NA, NA, 4 * 3))
+})
+
 #-------------------------------------------------------------------------------
 # Proportions
 #-------------------------------------------------------------------------------

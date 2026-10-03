@@ -82,9 +82,12 @@ cdist_var <- function(
 
   point_est_frame <- empty_point_est_frame(length(estimate))
 
-  point_est_frame$est_mean <- exp(
-    (log(estimate) + log(df) + lgamma(-1 + (df / 2))) -
-      (log(2) + lgamma(df / 2))
+  # The mean of the scaled inverse chi-squared distribution only exists for
+  # df > 2
+  point_est_frame$est_mean <- ifelse(
+    df > 2,
+    estimate * df / (df - 2),
+    NA_real_
   )
   point_est_frame$est_median <- estimate *
     df /
