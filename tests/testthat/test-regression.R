@@ -30,6 +30,11 @@ check_configuration <- function(name) {
     ref$point_est$est_median <- res$point_est$est_median
   }
 
+  # Missing point estimates (propdiff) were logical in version 1.6.3 and are
+  # now numeric
+  est_cols <- c("est_mean", "est_median", "est_mode")
+  ref$point_est[est_cols] <- lapply(ref$point_est[est_cols], as.numeric)
+
   expect_equal(
     mask_extreme_s_val(res$res_frame),
     mask_extreme_s_val(ref$res_frame),

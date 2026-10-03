@@ -66,10 +66,6 @@ cdist_corr <- function(
     null_values = null_values
   )
 
-  res_frame <- frames$res_frame
-  conf_frame <- frames$conf_frame
-  counternull_frame <- frames$counternull_frame
-
   # Point estimators
 
   point_est_frame <- empty_point_est_frame(length(estimate))
@@ -90,15 +86,10 @@ cdist_corr <- function(
       rel.tol = 1e-10
     )$value # Mean
     point_est_frame[i, c("est_median", "est_mode")] <-
-      point_est_median_mode(res_frame, i)
+      point_est_median_mode(frames$res_frame, i)
   }
 
-  list(
-    res_frame = res_frame,
-    conf_frame = conf_frame,
-    counternull_frame = counternull_frame,
-    point_est = point_est_frame
-  )
+  c(frames, list(point_est = point_est_frame))
 }
 
 cdist_corr_exact <- function(
@@ -298,10 +289,6 @@ cdist_corr_exact <- function(
     null_values = null_values
   )
 
-  res_frame <- frames$res_frame
-  conf_frame <- frames$conf_frame
-  counternull_frame <- frames$counternull_frame
-
   # Point estimators
 
   point_est_frame <- empty_point_est_frame(length(estimate))
@@ -395,10 +382,5 @@ cdist_corr_exact <- function(
     point_est_frame$est_mode[i] <- mode_fun(r = estimate[i], n = n[i])
   }
 
-  list(
-    res_frame = res_frame,
-    conf_frame = conf_frame,
-    counternull_frame = counternull_frame,
-    point_est = point_est_frame
-  )
+  c(frames, list(point_est = point_est_frame))
 }

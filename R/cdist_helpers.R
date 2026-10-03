@@ -3,9 +3,9 @@
 # Internal helper: empty point-estimates data frame for n estimates.
 empty_point_est_frame <- function(n) {
   data.frame(
-    est_mean = rep(NA, n),
-    est_median = rep(NA, n),
-    est_mode = rep(NA, n),
+    est_mean = rep(NA_real_, n),
+    est_median = rep(NA_real_, n),
+    est_mode = rep(NA_real_, n),
     variable = seq_len(n)
   )
 }

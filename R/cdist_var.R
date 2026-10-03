@@ -78,10 +78,6 @@ cdist_var <- function(
     null_values = null_values
   )
 
-  res_frame <- frames$res_frame
-  conf_frame <- frames$conf_frame
-  counternull_frame <- frames$counternull_frame
-
   # Point estimators
 
   point_est_frame <- empty_point_est_frame(length(estimate))
@@ -95,10 +91,5 @@ cdist_var <- function(
     (2 * stats::qgamma(0.5, df / 2, lower.tail = FALSE))
   point_est_frame$est_mode <- exp((log(estimate) + log(df)) - (log(2 + df)))
 
-  list(
-    res_frame = res_frame,
-    conf_frame = conf_frame,
-    counternull_frame = counternull_frame,
-    point_est = point_est_frame
-  )
+  c(frames, list(point_est = point_est_frame))
 }
