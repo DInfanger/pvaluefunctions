@@ -417,21 +417,15 @@ conf_dist <- function(
     stderr <- estimate / tstat
   }
 
-  if (type %in% c("ttest", "linreg", "gammareg", "general_t")) {
+  t_types <- c("ttest", "linreg", "gammareg", "general_t")
+  z_types <- c("logreg", "poisreg", "coxreg", "general_z")
+
+  if (type %in% c(t_types, z_types)) {
+    # df = NULL gives the normal distribution
     res <- cdist_location_scale(
       estimate = estimate,
       stderr = stderr,
-      df = df,
-      n_values = n_values,
-      conf_level = conf_level,
-      alternative = alternative,
-      null_values = null_values
-    )
-  } else if (type %in% c("logreg", "poisreg", "coxreg", "general_z")) {
-    res <- cdist_location_scale(
-      estimate = estimate,
-      stderr = stderr,
-      df = NULL,
+      df = if (type %in% t_types) df,
       n_values = n_values,
       conf_level = conf_level,
       null_values = null_values,
@@ -447,7 +441,6 @@ conf_dist <- function(
 
       stderr <- switch(
         type,
-        pearson = 1 / sqrt(n - 3),
         spearman = sqrt((1 + (estimate)^2 / 2) / (n - 3)),
         kendall = sqrt(0.437 / (n - 4))
       )
@@ -524,20 +517,17 @@ conf_dist <- function(
   res$res_frame$hypothesis <- NA
 
   if (alternative %in% "one_sided") {
+    # The variance distribution is skewed, so split it at its median
     if (type %in% "var") {
-      for (i in seq_along(estimate)) {
-        estimate[i] <- res$point_est$est_median[i]
-      }
+      estimate <- res$point_est$est_median
     }
 
-    for (i in seq_along(estimate)) {
-      res$res_frame$hypothesis[
-        res$res_frame$variable == i & res$res_frame$values < estimate[i]
-      ] <- 1 # greater
-      res$res_frame$hypothesis[
-        res$res_frame$variable == i & res$res_frame$values >= estimate[i]
-      ] <- (-1) # less
-    }
+    row_estimate <- estimate[res$res_frame$variable]
+    res$res_frame$hypothesis <- ifelse(
+      res$res_frame$values < row_estimate,
+      1, # greater
+      -1 # less
+    )
   }
 
   res$res_frame$hypothesis <- factor(
@@ -578,8 +568,6 @@ conf_dist <- function(
         xlim[2] <- plot_range_tmp[2]
       }
     }
-
-    rm(res_tmp, plot_range_tmp)
   }
 
   #-----------------------------------------------------------------------------
@@ -631,11 +619,7 @@ conf_dist <- function(
   # Cutoff for nicer plotting
   #-----------------------------------------------------------------------------
 
-  p_cutoff <- ifelse(
-    alternative %in% c("two_sided"),
-    plot_p_limit,
-    plot_p_limit * 2
-  )
+  p_cutoff <- if (alternative %in% "two_sided") plot_p_limit else plot_p_limit * 2
 
   if (plot_type %in% c("p_val")) {
     res$res_frame$values[res$res_frame$p_two < p_cutoff] <- NA
@@ -1108,8 +1092,6 @@ conf_dist <- function(
           linewidth = 0.5
         )
     }
-
-    rm(x_range, plot_limits, null_outside_plot, null_lines)
   }
 
   #-----------------------------------------------------------------------------

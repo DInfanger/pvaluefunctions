@@ -62,7 +62,7 @@ make_text_frame <- function(conf_level, alternative, trans) {
   theor_values <- switch(
     alternative,
     two_sided = rep(
-      ifelse(trans %in% "exp", 0, -Inf),
+      if (trans %in% "exp") 0 else -Inf,
       each = length(conf_level)
     ),
     one_sided = rep(Inf, each = length(conf_level))
