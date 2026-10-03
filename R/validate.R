@@ -251,7 +251,10 @@ validate_args <- function(
     # Levels that are too low for the type of the alternative are dropped
     # in conf_dist(); levels of 1 or more can never be valid.
     if (any(conf_level >= 1)) {
-      cli::cli_abort("All confidence levels must lie between 0 and 1.", call = call)
+      cli::cli_abort(
+        "All confidence levels must lie between 0 and 1.",
+        call = call
+      )
     }
   }
 
@@ -476,7 +479,9 @@ validate_args <- function(
     )
   }
 
-  if (type %in% c("prop", "propdiff") && (any(estimate < 0) || any(estimate > 1))) {
+  if (
+    type %in% c("prop", "propdiff") && (any(estimate < 0) || any(estimate > 1))
+  ) {
     cli::cli_abort(
       "Please provide proportion estimates as decimals between 0 and 1.",
       call = call
@@ -497,11 +502,13 @@ validate_args <- function(
         ((estimate[2] * n[2]) %% 1 >= 0.05))
   ) {
     cli::cli_warn(
-      "Number of successes (i.e. estimate*n) of proportions not integer! The the number of successes was rounded (i.e. round(estimate*n))."
+      "Number of successes (i.e. estimate*n) of proportions not integer! The number of successes was rounded (i.e. round(estimate*n))."
     )
   }
 
-  if (type %in% c("pearson", "spearman", "kendall") && any(abs(estimate) >= 1)) {
+  if (
+    type %in% c("pearson", "spearman", "kendall") && any(abs(estimate) >= 1)
+  ) {
     cli::cli_abort(
       "Correlation coefficients must lie strictly between -1 and 1.",
       call = call
@@ -543,15 +550,15 @@ validate_args <- function(
     )
   }
 
-  if (type %in% "spearman" && (any(estimate >= 0.9) || any(n < 10))) {
+  if (type %in% "spearman" && (any(abs(estimate) >= 0.9) || any(n < 10))) {
     cli::cli_warn(
-      "Approximations for Spearman's correlation are only valid for r < 0.9 and n >= 10. Interpret with caution."
+      "Approximations for Spearman's correlation are only valid for |r| < 0.9 and n >= 10. Interpret with caution."
     )
   }
 
-  if (type %in% "kendall" && any(estimate >= 0.8)) {
+  if (type %in% "kendall" && any(abs(estimate) >= 0.8)) {
     cli::cli_warn(
-      "Approximations for Kendall's correlation are only valid for r < 0.8. Interpret with caution."
+      "Approximations for Kendall's correlation are only valid for |r| < 0.8. Interpret with caution."
     )
   }
 

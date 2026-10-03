@@ -1,5 +1,14 @@
 ## NEWS and changes for the pvaluefunctions package
 
+Development version
+-------------
+
+Bug fixes
+
+  * Point estimates for types based on the t- and normal distribution: the median is now exactly the estimate. Previously it was read off a coarse grid and could be far off, especially for small degrees of freedom. The mean is `NA` for `df <= 1` because it does not exist.
+  * The shaded logarithmic part of the y-axis (`log_yaxis = TRUE`) now spans the whole logarithmic x-axis. Previously it stopped at x = 100.
+  * The warnings for the approximations of Spearman's and Kendall's correlation now also apply to negative estimates.
+
 1.7.0
 -------------
 

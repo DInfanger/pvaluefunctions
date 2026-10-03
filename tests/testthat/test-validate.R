@@ -250,6 +250,14 @@ test_that("approximations for rank correlations warn", {
     cd(estimate = 0.85, n = 30, type = "kendall"),
     "Kendall"
   )
+  expect_warning(
+    cd(estimate = -0.95, n = 30, type = "spearman"),
+    "Spearman"
+  )
+  expect_warning(
+    cd(estimate = -0.85, n = 30, type = "kendall"),
+    "Kendall"
+  )
 })
 
 test_that("conf_dist() ignores confidence levels that are too low", {
