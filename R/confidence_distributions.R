@@ -413,20 +413,12 @@ conf_dist <- function(
   # Calculate the confidence distributions/densities and p-value curves
   #-----------------------------------------------------------------------------
 
-  if (type %in% "ttest") {
-    stderr <- estimate / tstat
+  if (type %in% c("ttest", "linreg", "gammareg", "general_t")) {
+    if (type %in% "ttest") {
+      stderr <- estimate / tstat
+    }
 
-    res <- cdist_t(
-      estimate = estimate,
-      stderr = stderr,
-      df = df,
-      n_values = n_values,
-      conf_level = conf_level,
-      alternative = alternative,
-      null_values = null_values
-    )
-  } else if (type %in% c("linreg", "gammareg", "general_t")) {
-    res <- cdist_t(
+    res <- cdist_location_scale(
       estimate = estimate,
       stderr = stderr,
       df = df,
@@ -436,9 +428,10 @@ conf_dist <- function(
       null_values = null_values
     )
   } else if (type %in% c("logreg", "poisreg", "coxreg", "general_z")) {
-    res <- cdist_z(
+    res <- cdist_location_scale(
       estimate = estimate,
       stderr = stderr,
+      df = NULL,
       n_values = n_values,
       conf_level = conf_level,
       null_values = null_values,
