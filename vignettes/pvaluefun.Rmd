@@ -28,7 +28,7 @@ The code and instructions to reproduce all graphics in our paper can be found in
 
 ## Overview
 
-This vignette shows how to use the `pvaluefunctions` package wich contains an R function to create graphics of *p*-value functions, confidence distributions, confidence densities, or the [Surprisal value (S-value)](http://www.umsl.edu/~fraundorfp/egsurpri.html) (Greenland 2019).
+This vignette shows how to use the `pvaluefunctions` package which contains an R function to create graphics of *p*-value functions, confidence distributions, confidence densities, or the [Surprisal value (S-value)](http://www.umsl.edu/~fraundorfp/egsurpri.html) (Greenland 2019).
 
 ## Installation
 
@@ -38,29 +38,15 @@ Install (`install.packages("pvaluefunctions")`) and load the package from CRAN.
 library(pvaluefunctions)
 ```
 
-<!-- Download the file `confidence_distributions.R` to your computer. You can either `source()` the function in R or open it, select and run everything. After loading the function, it's ready for use. -->
-
-<!-- To reproduce the plots from the publication, download the file `paper_plots.R` and run it *after* loading the main function contained in the file `confidence_distributions.R` (see above). -->
-
-<!-- Alternatively, you can source the files directly from the GitHub repository using the [`devtools`](https://CRAN.R-project.org/package=devtools) package: -->
-
-```{r source_github, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
-library(devtools)
-
-# Load function
-source_url("https://raw.githubusercontent.com/DInfanger/pvaluefunctions/master/R/confidence_distributions.R")
-
-```
-
 ## Dependencies
 
-The function depends on the following R packages:
+The package depends on the following R packages, which are installed automatically together with the package:
 
+* [cli](https://cran.r-project.org/package=cli)
 * [ggplot2](https://cran.r-project.org/package=ggplot2)
-* [scales](https://cran.r-project.org/package=scales)
-* [zipfR](https://cran.r-project.org/package=zipfR)
-* [pracma](https://cran.r-project.org/package=pracma)
 * [gsl](https://cran.r-project.org/package=gsl)
+* [rlang](https://cran.r-project.org/package=rlang)
+* [scales](https://cran.r-project.org/package=scales)
 
 ## Usage
 
@@ -107,13 +93,13 @@ There is only one function needed to create the plots: `conf_dist()`. The functi
 
 ### Returned values
 
-The main function `conf_dist()` returns five objects in a list:
+The main function `conf_dist()` invisibly returns a list with the following elements:
 
 * `res_frame`: A data frame containing the values used to construct the plot. It contains the following variables: `values` contain the values of the effect (e.g. mean difference, odds ratio etc.), `conf_dist` the values for the confidence distribution, `conf_dens` the values for the confidence density, `p_two` the values for the two-sided *p*-value function, `p_one` the values for the one-sided *p*-value function, `s_val` the S-value (surprisal) of the two-sided *p*-values, `variable` the name of the estimate, `hypothesis` indicating the alternative hypothesis if one-sided *p*-value functions were specified and `counternull` containing the counternull values.
 * `conf_frame`: A data frame containing the confidence intervals for the specified confidence levels for all estimates.
 * `counternull_frame`: A data frame containing the counternull values for the specified null values (see Rosenthal & Rubin (1994) for more information about the counternull).
 * `point_est`: A data frame containing the point estimates for all estimates. The point estimates correspond to the mean, median or mode of the confidence density (see Xie & Singh (2013) for more information). Estimates are produced using numerical procedures: Increase the number of points `n_values` for higher numerical precision.
-* `aucc_frame`: A data frame containing the estimated AUCC (area under the confidence curve). The AUCC is a measures of precision with higher values indicating a poorer precision compared to smaller values (see Berrar (2017)). It also provides the proportion of the AUCC that lies above the null value(s), if they are provided.
+* `aucc_frame`: A data frame containing the estimated AUCC (area under the confidence curve). The AUCC is a measure of precision with higher values indicating a poorer precision compared to smaller values (see Berrar (2017)). It also provides the proportion of the AUCC that lies above the null value(s), if they are provided.
 * `plot`: A [ggplot2](https://ggplot2.tidyverse.org/) plot object (only returned if the option `plot = TRUE` was specified).
 
 ## Examples

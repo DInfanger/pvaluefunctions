@@ -102,10 +102,18 @@ conf_dist(
 \item{plot}{Logical. Should a plot be created (\code{TRUE}, the default) or not (\code{FALSE}). \code{FALSE} can be useful if users want to create their own plots using the returned data from the function. If \code{FALSE}, no ggplot2 object is returned.}
 }
 \value{
-\code{conf_dist} returns four data frames and if \code{plot = TRUE} was specified, a ggplot2-plot object: \code{res_frame} (contains parameter values (e.g. mean differences, odds ratios etc.), \emph{p}-values (one- and two-sided), s-values, confidence distributions and densities, variable names and type of hypothesis), \code{conf_frame} (contains the specified confidence level(s) and the corresponding lower and upper limits as well as the corresponding variable name), \code{counternull_frame} (contains the counternull and the corresponding null values), \code{point_est} (contains the mean, median and mode point estimates) and if \code{plot = TRUE} was specified, \code{aucc_frame} contains the estimated AUCC (area under the confidence curve, see Berrar 2017) calculated by trapezoidal integration on the untransformed scale. Also provides the proportion of the aucc that lies above the null value(s) if they are provided. \code{plot} (a ggplot2 object).
+\code{conf_dist} invisibly returns a list with the following elements:
+\itemize{
+\item \code{res_frame}: A data frame with the parameter values (e.g. mean differences, odds ratios etc.), \emph{p}-values (one- and two-sided), s-values, confidence distributions and densities, variable names and type of hypothesis. If \code{plot_counternull = TRUE}, it also contains the counternulls to plot.
+\item \code{conf_frame}: A data frame with the specified confidence level(s), the corresponding lower and upper limits and the variable names. \code{NULL} if \code{conf_level} was not specified.
+\item \code{counternull_frame}: A data frame with the null values and their counternulls. \code{NULL} if \code{null_values} were not specified.
+\item \code{point_est}: A data frame with the mean, median and mode of the confidence densities.
+\item \code{aucc_frame}: A data frame with the AUCC (area under the confidence curve, see Berrar 2017), calculated by trapezoidal integration on the untransformed scale, and the proportion of the AUCC that lies above the null value(s), if they were specified.
+\item \code{plot}: A ggplot2 object. Only if \code{plot = TRUE} was specified.
+}
 }
 \description{
-The function \code{conf_dist} generates confidence distributions (cdf), confidence densities (pdf), Shannon suprisal (s-value) functions and \emph{p}-value functions for several commonly used estimates. In addition, counternulls (see Rosenthal et al. 1994), point estimates and the area under the confidence curve (AUCC) are calculated.
+The function \code{conf_dist} generates confidence distributions (cdf), confidence densities (pdf), Shannon surprisal (s-value) functions and \emph{p}-value functions for several commonly used estimates. In addition, counternulls (see Rosenthal et al. 1994), point estimates and the area under the confidence curve (AUCC) are calculated.
 }
 \details{
 \emph{P}-value functions and confidence intervals are calculated based on the \emph{t}-distribution for \emph{t}-tests, linear regression coefficients, and gamma regression models (GLM). The normal distribution is used for logistic regression, poisson regression and cox regression models. For correlation coefficients, Fisher's transform is used using the corresponding variances (see Bonett et al. 2000). \emph{P}-value functions and confidence intervals for variances are constructed using the Chi2 distribution. Finally, Wilson's score intervals are used for one proportion. For differences of proportions, the Wilson score interval with continuity correction is used (Newcombe 1998).

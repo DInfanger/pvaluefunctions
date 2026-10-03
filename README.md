@@ -55,22 +55,20 @@ functions, confidence distributions, confidence densities, or the
 
 You can install the package directly from CRAN by typing
 `install.packages("pvaluefunctions")`. After installation, load it in R
-using `library(pvaluefunctions)`.
+using `library(pvaluefunctions)`. The development version can be
+installed from GitHub with
+`remotes::install_github("DInfanger/pvaluefunctions")`.
 
 ## Dependencies
 
-The function depends on the following R packages, which need to be
-installed beforehand:
+The package depends on the following R packages, which are installed
+automatically together with the package:
 
+-   [cli](https://cran.r-project.org/package=cli)
 -   [ggplot2](https://cran.r-project.org/package=ggplot2)
--   [scales](https://cran.r-project.org/package=scales)
--   [zipfR](https://cran.r-project.org/package=zipfR)
--   [pracma](https://cran.r-project.org/package=pracma)
 -   [gsl](https://cran.r-project.org/package=gsl)
-
-Use the command
-`install.packages(c("ggplot2", "scales", "zipfR", "pracma", "gsl"))` in
-R to install those packages.
+-   [rlang](https://cran.r-project.org/package=rlang)
+-   [scales](https://cran.r-project.org/package=scales)
 
 ## Examples
 
