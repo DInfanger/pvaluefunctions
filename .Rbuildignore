@@ -18,3 +18,4 @@
 ^\.claude$
 ^dev$
 ^vignettes/.*\.md$
+^\.posit/assistant$

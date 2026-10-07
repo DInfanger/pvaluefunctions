@@ -641,7 +641,11 @@ conf_dist <- function(
   # Cutoff for nicer plotting
   #-----------------------------------------------------------------------------
 
-  p_cutoff <- if (alternative %in% "two_sided") plot_p_limit else plot_p_limit * 2
+  p_cutoff <- if (alternative %in% "two_sided") {
+    plot_p_limit
+  } else {
+    plot_p_limit * 2
+  }
 
   if (plot_type %in% c("p_val")) {
     res$res_frame$values[res$res_frame$p_two < p_cutoff] <- NA

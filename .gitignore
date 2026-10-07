@@ -1,6 +1,7 @@
 inst/doc
 packrat/lib*/
 .agents/
+.claude/
 .Rproj.user
 *.Rproj
 .posit/
@@ -15,3 +16,4 @@ CRAN-RELEASE
 .DS_Store
 AGENTS.md
 dev/
+*.code-workspace
