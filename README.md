@@ -129,7 +129,7 @@ distribution estimator of a parameter: A review. *Internat Statist Rev.*
 
 ## Contact
 
-[Denis Infanger](https://dsbg.unibas.ch/de/personen/denis-infanger/)
+[Denis Infanger](https://udem.insel.ch/de/die-klinik-udem/details/person/detail/denis-infanger)
 
 ## Session info
 

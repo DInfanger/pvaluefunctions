@@ -19,11 +19,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Denis Infanger \email{denis.infanger@unibas.ch} (\href{https://orcid.org/0000-0001-9028-7110}{ORCID})
+\strong{Maintainer}: Denis Infanger \email{denis.infanger@insel.ch} (\href{https://orcid.org/0000-0001-9028-7110}{ORCID})
 
 Authors:
 \itemize{
-  \item Denis Infanger \email{denis.infanger@unibas.ch} (\href{https://orcid.org/0000-0001-9028-7110}{ORCID})
+  \item Denis Infanger \email{denis.infanger@insel.ch} (\href{https://orcid.org/0000-0001-9028-7110}{ORCID})
 }
 
 }
